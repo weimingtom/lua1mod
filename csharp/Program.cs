@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Diagnostics;
 
 namespace lua1mod
 {
@@ -20,6 +21,276 @@ namespace lua1mod
 			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
+		}
+	}
+}
+
+namespace KopiLua
+{
+	public partial class Lua
+	{
+		public class CharPtr
+		{
+			public char[] chars;
+			public int index;
+			
+			public char this[int offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public char this[uint offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public char this[long offset]
+			{
+				get { return chars[index + (int)offset]; }
+				set { chars[index + (int)offset] = value; }
+			}
+
+			public static implicit operator CharPtr(string str) { return new CharPtr(str); }
+			public static implicit operator CharPtr(char[] chars) { return new CharPtr(chars); }
+
+			public CharPtr()
+			{
+				this.chars = null;
+				this.index = 0;
+			}
+
+			public CharPtr(string str)
+			{
+				this.chars = (str + '\0').ToCharArray();
+				this.index = 0;
+			}
+
+			public CharPtr(CharPtr ptr)
+			{
+				this.chars = ptr.chars;
+				this.index = ptr.index;
+			}
+
+			public CharPtr(CharPtr ptr, int index)
+			{
+				this.chars = ptr.chars;
+				this.index = index;
+			}
+
+			public CharPtr(char[] chars)
+			{
+				this.chars = chars;
+				this.index = 0;
+			}
+
+			public CharPtr(char[] chars, int index)
+			{
+				this.chars = chars;
+				this.index = index;
+			}
+
+			public CharPtr(IntPtr ptr)
+			{
+				this.chars = new char[0];
+				this.index = 0;
+			}
+
+			public static CharPtr operator +(CharPtr ptr, int offset) {return new CharPtr(ptr.chars, ptr.index+offset);}
+			public static CharPtr operator -(CharPtr ptr, int offset) {return new CharPtr(ptr.chars, ptr.index-offset);}
+			public static CharPtr operator +(CharPtr ptr, uint offset) { return new CharPtr(ptr.chars, ptr.index + (int)offset); }
+			public static CharPtr operator -(CharPtr ptr, uint offset) { return new CharPtr(ptr.chars, ptr.index - (int)offset); }
+
+			public void inc() { this.index++; }
+			public void dec() { this.index--; }
+			public CharPtr next() { return new CharPtr(this.chars, this.index + 1); }
+			public CharPtr prev() { return new CharPtr(this.chars, this.index - 1); }
+			public CharPtr add(int ofs) { return new CharPtr(this.chars, this.index + ofs); }
+			public CharPtr sub(int ofs) { return new CharPtr(this.chars, this.index - ofs); }
+			
+			public static bool operator ==(CharPtr ptr, char ch) { return ptr[0] == ch; }
+			public static bool operator ==(char ch, CharPtr ptr) { return ptr[0] == ch; }
+			public static bool operator !=(CharPtr ptr, char ch) { return ptr[0] != ch; }
+			public static bool operator !=(char ch, CharPtr ptr) { return ptr[0] != ch; }
+
+			public static CharPtr operator +(CharPtr ptr1, CharPtr ptr2)
+			{
+				string result = "";
+				for (int i = 0; ptr1[i] != '\0'; i++)
+					result += ptr1[i];
+				for (int i = 0; ptr2[i] != '\0'; i++)
+					result += ptr2[i];
+				return new CharPtr(result);
+			}
+			public static int operator -(CharPtr ptr1, CharPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index; }
+			public static bool operator <(CharPtr ptr1, CharPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index < ptr2.index; }
+			public static bool operator <=(CharPtr ptr1, CharPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index <= ptr2.index; }
+			public static bool operator >(CharPtr ptr1, CharPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index > ptr2.index; }
+			public static bool operator >=(CharPtr ptr1, CharPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index >= ptr2.index; }
+			public static bool operator ==(CharPtr ptr1, CharPtr ptr2) {
+				object o1 = ptr1 as CharPtr;
+				object o2 = ptr2 as CharPtr;
+				if ((o1 == null) && (o2 == null)) return true;
+				if (o1 == null) return false;
+				if (o2 == null) return false;
+				return (ptr1.chars == ptr2.chars) && (ptr1.index == ptr2.index); }
+			public static bool operator !=(CharPtr ptr1, CharPtr ptr2) {return !(ptr1 == ptr2); }
+
+			public override bool Equals(object o)
+			{
+				return this == (o as CharPtr);
+			}
+
+			public override int GetHashCode()
+			{
+				return 0;
+			}
+			public override string ToString()
+			{
+				string result = "";
+				for (int i = index; (i<chars.Length) && (chars[i] != '\0'); i++)
+					result += chars[i];
+				return result;
+			}
+		}		
+		
+		public static string sizeOf(string type) 
+		{
+			return type;
+		}
+		
+		public static object malloc(string type)
+		{
+			if (type.Equals("Hash"))
+			{
+				return new Hash();
+			}
+			else if (type.Equals("node"))
+			{
+				return new node();
+			}
+			return null;
+		}
+		
+		public static object calloc(uint n, string type)
+		{
+			if (type.Equals("node"))
+		    {
+				node[] result = new node[n];
+				for (int i = 0; i < n; ++i)
+				{
+					result[i] = new node();
+				}
+				return result;
+		    }
+			return null;
+		}
+		
+		public static void lua_error(string str)
+		{
+			
+		}
+		
+		public static void free(object obj)
+		{
+			
+		}
+		
+		public static void lua_markobject(object obj)
+		{
+			
+		}
+		
+		public static object lua_getparam(int n)
+		{
+			return null;
+		}
+		
+		public static void lua_pushobject(object obj)
+		{
+			
+		}
+		
+		public static void lua_reportbug(string str)
+		{
+			
+		}
+		
+		public static void lua_pushnil()
+		{
+			
+		}
+		
+		public static int tag(object obj)
+		{
+			return 0;
+		}
+		public static void tag(object obj, int t)
+		{
+			
+		}
+		
+		public static Hash avalue(object obj)
+		{
+			return null;
+		}
+		
+		public static CharPtr svalue(object obj)
+		{
+			return null;
+		}
+		public static int nvalue(object obj)
+		{
+			return 0;
+		}
+		
+		public const int T_NIL = 0;
+		public const int T_NUMBER = 0;
+		public const int T_STRING = 0;
+		public const int T_ARRAY = 0;
+		
+		public static int memcmp(CharPtr ptr1, CharPtr ptr2, uint size) { return memcmp(ptr1, ptr2, (int)size); }
+		public static int memcmp(CharPtr ptr1, CharPtr ptr2, int size)
+		{
+			for (int i=0; i<size; i++)
+				if (ptr1[i]!=ptr2[i])
+				{
+					if (ptr1[i]<ptr2[i])
+						return -1;
+					else
+						return 1;
+				}
+			return 0;
+		}
+		public static CharPtr objToCharPtr(object obj)
+		{
+			return null;
+		}
+		public static int strcmp(CharPtr s1, CharPtr s2)
+		{
+			if (s1 == s2)
+				return 0;
+			if (s1 == null)
+				return -1;
+			if (s2 == null)
+				return 1;
+
+			for (int i = 0; ; i++)
+			{
+				if (s1[i] != s2[i])
+				{
+					if (s1[i] < s2[i])
+						return -1;
+					else
+						return 1;
+				}
+				if (s1[i] == '\0')
+					return 0;
+			}
 		}
 	}
 }
