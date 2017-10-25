@@ -19,21 +19,7 @@ namespace KopiLua
 	*/
 
 	public partial class Lua
-	{
-		public class node
-		{
-		 	public object @ref;
-			public object val;
-		 	public node next;
-		}
-	
-		public class Hash
-		{
-	 		public sbyte mark;
-	 		public uint nhash;
-	 		public node[] list;
-		}
-	
+	{	
 		/*
 		** Create a new hash. Return the hash pointer or NULL on error.
 		*/

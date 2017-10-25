@@ -292,5 +292,47 @@ namespace KopiLua
 					return 0;
 			}
 		}
+		
+		public class FILE
+		{
+			
+		}
+		
+		public static int fgetc(FILE fp)
+		{
+			return 0;
+		}
+		public static void ungetc(int c, FILE fp)
+		{
+			
+		}
+		
+		public static int EOF = -1;
+		
+		public static FILE fopen(string filename, string mode)
+		{
+			return null;
+		}
+		public static void fclose(FILE fp)
+		{
+			
+		}
+		
+		public static int lua_addfile(ref string fn)
+		{
+			return 0;
+		}
+		
+		public delegate int Input();
+		public static void lua_setinput(Input input)
+		{
+			
+		}
+		
+		public delegate void Unput(int c);
+		public static void lua_setunput(Unput unput)
+		{
+			
+		}
 	}
 }
