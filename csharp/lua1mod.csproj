@@ -49,6 +49,7 @@
     <Compile Include="hash.h.cs" />
     <Compile Include="inout.c.cs" />
     <Compile Include="inout.h.cs" />
+    <Compile Include="iolib.c.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utils\Arrays.cs" />

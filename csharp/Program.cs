@@ -334,5 +334,82 @@ namespace KopiLua
 		{
 			
 		}
+		
+		public static FILE stdin = null;
+		public static FILE stdout = null;
+		
+		public static void lua_pushnumber(float f)
+		{
+			
+		}
+		
+		public static int lua_isstring(object obj)
+		{
+			return 0;
+		}
+		
+		public static string lua_getstring(object obj)
+		{
+			return null;
+		}
+		
+		public static bool isspace(int c)
+		{
+			return false;
+		}
+		public static bool isdigit(int c)
+		{
+			return false;
+		}
+		
+		public static int fscanf(FILE fp, string str, string str2)
+		{
+			return 0;
+		}
+		
+		public static double strtod(string str, string str2)
+		{
+			return 0;
+		}
+		
+		public static void lua_pushnumber(double d)
+		{
+			
+		}
+		
+		public static char tolower(char c)
+		{
+			return '_';
+		}
+		
+		public static void lua_pushstring(ref string str)
+		{
+			
+		}
+		
+		public static int fprintf(FILE fp, string format, params object[] args)
+		{
+			return 0;
+		}
+		
+		public static void system(string str)
+		{
+			
+		}
+		
+		public static int lua_isnumber(object obj)
+		{
+			return 0;
+		}
+		
+		public static double lua_getnumber(object obj)
+		{
+			return 0;
+		}
+		
+		public static int remove(string filename)
+		{
+			return 0;
+		}
 	}
 }
