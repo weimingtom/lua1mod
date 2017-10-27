@@ -427,11 +427,6 @@ namespace KopiLua
 			
 		}
 		
-		public static void mathlib_open()
-		{
-			
-		}
-		
 		public static void lua_dofile(string filename)
 		{
 			
