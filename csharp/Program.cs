@@ -411,5 +411,30 @@ namespace KopiLua
 		{
 			return 0;
 		}
+		
+		public static void lua_call(string str, int i)
+		{
+			
+		}
+		
+		public static void lua_dostring(string str)
+		{
+			
+		}
+		
+		public static void strlib_open()
+		{
+			
+		}
+		
+		public static void mathlib_open()
+		{
+			
+		}
+		
+		public static void lua_dofile(string filename)
+		{
+			
+		}
 	}
 }
