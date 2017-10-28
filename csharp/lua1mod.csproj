@@ -54,6 +54,8 @@
     <Compile Include="lua.h.cs" />
     <Compile Include="lualib.h.cs" />
     <Compile Include="mathlib.c.cs" />
+    <Compile Include="opcode.c.cs" />
+    <Compile Include="opcode.h.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="strlib.c.cs" />
