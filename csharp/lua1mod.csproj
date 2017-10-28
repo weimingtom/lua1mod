@@ -56,6 +56,7 @@
     <Compile Include="mathlib.c.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="strlib.c.cs" />
     <Compile Include="utils\Arrays.cs" />
     <Compile Include="utils\StringFunctions.cs" />
   </ItemGroup>

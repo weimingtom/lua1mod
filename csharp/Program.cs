@@ -382,7 +382,7 @@ namespace KopiLua
 			return '_';
 		}
 		
-		public static void lua_pushstring(ref string str)
+		public static void lua_pushstring(string str)
 		{
 			
 		}
@@ -418,11 +418,6 @@ namespace KopiLua
 		}
 		
 		public static void lua_dostring(string str)
-		{
-			
-		}
-		
-		public static void strlib_open()
 		{
 			
 		}
