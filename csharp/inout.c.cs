@@ -144,7 +144,7 @@ namespace KopiLua
 		/*
 		** Function to open a string to be input unit
 		*/
-		public static int lua_openstring(ref string s)
+		public static int lua_openstring(string s)
 		{
 		 	lua_linenumber = 1;
 		 	lua_setinput(stringinput);

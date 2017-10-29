@@ -99,7 +99,7 @@ namespace KopiLua
 
 		public delegate void Cfunction();
 		public delegate int Input();
-		public delegate void Unput(int NamelessParameter);
+		public delegate void Unput(int c);
 
 		//C++ TO C# CONVERTER TODO TASK: Unions are not supported in C#:
 		//ORIGINAL LINE: union Value

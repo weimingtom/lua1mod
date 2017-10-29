@@ -29,6 +29,135 @@ namespace KopiLua
 {
 	public partial class Lua
 	{
+		public class BytePtr
+		{
+			public byte[] chars;
+			public int index;
+			
+			public byte this[int offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public byte this[uint offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public byte this[long offset]
+			{
+				get { return chars[index + (int)offset]; }
+				set { chars[index + (int)offset] = value; }
+			}
+
+//			public static implicit operator CharPtr(string str) { return new CharPtr(str); }
+			public static implicit operator BytePtr(byte[] chars) { return new BytePtr(chars); }
+
+			public BytePtr()
+			{
+				this.chars = null;
+				this.index = 0;
+			}
+
+//			public CharPtr(string str)
+//			{
+//				this.chars = (str + '\0').ToCharArray();
+//				this.index = 0;
+//			}
+
+			public BytePtr(BytePtr ptr)
+			{
+				this.chars = ptr.chars;
+				this.index = ptr.index;
+			}
+
+			public BytePtr(BytePtr ptr, int index)
+			{
+				this.chars = ptr.chars;
+				this.index = index;
+			}
+
+			public BytePtr(byte[] chars)
+			{
+				this.chars = chars;
+				this.index = 0;
+			}
+
+			public BytePtr(byte[] chars, int index)
+			{
+				this.chars = chars;
+				this.index = index;
+			}
+
+			public BytePtr(IntPtr ptr)
+			{
+				this.chars = new byte[0];
+				this.index = 0;
+			}
+
+			public static BytePtr operator +(BytePtr ptr, int offset) {return new BytePtr(ptr.chars, ptr.index+offset);}
+			public static BytePtr operator -(BytePtr ptr, int offset) {return new BytePtr(ptr.chars, ptr.index-offset);}
+			public static BytePtr operator +(BytePtr ptr, uint offset) { return new BytePtr(ptr.chars, ptr.index + (int)offset); }
+			public static BytePtr operator -(BytePtr ptr, uint offset) { return new BytePtr(ptr.chars, ptr.index - (int)offset); }
+
+			public void inc() { this.index++; }
+			public void dec() { this.index--; }
+			public BytePtr next() { return new BytePtr(this.chars, this.index + 1); }
+			public BytePtr prev() { return new BytePtr(this.chars, this.index - 1); }
+			public BytePtr add(int ofs) { return new BytePtr(this.chars, this.index + ofs); }
+			public BytePtr sub(int ofs) { return new BytePtr(this.chars, this.index - ofs); }
+			
+			public static bool operator ==(BytePtr ptr, byte ch) { return ptr[0] == ch; }
+			public static bool operator ==(byte ch, BytePtr ptr) { return ptr[0] == ch; }
+			public static bool operator !=(BytePtr ptr, byte ch) { return ptr[0] != ch; }
+			public static bool operator !=(byte ch, BytePtr ptr) { return ptr[0] != ch; }
+
+//			public static CharPtr operator +(BytePtr ptr1, BytePtr ptr2)
+//			{
+//				string result = "";
+//				for (int i = 0; ptr1[i] != '\0'; i++)
+//					result += ptr1[i];
+//				for (int i = 0; ptr2[i] != '\0'; i++)
+//					result += ptr2[i];
+//				return new CharPtr(result);
+//			}
+			public static int operator -(BytePtr ptr1, BytePtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index; }
+			public static bool operator <(BytePtr ptr1, BytePtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index < ptr2.index; }
+			public static bool operator <=(BytePtr ptr1, BytePtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index <= ptr2.index; }
+			public static bool operator >(BytePtr ptr1, BytePtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index > ptr2.index; }
+			public static bool operator >=(BytePtr ptr1, BytePtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index >= ptr2.index; }
+			public static bool operator ==(BytePtr ptr1, BytePtr ptr2) {
+				object o1 = ptr1 as BytePtr;
+				object o2 = ptr2 as BytePtr;
+				if ((o1 == null) && (o2 == null)) return true;
+				if (o1 == null) return false;
+				if (o2 == null) return false;
+				return (ptr1.chars == ptr2.chars) && (ptr1.index == ptr2.index); }
+			public static bool operator !=(BytePtr ptr1, BytePtr ptr2) {return !(ptr1 == ptr2); }
+
+			public override bool Equals(object o)
+			{
+				return this == (o as BytePtr);
+			}
+
+			public override int GetHashCode()
+			{
+				return 0;
+			}
+//			public override string ToString()
+//			{
+//				string result = "";
+//				for (int i = index; (i<chars.Length) && (chars[i] != '\0'); i++)
+//					result += chars[i];
+//				return result;
+//			}
+		}
+		
 		public class CharPtr
 		{
 			public char[] chars;
@@ -205,25 +334,25 @@ namespace KopiLua
 			
 		}
 		
-		public static object lua_getparam(int n)
-		{
-			return null;
-		}
+//		public static object lua_getparam(int n)
+//		{
+//			return null;
+//		}
 		
-		public static void lua_pushobject(object obj)
-		{
-			
-		}
+//		public static void lua_pushobject(object obj)
+//		{
+//			
+//		}
 		
 		public static void lua_reportbug(string str)
 		{
 			
 		}
 		
-		public static void lua_pushnil()
-		{
-			
-		}
+//		public static void lua_pushnil()
+//		{
+//			
+//		}
 		
 		public static int tag(object obj)
 		{
@@ -323,13 +452,13 @@ namespace KopiLua
 			return 0;
 		}
 		
-		public delegate int Input();
+//		public delegate int Input();
 		public static void lua_setinput(Input input)
 		{
 			
 		}
 		
-		public delegate void Unput(int c);
+//		public delegate void Unput(int c);
 		public static void lua_setunput(Unput unput)
 		{
 			
@@ -343,15 +472,15 @@ namespace KopiLua
 			
 		}
 		
-		public static int lua_isstring(object obj)
-		{
-			return 0;
-		}
+//		public static int lua_isstring(object obj)
+//		{
+//			return 0;
+//		}
 		
-		public static string lua_getstring(object obj)
-		{
-			return null;
-		}
+//		public static string lua_getstring(object obj)
+//		{
+//			return null;
+//		}
 		
 		public static bool isspace(int c)
 		{
@@ -372,10 +501,10 @@ namespace KopiLua
 			return 0;
 		}
 		
-		public static void lua_pushnumber(double d)
-		{
-			
-		}
+//		public static void lua_pushnumber(double d)
+//		{
+//			
+//		}
 		
 		public static char tolower(char c)
 		{
@@ -397,34 +526,39 @@ namespace KopiLua
 			
 		}
 		
-		public static int lua_isnumber(object obj)
-		{
-			return 0;
-		}
+//		public static int lua_isnumber(object obj)
+//		{
+//			return 0;
+//		}
 		
-		public static double lua_getnumber(object obj)
-		{
-			return 0;
-		}
+//		public static double lua_getnumber(object obj)
+//		{
+//			return 0;
+//		}
 		
 		public static int remove(string filename)
 		{
 			return 0;
 		}
 		
-		public static void lua_call(string str, int i)
-		{
-			
-		}
+//		public static void lua_call(string str, int i)
+//		{
+//			
+//		}
 		
-		public static void lua_dostring(string str)
-		{
-			
-		}
+//		public static void lua_dostring(string str)
+//		{
+//			
+//		}
 		
 		public static void lua_dofile(string filename)
 		{
 			
+		}
+		
+		public static bool lua_parse()
+		{
+			return true;
 		}
 	}
 }
