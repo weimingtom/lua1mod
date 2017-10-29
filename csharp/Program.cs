@@ -329,10 +329,10 @@ namespace KopiLua
 			
 		}
 		
-		public static void lua_markobject(object obj)
-		{
-			
-		}
+//		public static void lua_markobject(object obj)
+//		{
+//			
+//		}
 		
 //		public static object lua_getparam(int n)
 //		{
@@ -447,10 +447,10 @@ namespace KopiLua
 			
 		}
 		
-		public static int lua_addfile(ref string fn)
-		{
-			return 0;
-		}
+//		public static int lua_addfile(ref string fn)
+//		{
+//			return 0;
+//		}
 		
 //		public delegate int Input();
 		public static void lua_setinput(Input input)

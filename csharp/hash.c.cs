@@ -102,19 +102,19 @@ namespace KopiLua
 		*/
 		public static void lua_hashmark(Hash h)
 		{
-			int i;
-		
-			((h).mark) = 1;
-		
-			for (i = 0; i < ((h).nhash); i++)
-			{
-				node n;
-			  	for (n = ((h).list[i]); n != null; n = n.next)
-			  	{
-			   		lua_markobject(n.@ref);
-			   		lua_markobject(n.val);
-			  	}
-			}
+//			int i;
+//		
+//			((h).mark) = 1;
+//		
+//			for (i = 0; i < ((h).nhash); i++)
+//			{
+//				node n;
+//			  	for (n = ((h).list[i]); n != null; n = n.next)
+//			  	{
+//			   		lua_markobject(n.@ref);
+//			   		lua_markobject(n.val);
+//			  	}
+//			}
 		}
 		
 		public static void lua_next()

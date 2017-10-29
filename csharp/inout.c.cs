@@ -114,18 +114,18 @@ namespace KopiLua
 	
 		public static int lua_openfile(ref string fn)
 		{
-		 	lua_linenumber = 1;
-		 	lua_setinput(fileinput);
-		 	lua_setunput(fileunput);
-		 	fp = fopen(fn, "r");
-		 	if (fp == null)
-		 	{
-			 	return 1;
-		 	}
-		 	if (lua_addfile(ref fn) != 0)
-		 	{
-			 	return 1;
-		 	}
+//		 	lua_linenumber = 1;
+//		 	lua_setinput(fileinput);
+//		 	lua_setunput(fileunput);
+//		 	fp = fopen(fn, "r");
+//		 	if (fp == null)
+//		 	{
+//			 	return 1;
+//		 	}
+//		 	if (lua_addfile(ref fn) != 0)
+//		 	{
+//			 	return 1;
+//		 	}
 		 	return 0;
 		}
 	
@@ -146,20 +146,20 @@ namespace KopiLua
 		*/
 		public static int lua_openstring(string s)
 		{
-		 	lua_linenumber = 1;
-		 	lua_setinput(stringinput);
-		 	lua_setunput(stringunput);
-		 	st = s;
-		 	{
-		  		string sn = new string(new char[64]);
-				//C++ TO C# CONVERTER TODO TASK: C# does not allow setting maximum string width in format specifiers:
-				//ORIGINAL LINE: sprintf(sn, "String: %10.10s...", s);
-		  		sn = string.Format("String: {0,10}...", s);
-		  		if (lua_addfile(ref sn) != 0)
-		  		{
-			  		return 1;
-		  		}
-		 	}
+//		 	lua_linenumber = 1;
+//		 	lua_setinput(stringinput);
+//		 	lua_setunput(stringunput);
+//		 	st = s;
+//		 	{
+//		  		string sn = new string(new char[64]);
+//				//C++ TO C# CONVERTER TODO TASK: C# does not allow setting maximum string width in format specifiers:
+//				//ORIGINAL LINE: sprintf(sn, "String: %10.10s...", s);
+//		  		sn = string.Format("String: {0,10}...", s);
+//		  		if (lua_addfile(ref sn) != 0)
+//		  		{
+//			  		return 1;
+//		  		}
+//		 	}
 		 	return 0;
 		}
 		

@@ -107,7 +107,7 @@ namespace KopiLua
 		}
 	
 		//C++ TO C# CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in C#):
-		private static object lua_convtonumber_cvt;
+//		private static object lua_convtonumber_cvt;
 	
 		/*
 		** Test if is possible to convert an object to a number one.
