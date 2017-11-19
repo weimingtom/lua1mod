@@ -319,10 +319,10 @@ namespace KopiLua
 			return null;
 		}
 		
-		public static void lua_error(string str)
-		{
-			
-		}
+//		public static void lua_error(string str)
+//		{
+//			
+//		}
 		
 		public static void free(object obj)
 		{
@@ -344,10 +344,10 @@ namespace KopiLua
 //			
 //		}
 		
-		public static void lua_reportbug(string str)
-		{
-			
-		}
+//		public static void lua_reportbug(string str)
+//		{
+//			
+//		}
 		
 //		public static void lua_pushnil()
 //		{
@@ -467,10 +467,10 @@ namespace KopiLua
 		public static FILE stdin = null;
 		public static FILE stdout = null;
 		
-		public static void lua_pushnumber(float f)
-		{
-			
-		}
+//		public static void lua_pushnumber(float f)
+//		{
+//			
+//		}
 		
 //		public static int lua_isstring(object obj)
 //		{
@@ -511,10 +511,10 @@ namespace KopiLua
 			return '_';
 		}
 		
-		public static void lua_pushstring(string str)
-		{
-			
-		}
+//		public static void lua_pushstring(string str)
+//		{
+//			
+//		}
 		
 		public static int fprintf(FILE fp, string format, params object[] args)
 		{
@@ -551,15 +551,15 @@ namespace KopiLua
 //			
 //		}
 		
-		public static void lua_dofile(string filename)
-		{
-			
-		}
+//		public static void lua_dofile(string filename)
+//		{
+//			
+//		}
 		
-		public static bool lua_parse()
-		{
-			return true;
-		}
+//		public static bool lua_parse()
+//		{
+//			return true;
+//		}
 		
 		public const int BUFSIZ = 255; //FIXME:???
 	}

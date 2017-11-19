@@ -64,6 +64,7 @@
     <Compile Include="table.h.cs" />
     <Compile Include="utils\Arrays.cs" />
     <Compile Include="utils\StringFunctions.cs" />
+    <Compile Include="y_tab.c.cs" />
     <Compile Include="y_tab.h.cs" />
   </ItemGroup>
   <ItemGroup>

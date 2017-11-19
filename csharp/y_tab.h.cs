@@ -9,24 +9,14 @@ namespace KopiLua
 	{
 		//C++ TO C# CONVERTER TODO TASK: Unions are not supported in C#, but the following union can be replicated with the StructLayout and FieldOffset attributes:
 		//ORIGINAL LINE: union YYSTYPE
-		[StructLayout(LayoutKind.Explicit)]
-		public struct YYSTYPE
+		public class YYSTYPE
 		{
-		 	[FieldOffset(0)]
 		 	public int vInt;
-		 
-		 	[FieldOffset(0)]
 		 	public int vLong;
-		 
-		 	[FieldOffset(0)]
 		 	public float vFloat;
-		 
-		 	[FieldOffset(0)]
 		 	public Word vWord;
-		
 		 	//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
 			//ORIGINAL LINE: Byte *pByte;
-		 	[FieldOffset(0)]
 		 	public Byte[] pByte;
 		}
 

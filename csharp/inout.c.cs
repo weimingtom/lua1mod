@@ -23,7 +23,7 @@ namespace KopiLua
 		public static int lua_linenumber;
 		public static int lua_debug;
 		public static int lua_debugline;
-		public static AnonymousClass[] funcstack = Arrays.InitializeWithDefaultInstances<AnonymousClass>(DefineConstants.MAXFUNCSTACK);
+		public static AnonymousClass[] funcstack = Arrays.InitializeWithDefaultInstances<AnonymousClass>(MAXFUNCSTACK);
 		internal static int nfuncstack = 0;
 		
 	
@@ -39,7 +39,7 @@ namespace KopiLua
 		internal static FILE fp;
 		internal static string st;
 	
-		public delegate void usererrorDelegate(ref string s);
+		public delegate void usererrorDelegate(string s);
 		internal static usererrorDelegate usererror;
 	
 		/*
@@ -89,11 +89,11 @@ namespace KopiLua
 		** Call user function to handle error messages, if registred. Or report error
 		** using standard function (fprintf).
 		*/
-		public static void lua_error(ref string s)
+		public static void lua_error(string s)
 		{
 		 	if (usererror != null)
 		 	{
-			 	usererror(ref s);
+			 	usererror(s);
 		 	}
 		 	else
 		 	{
@@ -101,18 +101,14 @@ namespace KopiLua
 		 	}
 		}
 	
-		internal static class DefineConstants
-		{
-			public const int MAXFUNCSTACK = 32;
-		}
-	
+		public const int MAXFUNCSTACK = 32;
 	
 		/*
 		** Function to open a file to be input unit. 
 		** Return 0 on success or 1 on error.
 		*/
 	
-		public static int lua_openfile(ref string fn)
+		public static int lua_openfile(string fn)
 		{
 //		 	lua_linenumber = 1;
 //		 	lua_setinput(fileinput);
@@ -169,7 +165,7 @@ namespace KopiLua
 		*/
 		public static int lua_pushfunction(int file, int function)
 		{
-		 	if (nfuncstack >= DefineConstants.MAXFUNCSTACK - 1)
+		 	if (nfuncstack >= MAXFUNCSTACK - 1)
 		 	{
 		  		lua_error("function stack overflow");
 		  		return 1;
@@ -192,7 +188,7 @@ namespace KopiLua
 		/*
 		** Report bug building a message and sending it to lua_error function.
 		*/
-		public static void lua_reportbug(ref string s)
+		public static void lua_reportbug(string s)
 		{
 		 	string msg = new string(new char[1024]);
 		 	msg = s;
@@ -213,7 +209,7 @@ namespace KopiLua
 //		   			StringFunctions.StrChr(msg,0) = string.Format("\n\tin statement begining at line {0:D} of file \"{1}\"", lua_debugline, lua_filename());
 		  		}
 		 	}
-		 	lua_error(ref msg);
+		 	lua_error(msg);
 		}
 	}
 }

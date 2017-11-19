@@ -797,13 +797,13 @@ namespace KopiLua
 		** Open file, generate opcode and execute global statement. Return 0 on
 		** success or 1 on error.
 		*/
-		public static int lua_dofile(ref string filename)
+		public static int lua_dofile(string filename)
 		{
-		 	if (lua_openfile(ref filename) != 0)
+		 	if (lua_openfile(filename) != 0)
 		 	{
 			 	return 1;
 		 	}
-		 	if (lua_parse())
+		 	if (lua_parse() != 0)
 		 	{
 			 	lua_closefile();
 			 	return 1;
@@ -822,7 +822,7 @@ namespace KopiLua
 		 	{
 			 	return 1;
 		 	}
-		 	if (lua_parse())
+		 	if (lua_parse() != 0)
 		 	{
 			 	return 1;
 		 	}
@@ -1050,7 +1050,7 @@ namespace KopiLua
 		/*
 		** Push an object (tag=string) to stack. Return 0 on success or 1 on error.
 		*/
-		public static int lua_pushstring(ref string s)
+		public static int lua_pushstring(string s)
 		{
 //		 	if ((top - stack) >= MAXSTACK - 1)
 //		 	{
