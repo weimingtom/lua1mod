@@ -50,6 +50,7 @@
     <Compile Include="inout.c.cs" />
     <Compile Include="inout.h.cs" />
     <Compile Include="iolib.c.cs" />
+    <Compile Include="lex_yy.c.cs" />
     <Compile Include="lua.c.cs" />
     <Compile Include="lua.h.cs" />
     <Compile Include="lualib.h.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="table.h.cs" />
     <Compile Include="utils\Arrays.cs" />
     <Compile Include="utils\StringFunctions.cs" />
+    <Compile Include="y_tab.h.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

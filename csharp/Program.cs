@@ -453,16 +453,16 @@ namespace KopiLua
 //		}
 		
 //		public delegate int Input();
-		public static void lua_setinput(Input input)
-		{
-			
-		}
+//		public static void lua_setinput(Input input)
+//		{
+//			
+//		}
 		
 //		public delegate void Unput(int c);
-		public static void lua_setunput(Unput unput)
-		{
-			
-		}
+//		public static void lua_setunput(Unput unput)
+//		{
+//			
+//		}
 		
 		public static FILE stdin = null;
 		public static FILE stdout = null;
@@ -560,5 +560,7 @@ namespace KopiLua
 		{
 			return true;
 		}
+		
+		public const int BUFSIZ = 255; //FIXME:???
 	}
 }
