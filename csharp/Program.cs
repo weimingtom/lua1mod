@@ -319,69 +319,11 @@ namespace KopiLua
 			return null;
 		}
 		
-//		public static void lua_error(string str)
-//		{
-//			
-//		}
-		
 		public static void free(object obj)
 		{
 			
 		}
-		
-//		public static void lua_markobject(object obj)
-//		{
-//			
-//		}
-		
-//		public static object lua_getparam(int n)
-//		{
-//			return null;
-//		}
-		
-//		public static void lua_pushobject(object obj)
-//		{
-//			
-//		}
-		
-//		public static void lua_reportbug(string str)
-//		{
-//			
-//		}
-		
-//		public static void lua_pushnil()
-//		{
-//			
-//		}
-		
-		public static int tag(object obj)
-		{
-			return 0;
-		}
-		public static void tag(object obj, int t)
-		{
-			
-		}
-		
-		public static Hash avalue(object obj)
-		{
-			return null;
-		}
-		
-		public static CharPtr svalue(object obj)
-		{
-			return null;
-		}
-		public static int nvalue(object obj)
-		{
-			return 0;
-		}
-		
-		public const int T_NIL = 0;
-		public const int T_NUMBER = 0;
-		public const int T_STRING = 0;
-		public const int T_ARRAY = 0;
-		
+
 		public static int memcmp(CharPtr ptr1, CharPtr ptr2, uint size) { return memcmp(ptr1, ptr2, (int)size); }
 		public static int memcmp(CharPtr ptr1, CharPtr ptr2, int size)
 		{
@@ -395,10 +337,12 @@ namespace KopiLua
 				}
 			return 0;
 		}
+		
 		public static CharPtr objToCharPtr(object obj)
 		{
 			return null;
 		}
+		
 		public static int strcmp(CharPtr s1, CharPtr s2)
 		{
 			if (s1 == s2)
@@ -442,45 +386,14 @@ namespace KopiLua
 		{
 			return null;
 		}
+		
 		public static void fclose(FILE fp)
 		{
 			
 		}
 		
-//		public static int lua_addfile(ref string fn)
-//		{
-//			return 0;
-//		}
-		
-//		public delegate int Input();
-//		public static void lua_setinput(Input input)
-//		{
-//			
-//		}
-		
-//		public delegate void Unput(int c);
-//		public static void lua_setunput(Unput unput)
-//		{
-//			
-//		}
-		
 		public static FILE stdin = null;
 		public static FILE stdout = null;
-		
-//		public static void lua_pushnumber(float f)
-//		{
-//			
-//		}
-		
-//		public static int lua_isstring(object obj)
-//		{
-//			return 0;
-//		}
-		
-//		public static string lua_getstring(object obj)
-//		{
-//			return null;
-//		}
 		
 		public static bool isspace(int c)
 		{
@@ -501,21 +414,11 @@ namespace KopiLua
 			return 0;
 		}
 		
-//		public static void lua_pushnumber(double d)
-//		{
-//			
-//		}
-		
 		public static char tolower(char c)
 		{
 			return '_';
 		}
-		
-//		public static void lua_pushstring(string str)
-//		{
-//			
-//		}
-		
+
 		public static int fprintf(FILE fp, string format, params object[] args)
 		{
 			return 0;
@@ -526,41 +429,11 @@ namespace KopiLua
 			
 		}
 		
-//		public static int lua_isnumber(object obj)
-//		{
-//			return 0;
-//		}
-		
-//		public static double lua_getnumber(object obj)
-//		{
-//			return 0;
-//		}
-		
 		public static int remove(string filename)
 		{
 			return 0;
 		}
 		
-//		public static void lua_call(string str, int i)
-//		{
-//			
-//		}
-		
-//		public static void lua_dostring(string str)
-//		{
-//			
-//		}
-		
-//		public static void lua_dofile(string filename)
-//		{
-//			
-//		}
-		
-//		public static bool lua_parse()
-//		{
-//			return true;
-//		}
-		
-		public const int BUFSIZ = 255; //FIXME:???
+		public const int BUFSIZ = 8192; //FIXME:???
 	}
 }

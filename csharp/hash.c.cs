@@ -90,7 +90,7 @@ namespace KopiLua
 			   		return null;
 			  	}
 			  	n.@ref = @ref;
-			  	tag(n.val, T_NIL);
+			  	tag(n.val, (int)Type.T_NIL);
 			  	n.next = ((t).list[h]); // link node to head of list
 			  	((t).list[h]) = n;
 			 }
@@ -132,13 +132,13 @@ namespace KopiLua
 				lua_error("too many arguments to function `next'");
 				return;
 			}
-			if (tag(o) != T_ARRAY)
+			if (tag(o) != (int)Type.T_ARRAY)
 			{
 				lua_error("first argument of function `next' is not a table");
 				return;
 			}
 			a = avalue(o);
-			if (tag(r) == T_NIL)
+			if (tag(r) == (int)Type.T_NIL)
 			{
 			  	firstnode(a, 0);
 			  	return;
@@ -159,7 +159,7 @@ namespace KopiLua
 				  				firstnode(a, h + 1);
 				  				return;
 				 			}
-				 			else if (tag(n.next.val) != T_NIL)
+				 			else if (tag(n.next.val) != (int)Type.T_NIL)
 				 			{
 				  				lua_pushobject(n.next.@ref);
 				  				lua_pushobject(n.next.val);
@@ -168,7 +168,7 @@ namespace KopiLua
 				 			else
 				 			{
 				  				node next = n.next.next;
-				  				while (next != null && tag(next.val) == T_NIL)
+				  				while (next != null && tag(next.val) == (int)Type.T_NIL)
 				  				{
 					  				next = next.next;
 				  				}
@@ -226,11 +226,11 @@ namespace KopiLua
 		
 		internal static int head(Hash t, object @ref) // hash function
 		{
-			if (tag(@ref) == T_NUMBER)
+			if (tag(@ref) == (int)Type.T_NUMBER)
 			{
 				return (int)(((int)nvalue(@ref)) % ((t).nhash));
 			}
-			else if (tag(@ref) == T_STRING)
+			else if (tag(@ref) == (int)Type.T_STRING)
 			{
 			  	int h;
 				//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
@@ -254,21 +254,21 @@ namespace KopiLua
 		{
 			node n = null;
 			node p;
-			if (tag(@ref) == T_NUMBER)
+			if (tag(@ref) == (int)Type.T_NUMBER)
 			{
 			  	for (p = null,n = ((t).list[h]); n != null; p = n, n = n.next)
 			  	{
-			   		if ((tag((n).@ref)) == T_NUMBER && nvalue(@ref) == (nvalue((n).@ref)))
+			   		if ((tag((n).@ref)) == (int)Type.T_NUMBER && nvalue(@ref) == (nvalue((n).@ref)))
 			   		{
 				   		break;
 			   		}
 			  	}
 			}
-			else if (tag(@ref) == T_STRING)
+			else if (tag(@ref) == (int)Type.T_STRING)
 			{
 				for (p = null,n = ((t).list[h]); n != null; p = n, n = n.next)
 				{
-			   		if ((tag((n).@ref)) == T_STRING && (strcmp(svalue(@ref), (svalue((n).@ref))) == 0))
+			   		if ((tag((n).@ref)) == (int)Type.T_STRING && (strcmp(svalue(@ref), (svalue((n).@ref))) == 0))
 			   		{
 				   		break;
 			   		}
@@ -316,7 +316,7 @@ namespace KopiLua
 			  	int i;
 			  	for (i = h; i < ((a).nhash); i++)
 			  	{
-			   		if (((a).list[i]) != null && tag(((a).list[i]).val) != T_NIL)
+			  		if (((a).list[i]) != null && tag(((a).list[i]).val) != (int)Type.T_NIL)
 			   		{
 						lua_pushobject(((a).list[i]).@ref);
 						lua_pushobject(((a).list[i]).val);

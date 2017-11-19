@@ -129,14 +129,34 @@ namespace KopiLua
 		/* Macros to access structure members */
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define tag(o) ((o)->tag)
+		public static int tag(object obj)
+		{
+			return 0;
+		}
+		public static void tag(object obj, int t)
+		{
+			
+		}		
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define nvalue(o) ((o)->value.n)
+		public static int nvalue(object obj)
+		{
+			return 0;
+		}		
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define svalue(o) ((o)->value.s)
+		public static CharPtr svalue(object obj)
+		{
+			return null;
+		}		
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define bvalue(o) ((o)->value.b)
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define avalue(o) ((o)->value.a)
+		public static Hash avalue(object obj)
+		{
+			return null;
+		}		
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define fvalue(o) ((o)->value.f)
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
