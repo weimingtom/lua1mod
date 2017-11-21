@@ -203,7 +203,7 @@ namespace KopiLua
 		/*
 		** Mark an object if it is a string or a unmarked array.
 		*/
-		public static void lua_markobject(Object o)
+		public static void lua_markobject(Object_ o)
 		{
 //		 	if (tag(o) == T_STRING)
 //		 	{

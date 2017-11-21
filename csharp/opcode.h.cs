@@ -115,7 +115,7 @@ namespace KopiLua
 		 	public object u;
 		}
 
-		public class Object
+		public class Object_
 		{
 		 	public Type tag;
 		 	public Value value = new Value();

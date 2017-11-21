@@ -10,7 +10,7 @@ using System;
 
 namespace KopiLua
 {
-	using lua_Object = KopiLua.Lua.Object;	
+	using lua_Object = KopiLua.Lua.Object_;	
 	
 	public partial class Lua
 	{
@@ -30,12 +30,12 @@ namespace KopiLua
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define tostring(o) ((tag(o) != T_STRING) && (lua_tostring(o) != 0))
 	
-		internal static Object[] stack = new Object[MAXSTACK];
+		internal static Object_[] stack = new Object_[MAXSTACK];
 		static Lua() 
 		{
 			for (int i = 0; i < stack.Length; ++i)
 			{
-				stack[i] = new Object();
+				stack[i] = new Object_();
 			}
 			stack[0].tag = Type.T_MARK;
 		}

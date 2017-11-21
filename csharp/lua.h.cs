@@ -12,8 +12,8 @@ namespace KopiLua
 	
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define lua_register(n,f) (lua_pushcfunction(f), lua_storeglobal(n))
-	
-	
+		public static void lua_register(string n, lua_CFunction f) { lua_pushcfunction(f); lua_storeglobal(n); }
+
 	//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
 		//void lua_errorfunction(fnDelegate fn);
 	//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
