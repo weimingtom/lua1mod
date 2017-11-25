@@ -816,7 +816,7 @@ namespace KopiLua
 		** Generate opcode stored on string and execute global statement. Return 0 on
 		** success or 1 on error.
 		*/
-		public static int lua_dostring(string @string)
+		public static int lua_dostring(CharPtr @string)
 		{
 		 	if (lua_openstring(@string) != 0)
 		 	{
@@ -835,7 +835,7 @@ namespace KopiLua
 		/*
 		** Execute the given function. Return 0 on success or 1 on error.
 		*/
-		public static int lua_call(string functionname, int nparam)
+		public static int lua_call(CharPtr functionname, int nparam)
 		{
 //			//C++ TO C# CONVERTER NOTE: This static local variable declaration (not allowed in C#) has been moved just prior to the method:
 //			// static Byte startcode[] = {CALLFUNC, HALT};
@@ -873,7 +873,7 @@ namespace KopiLua
 		/*
 		** Given an object handle, return its number value. On error, return 0.0.
 		*/
-		public static double lua_getnumber(object @object)
+		public static double lua_getnumber(Object_ @object)
 		{
 //		 	if (((tag(@object) != T_NUMBER) && (lua_tonumber(@object) != 0)))
 //		 	{
@@ -889,7 +889,7 @@ namespace KopiLua
 		/*
 		** Given an object handle, return its string pointer. On error, return NULL.
 		*/
-		public static string lua_getstring(object @object)
+		public static CharPtr lua_getstring(Object_ @object)
 		{
 //		 	if (((tag(@object) != T_STRING) && (lua_tostring(@object) != 0)))
 //		 	{
@@ -905,7 +905,7 @@ namespace KopiLua
 		/*
 		** Given an object handle, return a copy of its string. On error, return NULL.
 		*/
-		public static string lua_copystring(Object @object)
+		public static string lua_copystring(Object_ @object)
 		{
 //		 	if (((tag(@object) != T_STRING) && (lua_tostring(@object) != 0)))
 //		 	{
@@ -937,7 +937,7 @@ namespace KopiLua
 		/*
 		** Given an object handle, return its user data. On error, return NULL.
 		*/
-		public static object lua_getuserdata(Object @object)
+		public static object lua_getuserdata(Object_ @object)
 		{
 //		 	if (tag(@object) != T_USERDATA)
 //		 	{
@@ -954,7 +954,7 @@ namespace KopiLua
 		** Given an object handle and a field name, return its field object.
 		** On error, return NULL.
 		*/
-		public static Object lua_getfield(object @object, ref string field)
+		public static Object lua_getfield(Object_ @object, string field)
 		{
 //		 	if (tag(@object) != T_ARRAY)
 //		 	{
@@ -1050,7 +1050,7 @@ namespace KopiLua
 		/*
 		** Push an object (tag=string) to stack. Return 0 on success or 1 on error.
 		*/
-		public static int lua_pushstring(string s)
+		public static int lua_pushstring(CharPtr s)
 		{
 //		 	if ((top - stack) >= MAXSTACK - 1)
 //		 	{

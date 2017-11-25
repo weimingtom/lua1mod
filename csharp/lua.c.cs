@@ -18,7 +18,7 @@ namespace KopiLua
 
 		internal static void callfunc()
 		{
-		 	Object obj = lua_getparam(1);
+		 	Object_ obj = lua_getparam(1);
 		 	if (lua_isstring(obj) != 0)
 		 	{
 			 	lua_call(lua_getstring(obj), 0);
@@ -27,7 +27,7 @@ namespace KopiLua
 	
 		internal static void execstr()
 		{
-		 	Object obj = lua_getparam(1);
+		 	Object_ obj = lua_getparam(1);
 		 	if (lua_isstring(obj) != 0)
 		 	{
 			 	lua_dostring(lua_getstring(obj));

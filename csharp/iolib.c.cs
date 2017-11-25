@@ -31,7 +31,7 @@ namespace KopiLua
 		*/
 		internal static void io_readfrom()
 		{
-		 	Object o = lua_getparam(1);
+		 	Object_ o = lua_getparam(1);
 		 	if (o == null) // restore standart input
 		 	{
 		  		if (@in != stdin)
@@ -81,7 +81,7 @@ namespace KopiLua
 		*/
 		internal static void io_writeto()
 		{
-		 	Object o = lua_getparam(1);
+		 	Object_ o = lua_getparam(1);
 		 	if (o == null) // restore standart output
 		 	{
 		  		if (@out != stdout)
@@ -394,8 +394,8 @@ namespace KopiLua
 		
 		internal static void io_write()
 		{
-		 	Object o1 = lua_getparam(1);
-		 	Object o2 = lua_getparam(2);
+		 	Object_ o1 = lua_getparam(1);
+		 	Object_ o2 = lua_getparam(2);
 		 	if (o1 == null) // new line
 		 	{
 		  		fprintf(@out, "\n");
@@ -432,7 +432,7 @@ namespace KopiLua
 		*/
 		public static void io_execute()
 		{
-		 	Object o = lua_getparam(1);
+		 	Object_ o = lua_getparam(1);
 		 	if (o == null || lua_isstring(o) == 0)
 		 	{
 		  		lua_error("incorrect argument to function 'execute`");
@@ -452,7 +452,7 @@ namespace KopiLua
 		*/
 		public static void io_remove()
 		{
-		 	Object o = lua_getparam(1);
+		 	Object_ o = lua_getparam(1);
 		 	if (o == null || lua_isstring(o) == 0)
 		 	{
 		  		lua_error("incorrect argument to function 'execute`");

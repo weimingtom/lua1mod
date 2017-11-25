@@ -382,7 +382,7 @@ namespace KopiLua
 		
 		public static int EOF = -1;
 		
-		public static FILE fopen(string filename, string mode)
+		public static FILE fopen(CharPtr filename, CharPtr mode)
 		{
 			return null;
 		}
@@ -418,18 +418,23 @@ namespace KopiLua
 		{
 			return '_';
 		}
+		
+		public static char toupper(char c)
+		{
+			return '_';
+		}
 
 		public static int fprintf(FILE fp, string format, params object[] args)
 		{
 			return 0;
 		}
 		
-		public static void system(string str)
+		public static void system(CharPtr str)
 		{
 			
 		}
 		
-		public static int remove(string filename)
+		public static int remove(CharPtr filename)
 		{
 			return 0;
 		}
@@ -485,6 +490,21 @@ namespace KopiLua
 		public static double pow(double x, double y)
 		{
 			return Math.Pow(x, y);
+		}
+		
+		public static CharPtr strstr(CharPtr str1, CharPtr str2)
+		{
+			return null;
+		}
+		
+		public static uint strlen(CharPtr str)
+		{
+			return 0;
+		}
+		
+		public static CharPtr strdup(CharPtr s)
+		{
+			return null;
 		}
 	}
 }
