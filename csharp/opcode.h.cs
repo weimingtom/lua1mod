@@ -107,7 +107,7 @@ namespace KopiLua
 		{
 		 	public Cfunction f;
 			public float n;
-		 	public string s;
+		 	public CharPtr s;
 			//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
 			//ORIGINAL LINE: byte *b;
 		 	public byte b;
@@ -123,52 +123,45 @@ namespace KopiLua
 
 		public class Symbol
 		{
-		 	public string name;
-		 	public object @object;
+		 	public CharPtr name;
+		 	public Object_ @object;
+		 	
+		 	public Symbol() {}
+		 	public Symbol(CharPtr name, Type tag, Cfunction f) 
+		 	{
+		 		this.name = name;
+		 		this.@object = new Object_();
+		 		this.@object.tag = tag;
+		 		this.@object.value.f = f;
+		 	}
 		}
 		/* Macros to access structure members */
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define tag(o) ((o)->tag)
-		public static int tag(object obj)
-		{
-			return 0;
-		}
-		public static void tag(object obj, int t)
-		{
-			
-		}		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define nvalue(o) ((o)->value.n)
-		public static int nvalue(object obj)
-		{
-			return 0;
-		}		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define svalue(o) ((o)->value.s)
-		public static CharPtr svalue(object obj)
-		{
-			return null;
-		}		
+		//#define tag(o) ((o)->tag)
+		public static Type tag(Object_ o) { return o.tag; }
+		public static void tag(Object_ o, Type t) { o.tag = t; }		
+		//#define nvalue(o) ((o)->value.n)
+		public static float nvalue(Object_ o) { return o.value.n; }		
+		//#define svalue(o) ((o)->value.s)
+		public static CharPtr svalue(Object_ o) { return o.value.s; }
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define bvalue(o) ((o)->value.b)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define avalue(o) ((o)->value.a)
-		public static Hash avalue(object obj)
-		{
-			return null;
-		}		
+		//#define avalue(o) ((o)->value.a)
+		public static Hash avalue(Object_ o) { return o.value.a; }		
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define fvalue(o) ((o)->value.f)
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define uvalue(o) ((o)->value.u)
 	
 		/* Macros to access symbol table */
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define s_name(i) (lua_table[i].name)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define s_object(i) (lua_table[i].object)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define s_tag(i) (tag(&s_object(i)))
+		//#define s_name(i) (lua_table[i].name)
+		public static CharPtr s_name(int i) {return lua_table[i].name; }
+		public static void s_name(int i, CharPtr ptr) {lua_table[i].name = ptr; }
+		//#define s_object(i) (lua_table[i].object)
+		public static Object_ s_object(int i) { return lua_table[i].@object; }
+		//#define s_tag(i) (tag(&s_object(i)))
+		public static Type s_tag(int i) { return tag(s_object(i)); }
+		public static void s_tag(int i, Type t) { tag(s_object(i), t); }
+		
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define s_nvalue(i) (nvalue(&s_object(i)))
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:

@@ -37,7 +37,7 @@ namespace KopiLua
 			  	return null;
 			}
 			((t).nhash) = nhash;
-			((t).mark) = 0;
+			((t).mark) = (char)0;
 			//C++ TO C# CONVERTER TODO TASK: The memory management function 'calloc' has no equivalent in C#:
 			((t).list) = ((node[])calloc(nhash, sizeOf("node")));
 			if (((t).list) == null)
@@ -69,7 +69,7 @@ namespace KopiLua
 		** node for the given reference and also return its pointer.
 		** On error, return NULL.
 		*/
-		public static object lua_hashdefine(Hash t, object @ref)
+		public static object lua_hashdefine(Hash t, Object_ @ref)
 		{
 			int h;
 			node n;
@@ -90,7 +90,7 @@ namespace KopiLua
 			   		return null;
 			  	}
 			  	n.@ref = @ref;
-			  	tag(n.val, (int)Type.T_NIL);
+			  	tag(n.val, Type.T_NIL);
 			  	n.next = ((t).list[h]); // link node to head of list
 			  	((t).list[h]) = n;
 			 }
@@ -120,8 +120,8 @@ namespace KopiLua
 		public static void lua_next()
 		{
 			Hash a;
-			object o = lua_getparam(1);
-			object r = lua_getparam(2);
+			Object_ o = lua_getparam(1);
+			Object_ r = lua_getparam(2);
 			if (o == null || r == null)
 			{
 				lua_error("too few arguments to function `next'");
@@ -132,13 +132,13 @@ namespace KopiLua
 				lua_error("too many arguments to function `next'");
 				return;
 			}
-			if (tag(o) != (int)Type.T_ARRAY)
+			if (tag(o) != Type.T_ARRAY)
 			{
 				lua_error("first argument of function `next' is not a table");
 				return;
 			}
 			a = avalue(o);
-			if (tag(r) == (int)Type.T_NIL)
+			if (tag(r) == Type.T_NIL)
 			{
 			  	firstnode(a, 0);
 			  	return;
@@ -159,7 +159,7 @@ namespace KopiLua
 				  				firstnode(a, h + 1);
 				  				return;
 				 			}
-				 			else if (tag(n.next.val) != (int)Type.T_NIL)
+				 			else if (tag(n.next.val) != Type.T_NIL)
 				 			{
 				  				lua_pushobject(n.next.@ref);
 				  				lua_pushobject(n.next.val);
@@ -168,7 +168,7 @@ namespace KopiLua
 				 			else
 				 			{
 				  				node next = n.next.next;
-				  				while (next != null && tag(next.val) == (int)Type.T_NIL)
+				  				while (next != null && tag(next.val) == Type.T_NIL)
 				  				{
 					  				next = next.next;
 				  				}
@@ -224,13 +224,13 @@ namespace KopiLua
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define ref_svalue(n) (svalue(&(n)->ref))
 		
-		internal static int head(Hash t, object @ref) // hash function
+		internal static int head(Hash t, Object_ @ref) // hash function
 		{
-			if (tag(@ref) == (int)Type.T_NUMBER)
+			if (tag(@ref) == Type.T_NUMBER)
 			{
 				return (int)(((int)nvalue(@ref)) % ((t).nhash));
 			}
-			else if (tag(@ref) == (int)Type.T_STRING)
+			else if (tag(@ref) == Type.T_STRING)
 			{
 			  	int h;
 				//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
@@ -250,25 +250,25 @@ namespace KopiLua
 			}
 		}
 		
-		internal static node present(Hash t, object @ref, int h)
+		internal static node present(Hash t, Object_ @ref, int h)
 		{
 			node n = null;
 			node p;
-			if (tag(@ref) == (int)Type.T_NUMBER)
+			if (tag(@ref) == Type.T_NUMBER)
 			{
 			  	for (p = null,n = ((t).list[h]); n != null; p = n, n = n.next)
 			  	{
-			   		if ((tag((n).@ref)) == (int)Type.T_NUMBER && nvalue(@ref) == (nvalue((n).@ref)))
+			   		if ((tag((n).@ref)) == Type.T_NUMBER && nvalue(@ref) == (nvalue((n).@ref)))
 			   		{
 				   		break;
 			   		}
 			  	}
 			}
-			else if (tag(@ref) == (int)Type.T_STRING)
+			else if (tag(@ref) == Type.T_STRING)
 			{
 				for (p = null,n = ((t).list[h]); n != null; p = n, n = n.next)
 				{
-			   		if ((tag((n).@ref)) == (int)Type.T_STRING && (strcmp(svalue(@ref), (svalue((n).@ref))) == 0))
+			   		if ((tag((n).@ref)) == Type.T_STRING && (strcmp(svalue(@ref), (svalue((n).@ref))) == 0))
 			   		{
 				   		break;
 			   		}
@@ -316,7 +316,7 @@ namespace KopiLua
 			  	int i;
 			  	for (i = h; i < ((a).nhash); i++)
 			  	{
-			  		if (((a).list[i]) != null && tag(((a).list[i]).val) != (int)Type.T_NIL)
+			  		if (((a).list[i]) != null && tag(((a).list[i]).val) != Type.T_NIL)
 			   		{
 						lua_pushobject(((a).list[i]).@ref);
 						lua_pushobject(((a).list[i]).val);

@@ -12,21 +12,22 @@ namespace KopiLua
 	{	
 		public class node
 		{
-		 	public object @ref;
-		 	public object val;
+		 	public Object_ @ref;
+		 	public Object_ val;
 		 	public node next;
 		}
 		
 		public class Hash
 		{
-		 	public sbyte mark;
+		 	public char mark;
 		 	public uint nhash;
 		 	public node[] list;
 		}
 		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define markarray(t) ((t)->mark)
-	
+		//#define markarray(t) ((t)->mark)
+		public static char markarray(Hash t) {return t.mark; }
+		public static void markarray(Hash t, char c) {t.mark = c; }
+		
 		//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
 		//Hash lua_hashcreate(uint nhash);
 		//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:

@@ -305,7 +305,7 @@ namespace KopiLua
 			return null;
 		}
 		
-		public static object calloc(uint n, string type)
+		public static object calloc(uint n, string type) //FIXME:some places are replaced with new, not with this method
 		{
 			if (type.Equals("node"))
 		    {
@@ -537,6 +537,11 @@ namespace KopiLua
 		
 		
 		public static CharPtr strchr(CharPtr str, char ch)
+		{
+			return null;
+		}
+		
+		public static CharPtr strcpy(CharPtr dest, CharPtr src)
 		{
 			return null;
 		}
