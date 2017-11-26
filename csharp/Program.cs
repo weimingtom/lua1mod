@@ -395,19 +395,15 @@ namespace KopiLua
 		public static FILE stdin = null;
 		public static FILE stdout = null;
 		
-		public static bool isspace(int c)
-		{
-			return false;
-		}
-		public static bool isdigit(int c)
-		{
-			return false;
-		}
-		
-		public static int fscanf(FILE fp, string str, string str2)
+		public static int isspace(int c)
 		{
 			return 0;
 		}
+		public static int isdigit(int c)
+		{
+			return 0;
+		}
+	
 		
 		public static double strtod(string str, string str2)
 		{
@@ -503,6 +499,44 @@ namespace KopiLua
 		}
 		
 		public static CharPtr strdup(CharPtr s)
+		{
+			return null;
+		}
+		
+		public static double strtod(CharPtr nptr, ref CharPtr endptr) 
+		{
+			return 0;
+		}
+		
+		public static void sprintf(CharPtr ptr, CharPtr format, params object[] args)
+		{
+			
+		}
+		
+		public static void sscanf(CharPtr ptr, CharPtr format, ref long arg)
+		{
+				
+		}
+		public static void sscanf(CharPtr ptr, CharPtr format, ref float arg)
+		{
+				
+		}
+		public static int fscanf(FILE fp, CharPtr format, CharPtr str)
+		{
+			return 0;
+		}		
+		public static int fscanf(FILE fp, CharPtr format, ref long str)
+		{
+			return 0;
+		}
+		public static int fscanf(FILE fp, CharPtr format, ref float str)
+		{
+			return 0;
+		}
+		
+		
+		
+		public static CharPtr strchr(CharPtr str, char ch)
 		{
 			return null;
 		}
