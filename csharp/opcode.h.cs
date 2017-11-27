@@ -143,6 +143,7 @@ namespace KopiLua
 		public static float nvalue(Object_ o) { return o.value.n; }		
 		//#define svalue(o) ((o)->value.s)
 		public static CharPtr svalue(Object_ o) { return o.value.s; }
+		public static void svalue(Object_ o, CharPtr ptr) { o.value.s = ptr; }
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define bvalue(o) ((o)->value.b)
 		//#define avalue(o) ((o)->value.a)
