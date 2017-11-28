@@ -298,21 +298,21 @@ namespace KopiLua
 			{
 				return new Hash();
 			}
-			else if (type.Equals("node"))
+			else if (type.Equals("Node"))
 			{
-				return new node();
+				return new Node();
 			}
 			return null;
 		}
 		
 		public static object calloc(uint n, string type) //FIXME:some places are replaced with new, not with this method
 		{
-			if (type.Equals("node"))
+			if (type.Equals("Node"))
 		    {
-				node[] result = new node[n];
+				Node[] result = new Node[n];
 				for (int i = 0; i < n; ++i)
 				{
-					result[i] = new node();
+					result[i] = new Node();
 				}
 				return result;
 		    }
@@ -324,6 +324,10 @@ namespace KopiLua
 			
 		}
 
+		public static int memcmp(object ptr1, object ptr2, string type) 
+		{
+			return 0; //FIXME:
+		}
 		public static int memcmp(CharPtr ptr1, CharPtr ptr2, uint size) { return memcmp(ptr1, ptr2, (int)size); }
 		public static int memcmp(CharPtr ptr1, CharPtr ptr2, int size)
 		{

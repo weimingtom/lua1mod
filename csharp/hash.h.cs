@@ -10,34 +10,29 @@ namespace KopiLua
 {
 	public partial class Lua
 	{	
-		public class node
+		public class Node
 		{
-		 	public Object_ @ref;
-		 	public Object_ val;
-		 	public node next;
+			public Object_ @ref = new Object_();
+		 	public Object_ val = new Object_();
+		 	public Node next;
 		}
 		
 		public class Hash
 		{
 		 	public char mark;
 		 	public uint nhash;
-		 	public node[] list;
+		 	public Node[] list;
 		}
 		
 		//#define markarray(t) ((t)->mark)
-		public static char markarray(Hash t) {return t.mark; }
-		public static void markarray(Hash t, char c) {t.mark = c; }
+		public static char markarray(Hash t) { return t.mark; }
+		public static void markarray(Hash t, char c) { t.mark = c; }
 		
-		//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
-		//Hash lua_hashcreate(uint nhash);
-		//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
-		//void lua_hashdelete(Hash h);
-		//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
-		//object lua_hashdefine(Hash t, object @ref);
-		//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
-		//void lua_hashmark(Hash h);
-	
-		//C++ TO C# CONVERTER TODO TASK: The implementation of the following method could not be found:
-		//void lua_next();
+//		Hash 	*lua_hashcreate (unsigned int nhash);
+//		void 	 lua_hashdelete (Hash *h);
+//		Object 	*lua_hashdefine (Hash *t, Object *ref);
+//		void 	 lua_hashmark   (Hash *h);
+//		
+//		void     lua_next (void);
 	}
 }

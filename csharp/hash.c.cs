@@ -8,41 +8,119 @@
 
 namespace KopiLua
 {
-	//C++ TO C# CONVERTER TODO TASK: The following line could not be converted:
-	//#include "opcode.h"
-	/*
-	** hash.h
-	** hash manager for lua
-	** Luiz Henrique de Figueiredo - 17 Aug 90
-	** Modified by Waldemar Celes Filho
-	** 26 Apr 93
-	*/
+		
+		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
+		//ORIGINAL LINE: #define markarray(t) ((t)->mark)		
 
+		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
+		//ORIGINAL LINE: #define lua_markstring(s) (*((s)-1))
+		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
+		//ORIGINAL LINE: #define lua_register(n,f) (lua_pushcfunction(f), lua_storeglobal(n))
+				
 	public partial class Lua
 	{	
+		//#define streq(s1,s2) (strcmp(s1,s2)==0)
+		//#define strneq(s1,s2) (strcmp(s1,s2)!=0)
+		private static bool strneq(CharPtr s1, CharPtr s2) {return strcmp(s1,s2)!=0;}
+		
+		//#define new(s) ((s *)malloc(sizeof(s)))
+		private static object new_(string s) { return malloc(sizeOf(s)); }
+		//#define newvector(n,s) ((s *)calloc(n,sizeof(s)))
+		private static object newvector(uint n, string s) { return calloc(n, sizeOf("Node")); }
+		
+		//#define nhash(t) ((t)->nhash)
+		private static int nhash(Hash t) { return (int)t.nhash; }
+		private static void nhash(Hash t, uint n) { t.nhash = n; }
+		//#define nodelist(t) ((t)->list)
+		private static Node[] nodelist(Hash t) { return t.list; }
+		private static void nodelist(Hash t, Node[] nodes) { t.list = nodes; }
+		//#define list(t,i) ((t)->list[i])
+		private static Node list(Hash t, int i) { return t.list[i]; }
+		private static void list(Hash t, int i, Node n) { t.list[i] = n; }
+		//#define ref_tag(n) (tag(&(n)->ref))
+		private static Type ref_tag(Node n) { return tag(n.@ref); }
+		//#define ref_nvalue(n) (nvalue(&(n)->ref))
+		private static float ref_nvalue(Node n) { return nvalue(n.@ref); }
+		//#define ref_svalue(n) (svalue(&(n)->ref))
+		private static CharPtr ref_svalue(Node n) { return svalue(n.@ref); }
+		
+		private static int head(Hash t, Object_ @ref)		/* hash function */
+		{
+			if (tag(@ref) == Type.T_NUMBER) return (((int)nvalue(@ref))%nhash(t));
+			else if (tag(@ref) == Type.T_STRING)
+			{
+			  	int h;
+				CharPtr name = svalue(@ref);
+				for (h=0; name[0] != 0; name.inc())		/* interpret name as binary number */
+			  	{
+			   		h <<= 8;
+			   		h += (byte) name[0];		/* avoid sign extension */
+			   		h %= nhash(t);			/* make it a valid index */
+			  	}
+			  	return h;
+			}
+			else
+			{
+			  	lua_reportbug ("unexpected type to index table");
+			  	return -1;
+			}
+		}
+		
+		private static Node present(Hash t, Object_ @ref, int h)
+		{
+			Node n=null, p=null;
+			if (tag(@ref) == Type.T_NUMBER)
+			{
+			  	for (p=null,n=list(t,h); n!=null; p=n, n=n.next)
+			   		if (ref_tag(n) == Type.T_NUMBER && nvalue(@ref) == ref_nvalue(n)) break;
+			}
+			else if (tag(@ref) == Type.T_STRING)
+			{
+				for (p=null,n=list(t,h); n!=null; p=n, n=n.next)
+			   		if (ref_tag(n) == Type.T_STRING && streq(svalue(@ref),ref_svalue(n))) break;
+			}
+			if (n == null)				/* name not present */
+				return null;
+#if false
+			if (p!=null)				/* name present but not first */
+			{
+			  	p.next=n.next;			/* move-to-front self-organization */
+			  	n.next=list(t,h);
+			  	list(t,h,n);
+			}
+#endif
+			return n;
+		}
+		
+		private static void freelist (Node n)
+		{
+			 while (n!=null)
+			 {
+			  	Node next = n.next;
+				free (n);
+				n = next;
+			 }
+		}
+
+
+
 		/*
 		** Create a new hash. Return the hash pointer or NULL on error.
 		*/
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define markarray(t) ((t)->mark)
-		
-		public static Hash lua_hashcreate(uint nhash)
+		public static Hash lua_hashcreate(uint nhash_)
 		{
-			//C++ TO C# CONVERTER TODO TASK: The memory management function 'malloc' has no equivalent in C#:
-			Hash t = ((Hash)malloc(sizeOf("Hash")));
+			Hash t = (Hash)new_ ("Hash");
 			if (t == null)
 			{
-				lua_error("not enough memory");
+				lua_error ("not enough memory");
 			  	return null;
 			}
-			((t).nhash) = nhash;
-			((t).mark) = (char)0;
-			//C++ TO C# CONVERTER TODO TASK: The memory management function 'calloc' has no equivalent in C#:
-			((t).list) = ((node[])calloc(nhash, sizeOf("node")));
-			if (((t).list) == null)
+			nhash(t, nhash_);
+			markarray(t, (char)0);
+			nodelist(t, (Node[])newvector(nhash_, "Node"));
+			if (nodelist(t) == null)
 			{
-				lua_error("not enough memory");
+				lua_error ("not enough memory");
 			  	return null;
 			}
 			return t;
@@ -51,16 +129,12 @@ namespace KopiLua
 		/*
 		** Delete a hash
 		*/
-		public static void lua_hashdelete(Hash h)
+		public static void lua_hashdelete (Hash h)
 		{
 			int i;
-			for (i = 0; i < ((h).nhash); i++)
-			{
-				freelist(((h).list[i]));
-			}
-			//C++ TO C# CONVERTER TODO TASK: The memory management function 'free' has no equivalent in C#:
-			free(((h).list));
-			//C++ TO C# CONVERTER TODO TASK: The memory management function 'free' has no equivalent in C#:
+			for (i=0; i<nhash(h); i++)
+				freelist (list(h,i));
+			free (nodelist(h));
 			free(h);
 		}
 		
@@ -69,30 +143,26 @@ namespace KopiLua
 		** node for the given reference and also return its pointer.
 		** On error, return NULL.
 		*/
-		public static object lua_hashdefine(Hash t, Object_ @ref)
+		public static object lua_hashdefine (Hash t, Object_ @ref)
 		{
-			int h;
-			node n;
-			h = head(t, @ref);
-			if (h < 0)
-			{
-				return null;
-			}
-		
+			int   h;
+			Node n;
+			h = head (t, @ref);
+			if (h < 0) return null;
+			
 			n = present(t, @ref, h);
 			if (n == null)
 			{
-				//C++ TO C# CONVERTER TODO TASK: The memory management function 'malloc' has no equivalent in C#:
-			  	n = ((node)malloc(sizeOf("node")));
+				n = (Node) new_("Node");
 			  	if (n == null)
 			  	{
-			   		lua_error("not enough memory");
+			   		lua_error ("not enough memory");
 			   		return null;
 			  	}
 			  	n.@ref = @ref;
 			  	tag(n.val, Type.T_NIL);
-			  	n.next = ((t).list[h]); // link node to head of list
-			  	((t).list[h]) = n;
+			  	n.next = list(t,h);			/* link node to head of list */
+			  	list(t,h,n);
 			 }
 			 return (n.val);
 		}
@@ -100,208 +170,22 @@ namespace KopiLua
 		/*
 		** Mark a hash and check its elements 
 		*/
-		public static void lua_hashmark(Hash h)
+		public static void lua_hashmark (Hash h)
 		{
-//			int i;
-//		
-//			((h).mark) = 1;
-//		
-//			for (i = 0; i < ((h).nhash); i++)
-//			{
-//				node n;
-//			  	for (n = ((h).list[i]); n != null; n = n.next)
-//			  	{
-//			   		lua_markobject(n.@ref);
-//			   		lua_markobject(n.val);
-//			  	}
-//			}
-		}
+			int i;
 		
-		public static void lua_next()
-		{
-			Hash a;
-			Object_ o = lua_getparam(1);
-			Object_ r = lua_getparam(2);
-			if (o == null || r == null)
+			markarray(h, (char)1);
+		
+			for (i=0; i<nhash(h); i++)
 			{
-				lua_error("too few arguments to function `next'");
-				return;
-			}
-			if (lua_getparam(3) != null)
-			{
-				lua_error("too many arguments to function `next'");
-				return;
-			}
-			if (tag(o) != Type.T_ARRAY)
-			{
-				lua_error("first argument of function `next' is not a table");
-				return;
-			}
-			a = avalue(o);
-			if (tag(r) == Type.T_NIL)
-			{
-			  	firstnode(a, 0);
-			  	return;
-			}
-			else
-			{
-			  	int h = head(a, r);
-			  	if (h >= 0)
+				Node n;
+			  	for (n = list(h,i); n != null; n = n.next)
 			  	{
-			   		node n = ((a).list[h]);
-			   		while (n != null)
-			   		{
-						//C++ TO C# CONVERTER TODO TASK: The memory management function 'memcmp' has no equivalent in C#:
-						if (memcmp(objToCharPtr(n.@ref), objToCharPtr(r), 1) == 0)
-						{
-				 			if (n.next == null)
-				 			{
-				  				firstnode(a, h + 1);
-				  				return;
-				 			}
-				 			else if (tag(n.next.val) != Type.T_NIL)
-				 			{
-				  				lua_pushobject(n.next.@ref);
-				  				lua_pushobject(n.next.val);
-				  				return;
-				 			}
-				 			else
-				 			{
-				  				node next = n.next.next;
-				  				while (next != null && tag(next.val) == Type.T_NIL)
-				  				{
-					  				next = next.next;
-				  				}
-				  				if (next == null)
-				  				{
-				   					firstnode(a, h + 1);
-				   					return;
-				  				}
-				 	 			else
-				  				{
-				   					lua_pushobject(next.@ref);
-				   					lua_pushobject(next.val);
-				  				}
-				  				return;
-				 			}
-						}
-						n = n.next;
-			   		}
-			   		if (n == null)
-			   		{
-						lua_error("error in function 'next': reference not found");
-			   		}
-			  	}
-			 }
-		}
-		
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_markstring(s) (*((s)-1))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_register(n,f) (lua_pushcfunction(f), lua_storeglobal(n))
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define streq(s1,s2) (strcmp(s1,s2)==0)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define strneq(s1,s2) (strcmp(s1,s2)!=0)
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define new(s) ((s *)malloc(sizeof(s)))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define newvector(n,s) ((s *)calloc(n,sizeof(s)))
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define nhash(t) ((t)->nhash)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define nodelist(t) ((t)->list)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define list(t,i) ((t)->list[i])
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define ref_tag(n) (tag(&(n)->ref))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define ref_nvalue(n) (nvalue(&(n)->ref))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define ref_svalue(n) (svalue(&(n)->ref))
-		
-		internal static int head(Hash t, Object_ @ref) // hash function
-		{
-			if (tag(@ref) == Type.T_NUMBER)
-			{
-				return (int)(((int)nvalue(@ref)) % ((t).nhash));
-			}
-			else if (tag(@ref) == Type.T_STRING)
-			{
-			  	int h;
-				//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
-				CharPtr name = svalue(@ref);
-				for (h = 0; name[0] != 0; name.inc()) // interpret name as binary number
-			  	{
-			   		h <<= 8;
-			   		h += (byte) name[0]; // avoid sign extension
-			   		h %= (int)(((t).nhash)); // make it a valid index
-			  	}
-			  	return h;
-			}
-			else
-			{
-			  	lua_reportbug("unexpected type to index table");
-			  	return -1;
-			}
-		}
-		
-		internal static node present(Hash t, Object_ @ref, int h)
-		{
-			node n = null;
-			node p;
-			if (tag(@ref) == Type.T_NUMBER)
-			{
-			  	for (p = null,n = ((t).list[h]); n != null; p = n, n = n.next)
-			  	{
-			   		if ((tag((n).@ref)) == Type.T_NUMBER && nvalue(@ref) == (nvalue((n).@ref)))
-			   		{
-				   		break;
-			   		}
+			   		lua_markobject (n.@ref);
+			   		lua_markobject (n.val);
 			  	}
 			}
-			else if (tag(@ref) == Type.T_STRING)
-			{
-				for (p = null,n = ((t).list[h]); n != null; p = n, n = n.next)
-				{
-			   		if ((tag((n).@ref)) == Type.T_STRING && (strcmp(svalue(@ref), (svalue((n).@ref))) == 0))
-			   		{
-				   		break;
-			   		}
-			  	}
-			}
-			if (n == null) // name not present
-			{
-				return null;
-			}
-			#if false
-			//if (p!=NULL)				// name present but not first 
-			//{
-			//  p->next=n->next;			// move-to-front self-organization 
-			//  n->next=list(t,h);
-			//  list(t,h)=n;
-			//}
-			#endif
-			return n;
 		}
-		
-		internal static void freelist(node n)
-		{
-			 while (n != null)
-			 {
-			  	node next = n.next;
-				//C++ TO C# CONVERTER TODO TASK: The memory management function 'free' has no equivalent in C#:
-			  	free(n);
-				//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to variables (in C#, the variable no longer points to the original when the original variable is re-assigned):
-				//ORIGINAL LINE: n = next;
-			  	n = next;
-			 }
-		}
-		
 		
 		/*
 		** Internal function to manipulate arrays. 
@@ -309,17 +193,18 @@ namespace KopiLua
 		** in the hash.
 		** This function pushs the element value and its reference to the stack.
 		*/
-		internal static void firstnode(Hash a, int h)
+		//#include "lua.h"
+		private static void firstnode (Hash a, int h)
 		{
-			if (h < ((a).nhash))
+			if (h < nhash(a))
 			{
 			  	int i;
-			  	for (i = h; i < ((a).nhash); i++)
+			  	for (i=h; i<nhash(a); i++)
 			  	{
-			  		if (((a).list[i]) != null && tag(((a).list[i]).val) != Type.T_NIL)
+			  		if (list(a,i) != null && tag(list(a,i).val) != Type.T_NIL)
 			   		{
-						lua_pushobject(((a).list[i]).@ref);
-						lua_pushobject(((a).list[i]).val);
+						lua_pushobject (list(a,i).@ref);
+						lua_pushobject (list(a,i).val);
 						return;
 			   		}
 			  	}
@@ -327,5 +212,68 @@ namespace KopiLua
 			 lua_pushnil();
 			 lua_pushnil();
 		}
+		
+		public static void lua_next ()
+		{
+			Hash a;
+			Object_ o = lua_getparam (1);
+			Object_ r = lua_getparam (2);
+			if (o == null || r == null)
+			{ lua_error ("too few arguments to function `next'"); return; }
+			if (lua_getparam(3) != null)
+			{ lua_error ("too many arguments to function `next'"); return; }
+			if (tag(o) != Type.T_ARRAY)
+			{ lua_error ("first argument of function `next' is not a table"); return; }
+			a = avalue(o);
+			if (tag(r) == Type.T_NIL)
+			{
+			  	firstnode (a, 0);
+			  	return;
+			}
+			else
+			{
+			  	int h = head (a, r);
+			  	if (h >= 0)
+			  	{
+			   		Node n = list(a,h);
+			   		while (n != null)
+			   		{
+						if (memcmp(n.@ref,r,sizeOf("Object_")) == 0)
+						{
+				 			if (n.next == null)
+				 			{
+				  				firstnode (a, h+1);
+				  				return;
+				 			}
+				 			else if (tag(n.next.val) != Type.T_NIL)
+				 			{
+				  				lua_pushobject (n.next.@ref);
+				  				lua_pushobject (n.next.val);
+				  				return;
+				 			}
+				 			else
+				 			{
+				  				Node next = n.next.next;
+				  				while (next != null && tag(next.val) == Type.T_NIL) next = next.next;
+				  				if (next == null)
+				  				{
+				   					firstnode (a, h+1);
+				   					return;
+				  				}
+				 	 			else
+				  				{
+				   					lua_pushobject (next.@ref);
+				   					lua_pushobject (next.val);
+				  				}
+				  				return;
+				 			}
+						}
+						n = n.next;
+			   		}
+			   		if (n == null)
+						lua_error ("error in function 'next': reference not found");
+			   	}
+			 }
+		}		
 	}
 }
