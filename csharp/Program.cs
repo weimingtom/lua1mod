@@ -398,6 +398,7 @@ namespace KopiLua
 		
 		public static FILE stdin = null;
 		public static FILE stdout = null;
+		public static FILE stderr = null;
 		
 		public static int isspace(int c)
 		{
