@@ -550,5 +550,10 @@ namespace KopiLua
 		{
 			return null;
 		}
+		
+		public static int puts(CharPtr str)
+		{
+			return 0;
+		}
 	}
 }

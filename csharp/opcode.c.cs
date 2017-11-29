@@ -797,7 +797,7 @@ namespace KopiLua
 		** Open file, generate opcode and execute global statement. Return 0 on
 		** success or 1 on error.
 		*/
-		public static int lua_dofile(string filename)
+		public static int lua_dofile(CharPtr filename)
 		{
 		 	if (lua_openfile(filename) != 0)
 		 	{
@@ -1110,7 +1110,7 @@ namespace KopiLua
 		** Store top of the stack at a global variable array field. 
 		** Return 1 on error, 0 on success.
 		*/
-		public static int lua_storeglobal(string name)
+		public static int lua_storeglobal(CharPtr name)
 		{
 //		 	int n = lua_findsymbol(name);
 //		 	if (n < 0)

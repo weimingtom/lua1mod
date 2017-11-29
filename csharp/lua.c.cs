@@ -8,51 +8,48 @@ using System;
 
 namespace KopiLua
 {
+	using lua_Object = KopiLua.Lua.Object_;		
+	
 	public partial class Lua
 	{
-		public static void test()
+		public static void test ()
 		{
 		  	lua_pushobject(lua_getparam(1));
-		  	lua_call("c", 1);
+		  	lua_call ("c", 1);
 		}
 
-		internal static void callfunc()
+		private static void callfunc ()
 		{
-		 	Object_ obj = lua_getparam(1);
-		 	if (lua_isstring(obj) != 0)
-		 	{
-			 	lua_call(lua_getstring(obj), 0);
-		 	}
+		 	lua_Object obj = lua_getparam (1);
+		 	if (lua_isstring(obj) != 0) lua_call(lua_getstring(obj), 0);
 		}
 	
-		internal static void execstr()
+		private static void execstr ()
 		{
-		 	Object_ obj = lua_getparam(1);
-		 	if (lua_isstring(obj) != 0)
-		 	{
-			 	lua_dostring(lua_getstring(obj));
-		 	}
+		 	lua_Object obj = lua_getparam (1);
+		 	if (lua_isstring(obj) != 0) lua_dostring(lua_getstring(obj));
 		}
 	
-		static void main(int argc, string[] args)
+		public static int main (int argc, CharPtr[] argv)
 		{
 		 	int i;
 		 	if (argc < 2)
 		 	{
-		  		Console.WriteLine("usage: lua filename [functionnames]");
-		  		return;
+		  		puts ("usage: lua filename [functionnames]");
+		  		return 0;
 		 	}
-//			(lua_pushcfunction(callfunc), lua_storeglobal("callfunc"));
-//			(lua_pushcfunction(execstr), lua_storeglobal("execstr"));
-//			(lua_pushcfunction(test), lua_storeglobal("test"));
-		 	iolib_open();
-		 	strlib_open();
-		 	mathlib_open();
-		 	lua_dofile(args[1]);
-		 	for (i = 2; i < argc; i++)
+			lua_register ("callfunc", callfunc);
+			lua_register ("execstr", execstr);
+			lua_register ("test", test);
+		 	iolib_open ();
+		 	strlib_open ();
+		 	mathlib_open ();
+		 	lua_dofile (argv[1]);
+		 	for (i=2; i<argc; i++)
 		 	{
-		  		lua_call(args[i], 0);
+		  		lua_call(argv[i], 0);
 		 	}
+		 	return 0;
 		}
 	}
 }
