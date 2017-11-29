@@ -555,5 +555,20 @@ namespace KopiLua
 		{
 			return 0;
 		}
+		
+		public static CharPtr strcat(CharPtr desc, CharPtr src)
+		{
+			return null;
+		}
+		
+		//Java
+		//float f = 123.456f;
+		//int i = Float.floatToIntBits(f);
+		//System.out.println(i);
+		//public static float intBitsToFloat(int bits)
+		public static float bytesToFloat(byte byte0, byte byte1, byte byte2, byte byte3)
+		{
+			return BitConverter.ToSingle(new byte[]{byte0, byte1, byte2, byte3}, 0);
+		}
 	}
 }

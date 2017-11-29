@@ -7,16 +7,7 @@
 */
 
 namespace KopiLua
-{
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define markarray(t) ((t)->mark)		
-
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_markstring(s) (*((s)-1))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_register(n,f) (lua_pushcfunction(f), lua_storeglobal(n))
-				
+{				
 	public partial class Lua
 	{	
 		//#define streq(s1,s2) (strcmp(s1,s2)==0)
@@ -143,7 +134,7 @@ namespace KopiLua
 		** node for the given reference and also return its pointer.
 		** On error, return NULL.
 		*/
-		public static object lua_hashdefine (Hash t, Object_ @ref)
+		public static Object_ lua_hashdefine (Hash t, Object_ @ref)
 		{
 			int   h;
 			Node n;

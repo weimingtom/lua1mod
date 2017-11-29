@@ -26,13 +26,30 @@ namespace KopiLua
 		//#define MAXSYMBOL	512
 		//#endif
 		private const int MAXSYMBOL = 512;
-		private static Symbol[] tablebuffer = {
+		private static Symbol[] _tablebuffer = {
 			new Symbol("type", Type.T_CFUNCTION, lua_type),
 			new Symbol("tonumber", Type.T_CFUNCTION, lua_obj2number),
 			new Symbol("next", Type.T_CFUNCTION, lua_next),
 			new Symbol("nextvar", Type.T_CFUNCTION, lua_nextvar),
 			new Symbol("print", Type.T_CFUNCTION, lua_print)
 		};
+		private static Symbol[] _inittablebuffer() 
+		{
+			Symbol[] tablebuffer = new Symbol[MAXSYMBOL];
+			for (int i = 0; i < tablebuffer.Length; ++i)
+			{
+				if (i < _tablebuffer.Length)
+				{
+					tablebuffer[i] = _tablebuffer[i];
+				}
+				else
+				{
+					tablebuffer[i] = new Symbol();
+				}
+			}
+			return tablebuffer;
+		}
+		private static Symbol[] tablebuffer = _inittablebuffer();
 		public static Symbol[] lua_table = tablebuffer;
 		public static Word lua_ntable = 5;		
 		
@@ -42,11 +59,28 @@ namespace KopiLua
 		//#define MAXCONSTANT	256
 		//#endif
 		private const int MAXCONSTANT = 256;
-		private static CharPtr[] constantbuffer = {
+		private static CharPtr[] _constantbuffer = {
 			"mark", "nil", "number",
 			"string", "table", 
 			"function", "cfunction"
 		};
+		private static CharPtr[] _initconstantbuffer() 
+		{
+			CharPtr[] constantbuffer = new CharPtr[MAXCONSTANT];
+			for (int i = 0; i < constantbuffer.Length; ++i)
+			{
+				if (i < _constantbuffer.Length)
+				{
+					constantbuffer[i] = _constantbuffer[i];
+				}
+				else
+				{
+					constantbuffer[i] = null;
+				}
+			}
+			return constantbuffer;
+		}
+		private static CharPtr[] constantbuffer = _initconstantbuffer();
 		public static CharPtr[] lua_constant = constantbuffer;
 		public static Word lua_nconstant = (int)Type.T_CFUNCTION + 1;
 		

@@ -91,22 +91,36 @@ namespace KopiLua
 		public delegate int Input();
 		public delegate void Unput(int c);
 		
-		public struct Value
+		public struct Value //FIXME:struct?class?
 		{
 		 	public Cfunction f;
 			public float n;
 		 	public CharPtr s;
-			//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-			//ORIGINAL LINE: byte *b;
-		 	public byte b;
+		 	public byte[] b;
 		 	public Hash a;
 		 	public object u;
+			
+			public void set(Value v)
+		 	{
+				this.f = v.f;
+				this.n = v.n;
+				this.s = v.s;
+				this.b = v.b;
+				this.a = v.a;
+				this.u = v.u;
+			}
 		}
 
 		public class Object_
 		{
 		 	public Type tag;
 		 	public Value value = new Value();
+		 	
+		 	public void set(Object_ obj)
+		 	{
+		 		this.tag = obj.tag;
+		 		this.value.set(obj.value);
+		 	}
 		}
 
 		public class Symbol
@@ -130,6 +144,7 @@ namespace KopiLua
 		public static void tag(Object_ o, Type t) { o.tag = t; }		
 		//#define nvalue(o) ((o)->value.n)
 		public static float nvalue(Object_ o) { return o.value.n; }		
+		public static void nvalue(Object_ o, float n) { o.value.n = n; }	
 		//#define svalue(o) ((o)->value.s)
 		public static CharPtr svalue(Object_ o) { return o.value.s; }
 		public static void svalue(Object_ o, CharPtr ptr) { o.value.s = ptr; }

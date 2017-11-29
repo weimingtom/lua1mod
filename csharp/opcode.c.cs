@@ -5,63 +5,85 @@
 */
 using System;
 
-//#if __GNUC__
-//#endif
-
 namespace KopiLua
 {
 	using lua_Object = KopiLua.Lua.Object_;	
+	using Word = System.UInt16;
 	
 	public partial class Lua
 	{
-		public const int MAXSTACK = 256;
+		//#define tonumber(o) ((tag(o) != T_NUMBER) && (lua_tonumber(o) != 0))
+		//#define tostring(o) ((tag(o) != T_STRING) && (lua_tostring(o) != 0))
 	
-		//C++ TO C# CONVERTER TODO TASK: The following line could not be converted:
-		//#include "opcode.h"
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define markarray(t) ((t)->mark)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_markstring(s) (*((s)-1))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_register(n,f) (lua_pushcfunction(f), lua_storeglobal(n))
-	
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define tonumber(o) ((tag(o) != T_NUMBER) && (lua_tonumber(o) != 0))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define tostring(o) ((tag(o) != T_STRING) && (lua_tostring(o) != 0))
-	
-		internal static Object_[] stack = new Object_[MAXSTACK];
-		static Lua() 
+		//#ifndef MAXSTACK
+		//#define MAXSTACK 256
+		//#endif		
+		private const int MAXSTACK = 256;
+		private static Object_[] _initstack()
 		{
+			Object_[] stack = new Object_[MAXSTACK];
 			for (int i = 0; i < stack.Length; ++i)
 			{
 				stack[i] = new Object_();
 			}
 			stack[0].tag = Type.T_MARK;
+			return stack;
 		}
+		private static Object_[] stack = _initstack();
 		
-//		internal static object top = stack + 1;
-//		internal static object @base = stack + 1;
-	
-	
+		private class ObjectRef 
+		{
+			private Object_[] obj;
+			private int index;
+			public ObjectRef(Object_[] _obj, int _index)
+			{
+				this.obj = _obj;
+				this.index = _index;
+			}
+			
+			public Object_ inc() 
+			{
+				index++;
+				return obj[index - 1];
+			}
+
+			public Object_ dec() 
+			{
+				index--;
+				return obj[index + 1];
+			}
+			
+			public Object_ get()
+			{
+				return obj[index];
+			}
+
+			public Object_ get(int offset)
+			{
+				return obj[index + offset];
+			}
+			
+			public void set(int offset, Object_ o)
+			{
+				obj[index + offset].set(o);
+			}
+		}
+		private static ObjectRef top = new ObjectRef(stack, 1), @base = new ObjectRef(stack, 1);
+		
 		/*
 		** Concatenate two given string, creating a mark space at the beginning.
 		** Return the new string pointer.
 		*/
 		internal static CharPtr lua_strconc(CharPtr l, CharPtr r)
 		{
-//			//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//			//ORIGINAL LINE: sbyte *s = calloc(strlen(l)+strlen(r)+2, sizeof(sbyte));
-//			//C++ TO C# CONVERTER TODO TASK: The memory management function 'calloc' has no equivalent in C#:
-//		 	sbyte s = calloc(l.Length + r.Length + 2, sizeof(sbyte));
-//		 	if (s == null)
-//		 	{
-//		  		lua_error("not enough memory");
-//		  		return null;
-//		 	}
-//		 	s++= 0; // create mark space
-//		 	return strcat(strcpy(s,l),r);
-			return null;
+			CharPtr s = (CharPtr)calloc (strlen(l)+strlen(r)+2, sizeOf("char"));
+		 	if (s == null)
+		 	{
+		  		lua_error ("not enough memory");
+		  		return null;
+		 	}
+		 	s[0] = '\0'; s.inc(); // create mark space
+		 	return strcat(strcpy(s,l),r);
 		}
 	
 		/*
@@ -70,106 +92,87 @@ namespace KopiLua
 		*/
 		public static CharPtr lua_strdup(CharPtr l)
 		{
-//			//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//			//ORIGINAL LINE: sbyte *s = calloc(strlen(l)+2, sizeof(sbyte));
-//			//C++ TO C# CONVERTER TODO TASK: The memory management function 'calloc' has no equivalent in C#:
-//		 	sbyte s = calloc(l.Length + 2, sizeof(sbyte));
-//		 	if (s == null)
-//		 	{
-//		  		lua_error("not enough memory");
-//		  		return null;
-//		 	}
-//		 	s++= 0; // create mark space
-//		 	return strcpy(s,l);
-			return null;
+			CharPtr s = (CharPtr)calloc (strlen(l)+2, sizeOf("char"));
+		 	if (s == null)
+		 	{
+		  		lua_error ("not enough memory");
+		  		return null;
+		 	}
+		 	s[0] = '\0'; s.inc(); // create mark space
+		 	return strcpy(s,l);
 		}
 	
 		/*
 		** Convert, if possible, to a number tag.
 		** Return 0 in success or not 0 on error.
 		*/ 
-		internal static int lua_tonumber(Object obj)
+		internal static int lua_tonumber(Object_ obj)
 		{
-//		 	string ptr;
-//		 	if (tag(obj) != T_STRING)
-//		 	{
-//		  		lua_reportbug("unexpected type at conversion to number");
-//		  		return 1;
-//		 	}
-//		 	nvalue(obj) = strtod(svalue(obj), ptr);
-//		 	if (ptr != 0)
-//		 	{
-//		  		lua_reportbug("string to number convertion failed");
-//		  		return 2;
-//		 	}
-//		 	tag(obj) = T_NUMBER;
+		 	CharPtr ptr = null;
+		 	if (tag(obj) != Type.T_STRING)
+		 	{
+		  		lua_reportbug ("unexpected type at conversion to number");
+		  		return 1;
+		 	}
+		 	nvalue(obj, (float)strtod(svalue(obj), ref ptr));
+		 	if (ptr[0] != '\0')
+		 	{
+		  		lua_reportbug ("string to number convertion failed");
+		  		return 2;
+		 	}
+		 	tag(obj, Type.T_NUMBER);
 		 	return 0;
 		}
 	
-		//C++ TO C# CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in C#):
-//		private static object lua_convtonumber_cvt;
-	
+		private static Object_ lua_convtonumber_cvt = new Object_();
 		/*
 		** Test if is possible to convert an object to a number one.
 		** If possible, return the converted object, otherwise return nil object.
 		*/ 
-		internal static Object lua_convtonumber(Object obj)
+		private static Object_ lua_convtonumber(Object_ obj)
 		{
-//			//C++ TO C# CONVERTER NOTE: This static local variable declaration (not allowed in C#) has been moved just prior to the method:
-//			// static object cvt;
-//	
-//		 	if (tag(obj) == T_NUMBER)
-//		 	{
-//		  		lua_convtonumber_cvt = obj;
-//		  		return lua_convtonumber_cvt;
-//		 	}
-//	
-//		 	tag(lua_convtonumber_cvt) = T_NIL;
-//		 	if (tag(obj) == T_STRING)
-//		 	{
-//		  		string ptr;
-//		  		nvalue(lua_convtonumber_cvt) = strtod(svalue(obj), ptr);
-//		  		if (ptr == 0)
-//		  		{
-//		   			tag(lua_convtonumber_cvt) = T_NUMBER;
-//		  		}
-//		 	}
-//		 	return lua_convtonumber_cvt;
-			return null;
+			// static object cvt;
+	
+		 	if (tag(obj) == Type.T_NUMBER)
+		 	{
+		  		lua_convtonumber_cvt = obj;
+		  		return lua_convtonumber_cvt;
+		 	}
+	
+		 	tag(lua_convtonumber_cvt, Type.T_NIL);
+		 	if (tag(obj) == Type.T_STRING)
+		 	{
+		  		CharPtr ptr = null;
+		  		nvalue(lua_convtonumber_cvt, (float)strtod(svalue(obj), ref ptr));
+		  		if (ptr[0] == '\0')
+		  		{
+		  			tag(lua_convtonumber_cvt, Type.T_NUMBER);
+		  		}
+		 	}
+		 	return lua_convtonumber_cvt;
 		}
 	
-		//C++ TO C# CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in C#):
-		private static string lua_tostring_s = new string(new char[256]);
-	
-	
-	
+		private static CharPtr lua_tostring_s = new CharPtr(new char[256]);
 		/*
 		** Convert, if possible, to a string tag
 		** Return 0 in success or not 0 on error.
 		*/ 
-		internal static int lua_tostring(Object obj)
+		private static int lua_tostring(Object_ obj)
 		{
-//			//C++ TO C# CONVERTER NOTE: This static local variable declaration (not allowed in C#) has been moved just prior to the method:
-//			// static sbyte s[256];
-//		 	if (tag(obj) != T_NUMBER)
-//		 	{
-//		  		lua_reportbug("unexpected type at conversion to string");
-//		  		return 1;
-//		 	}
-//		 	if ((int) nvalue(obj) == nvalue(obj))
-//		 	{
-//		  		lua_tostring_s = string.Format("{0:D}", (int) nvalue(obj));
-//		 	}
-//		 	else
-//		 	{
-//		  		lua_tostring_s = string.Format("{0:g}", nvalue(obj));
-//		 	}
-//		 	svalue(obj) = lua_createstring(lua_strdup(ref lua_tostring_s));
-//		 	if (svalue(obj) == null)
-//		 	{
-//		  		return 1;
-//		 	}
-//		 	tag(obj) = T_STRING;
+			// static sbyte s[256];
+		 	if (tag(obj) != Type.T_NUMBER)
+		 	{
+		  		lua_reportbug ("unexpected type at conversion to string");
+		  		return 1;
+		 	}
+		 	if ((int) nvalue(obj) == nvalue(obj))
+		  		sprintf (lua_tostring_s, "%d", (int) nvalue(obj));
+		 	else
+		 		sprintf (lua_tostring_s, "%g", nvalue(obj));
+		 	svalue(obj, lua_createstring(lua_strdup(lua_tostring_s)));
+		 	if (svalue(obj) == null)
+		  		return 1;
+		 	tag(obj, Type.T_STRING);
 		 	return 0;
 		}
 	
@@ -177,7 +180,6 @@ namespace KopiLua
 		/*
 		** Execute the given opcode. Return 0 in success or 1 on error.
 		*/
-		//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on the parameter 'pc', so pointers on this parameter are left unchanged:
 		public static int lua_execute(BytePtr pc)
 		{
 		 	while (true)
@@ -189,118 +191,115 @@ namespace KopiLua
 			  		break;
 	
 		   		case OpCode.PUSHNIL:
-//			   		tag(top++) = T_NIL;
+			  		tag(top.inc(), Type.T_NIL);
 			   		break;
 	
 		   		case OpCode.PUSH0:
-//			   		tag(top) = T_NUMBER;
-//			   		nvalue(top++) = 0;
+			   		tag(top.get(), Type.T_NUMBER);
+			   		nvalue(top.inc(), 0);
 			   		break;
 		   
 			   	case OpCode.PUSH1:
-//			   		tag(top) = T_NUMBER;
-//			   		nvalue(top++) = 1;
+			   		tag(top.get(), Type.T_NUMBER);
+			   		nvalue(top.inc(), 1);
 			   		break;
 		   
 			   	case OpCode.PUSH2:
-//			   		tag(top) = T_NUMBER;
-//			   		nvalue(top++) = 2;
+			   		tag(top.get(), Type.T_NUMBER);
+			   		nvalue(top.inc(), 2);
 			   		break;
 	
 		   		case OpCode.PUSHBYTE:
-//			   		tag(top) = T_NUMBER;
-//			   		nvalue(top++) = *pc++;
+			   		tag(top.get(), Type.T_NUMBER);
+			   		nvalue(top.inc(), pc[0]); pc.inc();
 			   		break;
 	
 		   		case OpCode.PUSHWORD:
-//					tag(top) = T_NUMBER;
-//					nvalue(top++) = (Word)(pc);
-//					pc += sizeof(Word);
+			   		tag(top.get(), Type.T_NUMBER);
+			   		nvalue(top.inc(), (Word)(pc[0] | pc[1] << 8));
+					pc += 2;
 		   			break;
 	
 		   		case OpCode.PUSHFLOAT:
-//					tag(top) = T_NUMBER;
-//					nvalue(top++) = (float)(pc);
-//					pc += sizeof(float);
+		   			tag(top.get(), Type.T_NUMBER);
+		   			nvalue(top.inc(), bytesToFloat(pc[0], pc[1], pc[2], pc[3]));
+					pc += 4;
 		   			break;
 		   
 			   	case OpCode.PUSHSTRING:
-//			   		{
-//						int w = (Word)(pc);
-//						pc += sizeof(Word);
-//						tag(top) = T_STRING;
-//						svalue(top++) = lua_constant[w];
-//			   		}
+			   		{
+		   				int w = (Word)(pc[0] | pc[1] << 8);
+						pc += 2;
+						tag(top.get(), Type.T_STRING);
+						svalue(top.inc(), lua_constant[w]);
+			   		}
 			   		break;
 		
 			   	case OpCode.PUSHLOCAL0:
-//				   	top++= *(@base + 0);
+			   		top.inc().set(@base.get(0));
 				   	break;
 			   
 			   	case OpCode.PUSHLOCAL1:
-//				   	top++= *(@base + 1);
+				   	top.inc().set(@base.get(1));
 				   	break;
 			   
 				case OpCode.PUSHLOCAL2:
-//				   	top++= *(@base + 2);
+					top.inc().set(@base.get(2));
 				   	break;
 			   
 				case OpCode.PUSHLOCAL3:
-//				   	top++= *(@base + 3);
+					top.inc().set(@base.get(3));
 				   	break;
 			   
 				case OpCode.PUSHLOCAL4:
-//				   	top++= *(@base + 4);
+					top.inc().set(@base.get(4));
 				  	break;
 			   
 				case OpCode.PUSHLOCAL5:
-//				   	top++= *(@base + 5);
+					top.inc().set(@base.get(5));
 				   	break;
 			   
 				case OpCode.PUSHLOCAL6:
-//				   	top++= *(@base + 6);
+					top.inc().set(@base.get(6));
 				   	break;
 			   
 				case OpCode.PUSHLOCAL7:
-//				   	top++= *(@base + 7);
+					top.inc().set(@base.get(7));
 				   	break;
 			   
 				case OpCode.PUSHLOCAL8:
-//				   	top++= *(@base + 8);
+					top.inc().set(@base.get(8));
 				   	break;
 			   
 				case OpCode.PUSHLOCAL9:
-//				   	top++= *(@base + 9);
+					top.inc().set(@base.get(9));
 				   	break;
 		
 			   	case OpCode.PUSHLOCAL:
-//				   	top++= *(@base + (*pc++));
+				   	top.inc().set(@base.get(pc[0])); pc.inc();
 				   	break;
 		
 			   case OpCode.PUSHGLOBAL:
-//					top++= s_object((Word)(pc));
-//					pc += sizeof(Word);
+				   	top.inc().set(s_object((Word)(pc[0] | pc[1] << 8)));
+				   	pc += 2;
 			   		break;
 		
 			   case OpCode.PUSHINDEXED:
-//					--top;
-//					if (tag(top - 1) != T_ARRAY)
-//					{
-//				 		lua_reportbug("indexed expression not a table");
-//				 		return 1;
-//					}
-//					{
-//				 		object h = lua_hashdefine(avalue(top - 1), top);
-//				 		if (h == null)
-//				 		{
-//					 		return 1;
-//				 		}
-//				 		*(top - 1) = h;
-//					}
+			   		top.dec();
+			   		if (tag(top.get(-1)) != Type.T_ARRAY)
+					{
+				 		lua_reportbug ("indexed expression not a table");
+				 		return 1;
+					}
+					{
+			   			Object_ h = lua_hashdefine (avalue(top.get(- 1)), top.get());
+				 		if (h == null) return 1;
+				 		top.set(-1, h);
+					}
 			   		break;
 		
 			   	case OpCode.PUSHMARK:
-//				   	tag(top++) = T_MARK;
+			   		tag(top.inc(), Type.T_MARK);
 				   	break;
 		
 			   	case OpCode.PUSHOBJECT:
