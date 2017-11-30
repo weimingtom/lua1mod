@@ -67,6 +67,54 @@ namespace KopiLua
 			{
 				obj[index + offset].set(o);
 			}
+			
+			public void add(int offset) 
+			{
+				index += offset;
+			}
+			
+			public bool notEqualsTo(Object_ o)
+			{
+				return obj[index] != o;
+			}
+			
+			public bool isLessThan(Object_ o)
+			{
+				int idx = -1;
+				bool found = false;
+				for (int i = 0; i < obj.Length; ++i)
+				{
+					if (o == obj[i])
+					{
+						idx = i;
+						found = true;
+						break;
+					}
+				}
+				if (found == false)
+				{
+					throw new Exception("objs not same");
+				}
+				return this.index < idx;				
+			}
+			
+			public void setRef(Object_ o)
+			{
+				bool found = false;
+				for (int i = 0; i < obj.Length; ++i)
+				{
+					if (o == obj[i])
+					{
+						this.index = i;
+						found = true;
+						break;
+					}
+				}
+				if (found == false)
+				{
+					throw new Exception("objs not same");
+				}
+			}
 		}
 		private static ObjectRef top = new ObjectRef(stack, 1), @base = new ObjectRef(stack, 1);
 		
@@ -303,120 +351,118 @@ namespace KopiLua
 				   	break;
 		
 			   	case OpCode.PUSHOBJECT:
-//				   	top = *(top - 3);
-//				  	top++;
+				   	top.set(0, top.get(-3));
+				   	top.inc();
 				   	break;
 		
 			   	case OpCode.STORELOCAL0:
-//				   	*(@base + 0) = *(--top);
+				   	top.dec(); @base.get(0).set(top.get());
 				   	break;
 			   
 				case OpCode.STORELOCAL1:
-//				   	*(@base + 1) = *(--top);
+				   	top.dec(); @base.get(1).set(top.get());
 				   	break;
 			   
 				case OpCode.STORELOCAL2:
-//				   	*(@base + 2) = *(--top);
+					top.dec(); @base.get(2).set(top.get());
 				  	break;
 			   
 				case OpCode.STORELOCAL3:
-//				   	*(@base + 3) = *(--top);
+					top.dec(); @base.get(3).set(top.get());
 				   	break;
 			   
 				case OpCode.STORELOCAL4:
-//				   	*(@base + 4) = *(--top);
+					top.dec(); @base.get(4).set(top.get());
 				  	break;
 			   
 				case OpCode.STORELOCAL5:
-//				   	*(@base + 5) = *(--top);
+					top.dec(); @base.get(5).set(top.get());
 				   	break;
 			   
 				case OpCode.STORELOCAL6:
-//				   	*(@base + 6) = *(--top);
+					top.dec(); @base.get(6).set(top.get());
 				   	break;
 			   
 				case OpCode.STORELOCAL7:
-//				   	*(@base + 7) = *(--top);
+					top.dec(); @base.get(7).set(top.get());
 				  	break;
 			   
 				case OpCode.STORELOCAL8:
-//				   	*(@base + 8) = *(--top);
+					top.dec(); @base.get(8).set(top.get());
 				   	break;
 			   
 				case OpCode.STORELOCAL9:
-//				   	*(@base + 9) = *(--top);
+					top.dec(); @base.get(9).set(top.get());
 				   	break;
 		
 			   	case OpCode.STORELOCAL:
-//				   	*(@base + (*pc++)) = *(--top);
+				   	top.dec(); @base.get(pc[0]).set(top.get()); pc.inc();
 				   	break;
 		
 			   	case OpCode.STOREGLOBAL:
-//					s_object((Word)(pc)) = *(--top);
-//					pc += sizeof(Word);
+				   	top.dec(); s_object((Word)(pc[0] | pc[1] << 8), top.get());
+					pc += 2;
 			   		break;
 		
 			   	case OpCode.STOREINDEXED0:
-//					if (tag(top - 3) != T_ARRAY)
-//					{
-//				 		lua_reportbug("indexed expression not a table");
-//				 		return 1;
-//					}
-//					{
-//				 		object h = lua_hashdefine(avalue(top - 3), top - 2);
-//				 		if (h == null)
-//				 		{
-//					 		return 1;
-//				 		}
-//				 		h = *(top - 1);
-//					}
-//					top -= 3;
+			   		if (tag(top.get(-3)) != Type.T_ARRAY)
+			   		{
+				 		lua_reportbug ("indexed expression not a table");
+				 		return 1;
+					}
+					{
+			   			Object_ h = lua_hashdefine(avalue(top.get(-3)), top.get(-2));
+				 		if (h == null)
+				 		{
+					 		return 1;
+				 		}
+				 		h.set(top.get(-1));
+					}
+			   		top.add(-3);
 			   		break;
 		
 			   	case OpCode.STOREINDEXED:
-//			   		{
-//						int n = pc++;
-//						if (tag(top - 3 - n) != T_ARRAY)
-//						{
-//				 			lua_reportbug("indexed expression not a table");
-//				 			return 1;
-//						}
-//						{
-//				 			object h = lua_hashdefine(avalue(top - 3 - n), top - 2 - n);
-//				 			if (h == null)
-//				 			{
-//					 			return 1;
-//				 			}
-//				 			h = *(top - 1);
-//						}
-//						--top;
-//			   		}
+			   		{
+			   			int n = pc[0]; pc.inc();
+			   			if (tag(top.get(-3-n)) != Type.T_ARRAY)
+						{
+				 			lua_reportbug ("indexed expression not a table");
+				 			return 1;
+						}
+						{
+			   				Object_ h = lua_hashdefine (avalue(top.get(-3-n)), top.get(-2-n));
+				 			if (h == null)
+				 			{
+					 			return 1;
+				 			}
+				 			h.set(top.get(-1));
+						}
+						top.dec();
+			   		}
 			   		break;
 		
 			   	case OpCode.STOREFIELD:
-//					if (tag(top - 3) != T_ARRAY)
-//					{
-//				 		lua_error("internal error - table expected");
-//				 		return 1;
-//					}
-//					(lua_hashdefine(avalue(top - 3), top - 2)) = *(top - 1);
-//					top -= 2;
+			   		if (tag(top.get(-3)) != Type.T_ARRAY)
+					{
+				 		lua_error ("internal error - table expected");
+				 		return 1;
+					}
+			   		(lua_hashdefine (avalue(top.get(-3)), top.get(-2))).set(top.get(-1));
+					top.add(-2);
 			   		break;
 		
 			   	case OpCode.ADJUST:
-//			   		{
-//						object newtop = @base + *(pc++);
-//						if (top != newtop)
-//						{
-//				 			while (top < newtop)
-//				 			{
-//					 			tag(top++) = T_NIL;
-//				 			}
-//							//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to variables (in C#, the variable no longer points to the original when the original variable is re-assigned):
-//							//ORIGINAL LINE: top = newtop;
-//				 			top = newtop;
-//						}
-//			   		}
+			   		{
+			   			Object_ newtop = @base.get(pc[0]); pc.inc();
+			   			if (top.notEqualsTo(newtop))
+						{
+			   				while (top.isLessThan(newtop))
+				 			{
+				 				tag(top.inc(), Type.T_NIL);
+				 			}
+				 			top.setRef(newtop);
+						}
+			   		}
 			   		break;
 		
 			   	case OpCode.CREATEARRAY:
@@ -638,39 +684,33 @@ namespace KopiLua
 			   		break;
 		
 			   	case OpCode.JMP:
-//				   	pc += (Word)(pc) + sizeof(Word);
+			   		pc += (Word)(pc[0] | pc[1] << 8) + 2;
 				   	break;
 		
 			   	case OpCode.UPJMP:
-//				   	pc -= (Word)(pc) - sizeof(Word);
+				   	pc -= (Word)(pc[0] | pc[1] << 8) - 2;
 				   	break;
 		
 			   	case OpCode.IFFJMP:
-//			   		{
-//						int n = (Word)(pc);
-//						pc += sizeof(Word);
-//						top--;
-//						if (tag(top) == T_NIL)
-//						{
-//							pc += n;
-//						}
-//			   		}
+			   		{
+				   		int n = (Word)(pc[0] | pc[1] << 8);
+						pc += 2;
+						top.dec();
+						if (tag(top.get()) == Type.T_NIL) pc += n;
+					}
 			   		break;
 		
 			   	case OpCode.IFFUPJMP:
-//			   		{
-//						int n = (Word)(pc);
-//						pc += sizeof(Word);
-//						top--;
-//						if (tag(top) == T_NIL)
-//						{
-//							pc -= n;
-//						}
-//			   		}
+			   		{
+			   			int n = (Word)(pc[0] | pc[1] << 8);
+						pc += 2;
+						top.dec();
+						if (tag(top.get()) == Type.T_NIL) pc -= n;
+					}
 			   		break;
 		
 			   	case OpCode.POP:
-//				   	--top;
+			   		top.dec();
 				   	break;
 		
 			   	case OpCode.CALLFUNC:
@@ -748,31 +788,28 @@ namespace KopiLua
 			   		return 0; // success
 		
 			   	case OpCode.SETFUNCTION:
-//		   			{
-//						int file;
-//						int func;
-//						file = (Word)(pc);
-//						pc += sizeof(Word);
-//						func = (Word)(pc);
-//						pc += sizeof(Word);
-//						if (lua_pushfunction(file, func) != 0)
-//						{
-//			 				return 1;
-//						}
-//		   			}
+		   			{
+						int file, func;
+						file = (Word)(pc[0] | pc[1] << 8);
+						pc += 2;
+						func = (Word)(pc[0] | pc[1] << 8);
+						pc += 2;
+						if (lua_pushfunction (file, func) != 0)
+			 				return 1;
+					}
 		   			break;
 		
 		   		case OpCode.SETLINE:
-//					lua_debugline = (Word)(pc);
-//					pc += sizeof(Word);
+		   			lua_debugline = (Word)(pc[0] | pc[1] << 8);
+					pc += 2;
 		   			break;
 	
 		   		case OpCode.RESET:
-//					lua_popfunction();
+					lua_popfunction ();
 		   			break;
 	
 		   		default:
-//					lua_error("internal error - opcode didn't match");
+					lua_error ("internal error - opcode didn't match");
 		   			return 1;
 			  	}
 		 	}

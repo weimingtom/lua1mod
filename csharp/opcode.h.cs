@@ -160,6 +160,7 @@ namespace KopiLua
 		public static void s_name(int i, CharPtr ptr) {lua_table[i].name = ptr; }
 		//#define s_object(i) (lua_table[i].object)
 		public static Object_ s_object(int i) { return lua_table[i].@object; }
+		public static void s_object(int i, Object_ o) { lua_table[i].@object.set(o); }
 		//#define s_tag(i) (tag(&s_object(i)))
 		public static Type s_tag(int i) { return tag(s_object(i)); }
 		public static void s_tag(int i, Type t) { tag(s_object(i), t); }
