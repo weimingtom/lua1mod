@@ -13,8 +13,10 @@ namespace KopiLua
 	public partial class Lua
 	{
 		//#define tonumber(o) ((tag(o) != T_NUMBER) && (lua_tonumber(o) != 0))
+		private static bool tonumber(Object_ o) { return (tag(o) != Type.T_NUMBER) && (lua_tonumber(o) != 0); }
 		//#define tostring(o) ((tag(o) != T_STRING) && (lua_tostring(o) != 0))
-	
+		private static bool tostring(Object_ o) { return (tag(o) != Type.T_STRING) && (lua_tostring(o) != 0); }
+		
 		//#ifndef MAXSTACK
 		//#define MAXSTACK 256
 		//#endif		
@@ -560,127 +562,107 @@ namespace KopiLua
 			   		break;
 		
 			   	case OpCode.LEOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						--top;
-//						if (tag(l) == T_NUMBER && tag(r) == T_NUMBER)
-//						{
-//				 			tag(top - 1) = (nvalue(l) <= nvalue(r)) ? T_NUMBER : T_NIL;
-//						}
-//						else
-//						{
-//					 		if (((tag(l) != T_STRING) && (lua_tostring(l) != 0)) || ((tag(r) != T_STRING) && (lua_tostring(r) != 0)))
-//					 		{
-//					  			return 1;
-//					 		}
-//					 		tag(top - 1) = (string.Compare(svalue(l), svalue(r)) <= 0) ? T_NUMBER : T_NIL;
-//						}
-//						nvalue(top - 1) = 1;
-//				   	}
+			   		{
+						object l = top - 2;
+						object r = top - 1;
+						--top;
+						if (tag(l) == T_NUMBER && tag(r) == T_NUMBER)
+						{
+				 			tag(top - 1) = (nvalue(l) <= nvalue(r)) ? T_NUMBER : T_NIL;
+						}
+						else
+						{
+					 		if (((tag(l) != T_STRING) && (lua_tostring(l) != 0)) || ((tag(r) != T_STRING) && (lua_tostring(r) != 0)))
+					 		{
+					  			return 1;
+					 		}
+					 		tag(top - 1) = (string.Compare(svalue(l), svalue(r)) <= 0) ? T_NUMBER : T_NIL;
+						}
+						nvalue(top - 1) = 1;
+				   	}
 			   		break;
 		
 			   case OpCode.ADDOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						if (((tag(r) != T_NUMBER) && (lua_tonumber(r) != 0)) || ((tag(l) != T_NUMBER) && (lua_tonumber(l) != 0)))
-//						{
-//				 			return 1;
-//						}
-//						nvalue(l) += nvalue(r);
-//						--top;
-//			   		}
+			   		{
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+						if (tonumber(r) || tonumber(l))
+				 			return 1;
+						nvalue(l, nvalue(l) + nvalue(r));
+						top.dec();
+			   		}
 			   		break;
 		
 			  	case OpCode.SUBOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						if (((tag(r) != T_NUMBER) && (lua_tonumber(r) != 0)) || ((tag(l) != T_NUMBER) && (lua_tonumber(l) != 0)))
-//						{
-//				 			return 1;
-//						}
-//						nvalue(l) -= nvalue(r);
-//						--top;
-//			   		}
+			   		{
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+						if (tonumber(r) || tonumber(l))
+				 			return 1;
+						nvalue(l, nvalue(l) - nvalue(r));
+						top.dec();
+			   		}
 			   		break;
 		
 			   	case OpCode.MULTOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						if (((tag(r) != T_NUMBER) && (lua_tonumber(r) != 0)) || ((tag(l) != T_NUMBER) && (lua_tonumber(l) != 0)))
-//						{
-//				 			return 1;
-//						}
-//						nvalue(l) *= nvalue(r);
-//						--top;
-//			   		}
+			   		{
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+						if (tonumber(r) || tonumber(l))
+				 			return 1;
+						nvalue(l, nvalue(l) * nvalue(r));
+						top.dec();
+			   		}
 			   		break;
 		
 			   	case OpCode.DIVOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						if (((tag(r) != T_NUMBER) && (lua_tonumber(r) != 0)) || ((tag(l) != T_NUMBER) && (lua_tonumber(l) != 0)))
-//						{
-//				 			return 1;
-//						}
-//						nvalue(l) /= nvalue(r);
-//						--top;
-//			   		}
+			   		{
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+						if (tonumber(r) || tonumber(l))
+				 			return 1;
+						nvalue(l, nvalue(l) / nvalue(r));
+						top.dec();
+			   		}
 			   		break;
 		
 			   	case OpCode.CONCOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						if (((tag(r) != T_STRING) && (lua_tostring(r) != 0)) || ((tag(l) != T_STRING) && (lua_tostring(l) != 0)))
-//						{
-//				 			return 1;
-//						}
-//						svalue(l) = lua_createstring(lua_strconc(ref svalue(l), ref svalue(r)));
-//						if (svalue(l) == null)
-//						{
-//				 			return 1;
-//						}
-//						--top;
-//			   		}
+			   		{
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+						if (tonumber(r) || tonumber(l))
+				 			return 1;
+						svalue(l, lua_createstring (lua_strconc(svalue(l),svalue(r))));
+						if (svalue(l) == null)
+				 			return 1;
+						top.dec();
+			   		}
 			   		break;
 		
 			   	case OpCode.MINUSOP:
-//					if (((tag(top - 1) != T_NUMBER) && (lua_tonumber(top - 1) != 0)))
-//					{
-//				 		return 1;
-//					}
-//					nvalue(top - 1) = - nvalue(top - 1);
+			   		if (tonumber(top.get(-1)))
+						return 1;
+					nvalue(top.get(-1), - nvalue(top.get(-1)));
 			   		break;
 		
 			   	case OpCode.NOTOP:
-//					tag(top - 1) = tag(top - 1) == T_NIL ? T_NUMBER : T_NIL;
+			   		tag(top.get(-1), tag(top.get(-1)) == Type.T_NIL ? Type.T_NUMBER : Type.T_NIL);
 			   		break;
 		
 			   	case OpCode.ONTJMP:
-//			   		{
-//						int n = (Word)(pc);
-//						pc += sizeof(Word);
-//						if (tag(top - 1) != T_NIL)
-//						{
-//							pc += n;
-//						}
-//			   		}
+			   		{
+			   			int n = (Word)(pc[0] | pc[1] << 8);
+						pc += 2;
+						if (tag(top.get(-1)) != Type.T_NIL) pc += n;
+					}
 			   		break;
 		
 			   	case OpCode.ONFJMP:
-//			   		{
-//						int n = (Word)(pc);
-//						pc += sizeof(Word);
-//						if (tag(top - 1) == T_NIL)
-//						{
-//							pc += n;
-//						}
-//			   		}
+			   		{
+						int n = (Word)(pc[0] | pc[1] << 8);
+						pc += 2;
+						if (tag(top.get(-1)) == Type.T_NIL) pc += n;
+					}
 			   		break;
 		
 			   	case OpCode.JMP:
