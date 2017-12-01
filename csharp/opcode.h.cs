@@ -4,10 +4,6 @@
 ** 16 Apr 92
 */
 
-
-//#if ! STACKGAP
-//#define STACKGAP
-//#endif
 namespace KopiLua
 {
 	using Cfunction = KopiLua.Lua.lua_CFunction;
@@ -90,8 +86,8 @@ namespace KopiLua
 		}
 
 		//public delegate void Cfunction();
-		public delegate int Input();
-		public delegate void Unput(int c);
+		public delegate int Input ();
+		public delegate void Unput (int c);
 		
 		public struct Value //FIXME:struct?class?
 		{
@@ -174,11 +170,17 @@ namespace KopiLua
 		public static Type s_tag(int i) { return tag(s_object(i)); }
 		public static void s_tag(int i, Type t) { tag(s_object(i), t); }
 		//#define s_nvalue(i) (nvalue(&s_object(i)))
+		public static float s_nvalue(int i) {return nvalue(s_object(i));}
 		//#define s_svalue(i) (svalue(&s_object(i)))
+		public static CharPtr s_svalue(int i) {return svalue(s_object(i));}
 		//#define s_bvalue(i) (bvalue(&s_object(i)))
+		public static BytePtr s_bvalue(int i) {return bvalue(s_object(i));}
 		//#define s_avalue(i) (avalue(&s_object(i)))
+		public static Hash s_avalue(int i) {return avalue(s_object(i));}
 		//#define s_fvalue(i) (fvalue(&s_object(i)))
+		public static lua_CFunction s_fvalue(int i) {return fvalue(s_object(i));}
 		//#define s_uvalue(i) (uvalue(&s_object(i)))
+		public static object s_uvalue(int i) {return uvalue(s_object(i));}
 		
 		
 		/* Exported functions */
