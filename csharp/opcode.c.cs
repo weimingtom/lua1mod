@@ -117,6 +117,15 @@ namespace KopiLua
 					throw new Exception("objs not same");
 				}
 			}
+			
+			public int minus(ObjectRef oref)
+			{
+				if (this.obj == oref.obj)
+				{
+					return this.index - oref.index;
+				}
+				throw new Exception("objs not same");
+			}
 		}
 		private static ObjectRef top = new ObjectRef(stack, 1), @base = new ObjectRef(stack, 1);
 		
@@ -468,27 +477,17 @@ namespace KopiLua
 			   		break;
 		
 			   	case OpCode.CREATEARRAY:
-//					if (tag(top - 1) == T_NIL)
-//					{
-//				 		nvalue(top - 1) = 101;
-//					}
-//					else
-//					{
-//				 		if (((tag(top - 1) != T_NUMBER) && (lua_tonumber(top - 1) != 0)))
-//				 		{
-//					 		return 1;
-//				 		}
-//				 		if (nvalue(top - 1) <= 0)
-//				 		{
-//					 		nvalue(top - 1) = 101;
-//				 		}
-//					}
-//					avalue(top - 1) = lua_createarray(lua_hashcreate(nvalue(top - 1)));
-//					if (avalue(top - 1) == null)
-//					{
-//				 		return 1;
-//					}
-//					tag(top - 1) = T_ARRAY;
+			   		if (tag(top.get(-1)) == Type.T_NIL)
+			   			nvalue(top.get(-1), 101);
+					else
+					{
+						if (tonumber(top.get(-1))) return 1;
+						if (nvalue(top.get(-1)) <= 0) nvalue(top.get(-1), 101);
+				 	}
+					avalue(top.get(-1), (Hash)lua_createarray(lua_hashcreate((uint)nvalue(top.get(-1)))));
+					if (avalue(top.get(-1)) == null)
+				 		return 1;
+					tag(top.get(-1), Type.T_ARRAY);
 			   		break;
 		
 			   	case OpCode.EQOP:
@@ -541,44 +540,40 @@ namespace KopiLua
 			   		break;
 		
 			   	case OpCode.LTOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						--top;
-//						if (tag(l) == T_NUMBER && tag(r) == T_NUMBER)
-//						{
-//				 			tag(top - 1) = (nvalue(l) < nvalue(r)) ? T_NUMBER : T_NIL;
-//						}
-//						else
-//						{
-//				 			if (((tag(l) != T_STRING) && (lua_tostring(l) != 0)) || ((tag(r) != T_STRING) && (lua_tostring(r) != 0)))
-//				 			{
-//				  				return 1;
-//				 			}
-//				 			tag(top - 1) = (string.Compare(svalue(l), svalue(r)) < 0) ? T_NUMBER : T_NIL;
-//						}
-//						nvalue(top - 1) = 1;
-//			   		}
+			   		{
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+			   			top.dec();
+						if (tag(l) == Type.T_NUMBER && tag(r) == Type.T_NUMBER)
+						{
+							tag(top.get(-1), (nvalue(l) < nvalue(r)) ? Type.T_NUMBER : Type.T_NIL);
+						}
+						else
+						{
+					 		if (tostring(l) || tostring(r))
+					  			return 1;
+					 		tag(top.get(-1), (strcmp (svalue(l), svalue(r)) < 0) ? Type.T_NUMBER : Type.T_NIL);
+						}
+						nvalue(top.get(-1), 1);
+			   		}
 			   		break;
 		
 			   	case OpCode.LEOP:
 			   		{
-						object l = top - 2;
-						object r = top - 1;
-						--top;
-						if (tag(l) == T_NUMBER && tag(r) == T_NUMBER)
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+			   			top.dec();
+						if (tag(l) == Type.T_NUMBER && tag(r) == Type.T_NUMBER)
 						{
-				 			tag(top - 1) = (nvalue(l) <= nvalue(r)) ? T_NUMBER : T_NIL;
+							tag(top.get(-1), (nvalue(l) <= nvalue(r)) ? Type.T_NUMBER : Type.T_NIL);
 						}
 						else
 						{
-					 		if (((tag(l) != T_STRING) && (lua_tostring(l) != 0)) || ((tag(r) != T_STRING) && (lua_tostring(r) != 0)))
-					 		{
+					 		if (tostring(l) || tostring(r))
 					  			return 1;
-					 		}
-					 		tag(top - 1) = (string.Compare(svalue(l), svalue(r)) <= 0) ? T_NUMBER : T_NIL;
+					 		tag(top.get(-1), (strcmp (svalue(l), svalue(r)) <= 0) ? Type.T_NUMBER : Type.T_NIL);
 						}
-						nvalue(top - 1) = 1;
+						nvalue(top.get(-1), 1);
 				   	}
 			   		break;
 		
@@ -751,19 +746,19 @@ namespace KopiLua
 			   		break;
 		
 			   	case OpCode.RETCODE:
-//			   		{
-//						int i;
-//						int shift = pc++;
-//						int nretval = top - @base - shift;
-//						top = @base - 2;
-//						pc = bvalue(@base-2);
-//						@base = stack + (int) nvalue(@base-1);
-//						for (i = 0; i < nretval; i++)
-//						{
-//			 				top = *(top + shift + 2);
-//			 				++top;
-//						}
-//		   			}
+			   		{
+						int i;
+						int shift = pc[0]; pc.inc();
+						int nretval = top.minus(@base) - shift;
+						top.setRef(@base.get(-2));
+						pc = bvalue(@base.get(-2));
+						@base = new ObjectRef(stack, (int) nvalue(@base.get(-1)));
+						for (i=0; i<nretval; i++)
+						{
+							top.get().set(top.get(shift + 2));
+			 				top.inc();
+						}
+		   			}
 		   			break;
 		
 			  	case OpCode.HALT:

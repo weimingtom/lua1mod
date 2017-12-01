@@ -96,7 +96,7 @@ namespace KopiLua
 		 	public Cfunction f;
 			public float n;
 		 	public CharPtr s;
-		 	public byte[] b;
+		 	public BytePtr b;
 		 	public Hash a;
 		 	public object u;
 			
@@ -149,8 +149,11 @@ namespace KopiLua
 		public static CharPtr svalue(Object_ o) { return o.value.s; }
 		public static void svalue(Object_ o, CharPtr ptr) { o.value.s = ptr; }
 		//#define bvalue(o) ((o)->value.b)
+		public static BytePtr bvalue(Object_ o) { return o.value.b; }
+		public static void bvalue(Object_ o, BytePtr b) { o.value.b = b; }
 		//#define avalue(o) ((o)->value.a)
 		public static Hash avalue(Object_ o) { return o.value.a; }		
+		public static void avalue(Object_ o, Hash a) { o.value.a = a; }	
 		//#define fvalue(o) ((o)->value.f)
 		//#define uvalue(o) ((o)->value.u)
 	
