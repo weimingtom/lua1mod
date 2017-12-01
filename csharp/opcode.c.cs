@@ -64,6 +64,11 @@ namespace KopiLua
 			{
 				return obj[index + offset];
 			}
+
+			public ObjectRef getRef(int offset)
+			{
+				return new ObjectRef(obj, index + offset);
+			}
 			
 			public void set(int offset, Object_ o)
 			{
@@ -123,6 +128,15 @@ namespace KopiLua
 				if (this.obj == oref.obj)
 				{
 					return this.index - oref.index;
+				}
+				throw new Exception("objs not same");
+			}
+
+			public int minus(Object_[] oarr)
+			{
+				if (this.obj == oarr)
+				{
+					return this.index - 0;
 				}
 				throw new Exception("objs not same");
 			}
@@ -491,52 +505,50 @@ namespace KopiLua
 			   		break;
 		
 			   	case OpCode.EQOP:
-//			   		{
-//						object l = top - 2;
-//						object r = top - 1;
-//						--top;
-//						if (tag(l) != tag(r))
-//						{
-//				 			tag(top - 1) = T_NIL;
-//						}
-//						else
-//						{
-//				 			switch (tag(l))
-//				 			{
-//				  			case T_NIL:
-//					  			tag(top - 1) = T_NUMBER;
-//					  			break;
-//				  
-//					  		case T_NUMBER:
-//					  			tag(top - 1) = (nvalue(l) == nvalue(r)) ? T_NUMBER : T_NIL;
-//					  			break;
-//				  
-//					  		case T_ARRAY:
-//					  			tag(top - 1) = (avalue(l) == avalue(r)) ? T_NUMBER : T_NIL;
-//					  			break;
-//				  
-//					  		case T_FUNCTION:
-//					  			tag(top - 1) = (bvalue(l) == bvalue(r)) ? T_NUMBER : T_NIL;
-//					  			break;
-//				  
-//					  		case T_CFUNCTION:
-//					  			tag(top - 1) = (fvalue(l) == fvalue(r)) ? T_NUMBER : T_NIL;
-//					  			break;
-//				  
-//					  		case T_USERDATA:
-//					  			tag(top - 1) = (uvalue(l) == uvalue(r)) ? T_NUMBER : T_NIL;
-//					  			break;
-//				  
-//					  		case T_STRING:
-//					  			tag(top - 1) = (string.Compare(svalue(l), svalue(r)) == 0) ? T_NUMBER : T_NIL;
-//					  			break;
-//				  
-//					  		case T_MARK:
-//					  			return 1;
-//				 			}
-//						}
-//						nvalue(top - 1) = 1;
-//			   		}
+			   		{
+			   			Object_ l = top.get(-2);
+			   			Object_ r = top.get(-1);
+			   			top.dec();
+						if (tag(l) != tag(r))
+							tag(top.get(-1), Type.T_NIL);
+						else
+						{
+				 			switch (tag(l))
+				 			{
+				  			case Type.T_NIL:
+				 				tag(top.get(-1), Type.T_NUMBER);
+					  			break;
+				  
+					  		case Type.T_NUMBER:
+					  			tag(top.get(-1), (nvalue(l) == nvalue(r)) ? Type.T_NUMBER : Type.T_NIL);
+					  			break;
+				  
+					  		case Type.T_ARRAY:
+					  			tag(top.get(-1), (avalue(l) == avalue(r)) ? Type.T_NUMBER : Type.T_NIL);
+					  			break;
+				  
+					  		case Type.T_FUNCTION:
+					  			tag(top.get(-1), (bvalue(l) == bvalue(r)) ? Type.T_NUMBER : Type.T_NIL);
+					  			break;
+				  
+					  		case Type.T_CFUNCTION:
+					  			tag(top.get(-1), (fvalue(l) == fvalue(r)) ? Type.T_NUMBER : Type.T_NIL);
+					  			break;
+				  
+					  		case Type.T_USERDATA:
+					  			tag(top.get(-1), (uvalue(l) == uvalue(r)) ? Type.T_NUMBER : Type.T_NIL);
+					  			break;
+				  
+					  		case Type.T_STRING:
+					  			tag(top.get(-1), (strcmp (svalue(l), svalue(r)) == 0) ? Type.T_NUMBER : Type.T_NIL);
+					  			break;
+				  
+					  		case Type.T_MARK:
+					  			return 1;
+				 			}
+						}
+						nvalue(top.get(-1), 1);
+			   		}
 			   		break;
 		
 			   	case OpCode.LTOP:
@@ -691,58 +703,52 @@ namespace KopiLua
 				   	break;
 		
 			   	case OpCode.CALLFUNC:
-//			   		{
-//						//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//						//ORIGINAL LINE: Byte *newpc;
-//						Byte newpc;
-//						//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
-//						object * b = top - 1;
-//						while (tag(b) != T_MARK)
-//						{
-//							b--;
-//						}
-//						if (tag(b - 1) == T_FUNCTION)
-//						{
-//				 			lua_debugline = 0; // always reset debug flag
-//				 			newpc = bvalue(b - 1);
-//				 			bvalue(b - 1) = pc; // store return code
-//				 			nvalue(b) = (@base - stack); // store base value
-//				 			@base = b + 1;
-//				 			pc = newpc;
-//				 			if (DefineConstants.MAXSTACK - (@base - stack) < STACKGAP)
-//				 			{
-//				  				lua_error("stack overflow");
-//				  				return 1;
-//				 			}
-//						}
-//						else if (tag(b - 1) == T_CFUNCTION)
-//						{
-//				 			int nparam;
-//				 			lua_debugline = 0; // always reset debug flag
-//				 			nvalue(b) = (@base - stack); // store base value
-//				 			@base = b + 1;
-//				 			nparam = top - @base; // number of parameters
-//				 			(fvalue(b - 1))(); // call C function
-//		
-//				 			/* shift returned values */
-//							{
-//				  				int i;
-//				  				int nretval = top - @base - nparam;
-//				  				top = @base - 2;
-//				  				@base = stack + (int) nvalue(@base-1);
-//				  				for (i = 0; i < nretval; i++)
-//				  				{
-//				   					top = *(top + nparam + 2);
-//				   					++top;
-//				  				}
-//				 			}
-//						}
-//						else
-//						{
-//				 			lua_reportbug("call expression not a function");
-//				 			return 1;
-//						}
-//			   		}
+			   		{
+						BytePtr newpc;
+						ObjectRef b_ = top.getRef(-1);
+						while (tag(b_.get()) != Type.T_MARK) b_.dec();
+						if (tag(b_.get(-1)) == Type.T_FUNCTION)
+						{
+				 			lua_debugline = 0;			/* always reset debug flag */
+				 			newpc = bvalue(b_.get(-1));
+				 			bvalue(b_.get(-1), pc);		        /* store return code */
+				 			nvalue(b_.get(), @base.minus(stack));		/* store base value */
+				 			@base = b_.getRef(+1);
+				 			pc = newpc;
+				 			if (MAXSTACK-@base.minus(stack) < STACKGAP)
+				 			{
+				  				lua_error ("stack overflow");
+				  				return 1;
+				 			}
+						}
+						else if (tag(b_.get(-1)) == Type.T_CFUNCTION)
+						{
+				 			int nparam;
+				 			lua_debugline = 0; // always reset debug flag
+				 			nvalue(b_.get(), @base.minus(stack)); // store base value
+				 			@base = b_.getRef(+1);
+				 			nparam = top.minus(@base); // number of parameters
+				 			(fvalue(b_.get(-1)))(); // call C function
+		
+				 			/* shift returned values */
+							{
+				  				int i;
+				  				int nretval = top.minus(@base) - nparam;
+				  				top = @base.getRef(-2);
+				  				@base = new ObjectRef(stack, (int) nvalue(@base.get(-1)));
+				  				for (i=0; i<nretval; i++)
+				  				{
+				  					top.get().set(top.get(nparam + 2));
+				   					top.inc();
+				  				}
+				 			}
+						}
+						else
+						{
+				 			lua_reportbug ("call expression not a function");
+				 			return 1;
+						}
+			   		}
 			   		break;
 		
 			   	case OpCode.RETCODE:
@@ -752,7 +758,7 @@ namespace KopiLua
 						int nretval = top.minus(@base) - shift;
 						top.setRef(@base.get(-2));
 						pc = bvalue(@base.get(-2));
-						@base = new ObjectRef(stack, (int) nvalue(@base.get(-1)));
+						@base = new ObjectRef(stack, (int) nvalue(@base.get(-1))); //FIXME:???new ObjectRef???
 						for (i=0; i<nretval; i++)
 						{
 							top.get().set(top.get(shift + 2));
@@ -812,16 +818,9 @@ namespace KopiLua
 		*/
 		public static int lua_dofile(CharPtr filename)
 		{
-		 	if (lua_openfile(filename) != 0)
-		 	{
-			 	return 1;
-		 	}
-		 	if (lua_parse() != 0)
-		 	{
-			 	lua_closefile();
-			 	return 1;
-		 	}
-		 	lua_closefile();
+		 	if (lua_openfile (filename) != 0) return 1;
+		 	if (lua_parse () != 0) { lua_closefile (); return 1; }
+		 	lua_closefile ();
 		 	return 0;
 		}
 	

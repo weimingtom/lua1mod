@@ -155,8 +155,12 @@ namespace KopiLua
 		public static Hash avalue(Object_ o) { return o.value.a; }		
 		public static void avalue(Object_ o, Hash a) { o.value.a = a; }	
 		//#define fvalue(o) ((o)->value.f)
+		public static Cfunction fvalue(Object_ o) { return o.value.f; }		
+		public static void fvalue(Object_ o, Cfunction f) { o.value.f = f; }	
 		//#define uvalue(o) ((o)->value.u)
-	
+		public static object uvalue(Object_ o) { return o.value.u; }		
+		public static void uvalue(Object_ o, object u) { o.value.u = u; }
+		
 		/* Macros to access symbol table */
 		//#define s_name(i) (lua_table[i].name)
 		public static CharPtr s_name(int i) {return lua_table[i].name; }
