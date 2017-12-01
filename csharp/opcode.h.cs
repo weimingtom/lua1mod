@@ -10,6 +10,8 @@
 //#endif
 namespace KopiLua
 {
+	using Cfunction = KopiLua.Lua.lua_CFunction;
+	
 	public partial class Lua
 	{
 //		#ifndef STACKGAP
@@ -87,7 +89,7 @@ namespace KopiLua
 		 	T_USERDATA
 		}
 
-		public delegate void Cfunction();
+		//public delegate void Cfunction();
 		public delegate int Input();
 		public delegate void Unput(int c);
 		

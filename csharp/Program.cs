@@ -429,6 +429,10 @@ namespace KopiLua
 		{
 			return 0;
 		}
+		public static int printf(string format, params object[] args)
+		{
+			return 0;
+		}
 		
 		public static void system(CharPtr str)
 		{

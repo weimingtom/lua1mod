@@ -9,6 +9,7 @@ namespace KopiLua
 {
 	using lua_Object = KopiLua.Lua.Object_;	
 	using Word = System.UInt16;
+	using real = System.Double; //???
 	
 	public partial class Lua
 	{
@@ -103,6 +104,24 @@ namespace KopiLua
 					throw new Exception("objs not same");
 				}
 				return this.index < idx;				
+			}
+			
+			public bool isLargerEquals(Object_[] objs)
+			{
+				if (this.obj != objs)
+				{
+					throw new Exception("objs not same");
+				}
+				return this.index >= 0;				
+			}
+			
+			public bool isLessEquals(ObjectRef oref)
+			{
+				if (this.obj != oref.obj)
+				{
+					throw new Exception("objs not same");
+				}
+				return this.index <= oref.index;					
 			}
 			
 			public void setRef(Object_ o)
@@ -802,21 +821,18 @@ namespace KopiLua
 		/*
 		** Mark all strings and arrays used by any object stored at stack.
 		*/
-		public static void lua_markstack()
+		public static void lua_markstack ()
 		{
-//			//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
-//		 	object * o;
-//		 	for (o = top - 1; o >= stack; o--)
-//		 	{
-//		  		lua_markobject(o);
-//		 	}
+			ObjectRef o;
+			for (o = top.getRef(-1); o.isLargerEquals(stack); o.dec())
+				lua_markobject (o.get());
 		}
 	
 		/*
 		** Open file, generate opcode and execute global statement. Return 0 on
 		** success or 1 on error.
 		*/
-		public static int lua_dofile(CharPtr filename)
+		public static int lua_dofile (CharPtr filename)
 		{
 		 	if (lua_openfile (filename) != 0) return 1;
 		 	if (lua_parse () != 0) { lua_closefile (); return 1; }
@@ -828,74 +844,48 @@ namespace KopiLua
 		** Generate opcode stored on string and execute global statement. Return 0 on
 		** success or 1 on error.
 		*/
-		public static int lua_dostring(CharPtr @string)
+		public static int lua_dostring (CharPtr @string)
 		{
-		 	if (lua_openstring(@string) != 0)
-		 	{
-			 	return 1;
-		 	}
-		 	if (lua_parse() != 0)
-		 	{
-			 	return 1;
-		 	}
+			if (lua_openstring (@string) != 0) return 1;
+		 	if (lua_parse () != 0) return 1;
 		 	return 0;
 		}
 	
-		//C++ TO C# CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in C#):
-//		private static Byte[] lua_call_startcode = {CALLFUNC, HALT};
-	
+		private static Byte[] lua_call_startcode = {(Byte)OpCode.CALLFUNC, (Byte)OpCode.HALT};
 		/*
 		** Execute the given function. Return 0 on success or 1 on error.
 		*/
 		public static int lua_call(CharPtr functionname, int nparam)
 		{
-//			//C++ TO C# CONVERTER NOTE: This static local variable declaration (not allowed in C#) has been moved just prior to the method:
-//			// static Byte startcode[] = {CALLFUNC, HALT};
-//		 	int i;
-//		 	object func = s_object(lua_findsymbol(functionname));
-//		 	if (tag(func) != T_FUNCTION)
-//		 	{
-//			 	return 1;
-//		 	}
-//		 	for (i = 1; i <= nparam; i++)
-//		 	{
-//		  		*(top - i + 2) = *(top - i);
-//		 	}
-//		 	top += 2;
-//		 	tag(top - nparam - 1) = T_MARK;
-//		 	*(top - nparam - 2) = func;
-//		 	return (lua_execute(lua_call_startcode));
-			return 0;
+			// static Byte startcode[] = {CALLFUNC, HALT};
+		 	int i;
+		 	Object_ func = new Object_(); func.set(s_object(lua_findsymbol(functionname))); //FIXME:???copy???
+		 	if (tag(func) != Type.T_FUNCTION) return 1;
+		 	for (i = 1; i <= nparam; i++)
+		 		top.get(-i+2).set(top.get(-i));
+		 	top.add(2);
+		 	tag(top.get(-nparam-1), Type.T_MARK);
+		 	top.get(-nparam-2).set(func);
+		 	return (lua_execute (lua_call_startcode));
 		}
 	
 		/*
 		** Get a parameter, returning the object handle or NULL on error.
 		** 'number' must be 1 to get the first parameter.
 		*/
-		public static lua_Object lua_getparam(int number)
+		public static Object_ lua_getparam(int number)
 		{
-//		 	if (number <= 0 || number > top - @base)
-//		 	{
-//			 	return null;
-//		 	}
-//		 	return (@base + number - 1);
-			return null;
+			if (number <= 0 || number > top.minus(@base)) return null;
+			return (@base.get(number-1));
 		}
 	
 		/*
 		** Given an object handle, return its number value. On error, return 0.0.
 		*/
-		public static double lua_getnumber(Object_ @object)
+		public static real lua_getnumber(Object_ @object)
 		{
-//		 	if (((tag(@object) != T_NUMBER) && (lua_tonumber(@object) != 0)))
-//		 	{
-//			 	return 0.0;
-//		 	}
-//		 	else
-//		 	{
-//			 	return (nvalue(@object));
-//		 	}
-			return 0;
+			if (tonumber (@object)) return 0.0;
+			else                   return (nvalue(@object));
 		}
 	
 		/*
@@ -903,47 +893,26 @@ namespace KopiLua
 		*/
 		public static CharPtr lua_getstring(Object_ @object)
 		{
-//		 	if (((tag(@object) != T_STRING) && (lua_tostring(@object) != 0)))
-//		 	{
-//			 	return null;
-//		 	}
-//		 	else
-//		 	{
-//			 	return (svalue(@object));
-//		 	}
-			return null;
+			if (tostring (@object)) return null;
+			else                   return (svalue(@object));
 		}
 	
 		/*
 		** Given an object handle, return a copy of its string. On error, return NULL.
 		*/
-		public static string lua_copystring(Object_ @object)
+		public static CharPtr lua_copystring(Object_ @object)
 		{
-//		 	if (((tag(@object) != T_STRING) && (lua_tostring(@object) != 0)))
-//		 	{
-//			 	return null;
-//		 	}
-//		 	else
-//		 	{
-//			 	return (svalue(@object));
-//		 	}
-			return null;
+			if (tostring (@object)) return null;
+			else                   return (strdup(svalue(@object)));
 		}
 	
 		/*
 		** Given an object handle, return its cfuntion pointer. On error, return NULL.
 		*/
-		public static lua_CFunction lua_getcfunction(Object @object)
+		public static lua_CFunction lua_getcfunction(Object_ @object)
 		{
-//		 	if (tag(@object) != T_CFUNCTION)
-//		 	{
-//			 	return null;
-//		 	}
-//		 	else
-//		 	{
-//			 	return (fvalue(@object));
-//		 	}
-			return null;
+			if (tag(@object) != Type.T_CFUNCTION) return null;
+			else                            return (fvalue(@object));
 		}
 	
 		/*
@@ -951,141 +920,120 @@ namespace KopiLua
 		*/
 		public static object lua_getuserdata(Object_ @object)
 		{
-//		 	if (tag(@object) != T_USERDATA)
-//		 	{
-//			 	return null;
-//		 	}
-//		 	else
-//		 	{
-//			 	return (uvalue(@object));
-//		 	}
-			return null;
+			if (tag(@object) != Type.T_USERDATA) return null;
+			else                           return (uvalue(@object));
 		}
 	
 		/*
 		** Given an object handle and a field name, return its field object.
 		** On error, return NULL.
 		*/
-		public static Object lua_getfield(Object_ @object, string field)
+		public static Object lua_getfield(Object_ @object, CharPtr field)
 		{
-//		 	if (tag(@object) != T_ARRAY)
-//		 	{
-//		  		return null;
-//		 	}
-//		 	else
-//		 	{	
-//		  		object @ref;
-//		  		tag(@ref) = T_STRING;
-//		  		svalue(@ref) = lua_createstring(lua_strdup(ref field));
-//		  		return (lua_hashdefine(avalue(@object), @ref));
-//		 	}
-			return null;
+		 	if (tag(@object) != Type.T_ARRAY)
+		  		return null;
+		 	else
+		 	{	
+		 		Object_ @ref = new Object_();
+		 		tag(@ref, Type.T_STRING);
+		 		svalue(@ref, lua_createstring(lua_strdup(field)));
+		  		return (lua_hashdefine(avalue(@object), @ref));
+		 	}
 		}
 	
 		/*
 		** Given an object handle and an index, return its indexed object.
 		** On error, return NULL.
 		*/
-		public static Object lua_getindexed(object @object, float index)
+		public static Object_ lua_getindexed(Object_ @object, float index)
 		{
-//		 	if (tag(@object) != T_ARRAY)
-//		 	{
-//		  		return null;
-//		 	}
-//		 	else
-//		 	{
-//		  		object @ref;
-//		  		tag(@ref) = T_NUMBER;
-//		  		nvalue(@ref) = index;
-//		 	 	return (lua_hashdefine(avalue(@object), @ref));
-//		 	}
-			return null;
+		 	if (tag(@object) != Type.T_ARRAY)
+		  		return null;
+		 	else
+		 	{
+		 		Object_ @ref = new Object_();
+		 		tag(@ref, Type.T_NUMBER);
+		 		nvalue(@ref, index);
+		 	 	return (lua_hashdefine(avalue(@object), @ref));
+		 	}
 		}
 	
 		/*
 		** Get a global object. Return the object handle or NULL on error.
 		*/
-		public static Object lua_getglobal(string name)
+		public static Object_ lua_getglobal (CharPtr name)
 		{
-//		 	int n = lua_findsymbol(name);
-//			if (n < 0)
-//		 	{
-//			 	return null;
-//		 	}
-//		 	return s_object(n);
-			return null;
+			int n = lua_findsymbol(name);
+			if (n < 0) return null;
+			return s_object(n);
 		}
 	
 		/*
 		** Pop and return an object
 		*/
-		public static Object lua_pop()
+		public static Object lua_pop ()
 		{
-//		 	if (top <= @base)
-//		 	{
-//			 	return null;
-//		 	}
-//		 	top--;
-//		 	return top;
-			return null;
+			if (top.isLessEquals(@base)) return null;
+			top.dec();
+			return top;
 		}
 	
 		/*
 		** Push a nil object
 		*/
-		public static int lua_pushnil()
+		public static int lua_pushnil ()
 		{
-//		 	if ((top - stack) >= MAXSTACK - 1)
-//		 	{
-//		  		lua_error("stack overflow");
-//		  		return 1;
-//		 	}
-//		 	tag(top) = T_NIL;
+			if ((top.minus(stack)) >= MAXSTACK-1)
+		 	{
+		  		lua_error ("stack overflow");
+		  		return 1;
+		 	}
+			tag(top.get(), Type.T_NIL);
 		 	return 0;
 		}
 	
 		/*
 		** Push an object (tag=number) to stack. Return 0 on success or 1 on error.
 		*/
-		public static int lua_pushnumber(double n)
+		public static int lua_pushnumber (real n)
 		{
-//		 	if ((top - stack) >= MAXSTACK - 1)
-//		 	{
-//		  		lua_error("stack overflow");
-//		  		return 1;
-//		 	}
-//		 	tag(top) = T_NUMBER;
-//		 	nvalue(top++) = n;
+			if ((top.minus(stack)) >= MAXSTACK-1)
+		 	{
+		  		lua_error ("stack overflow");
+		  		return 1;
+		 	}
+			tag(top.get(), Type.T_NUMBER);
+			nvalue(top.inc(), (float)n); //FIXME:real->float
 		 	return 0;
 		}
 	
 		/*
 		** Push an object (tag=string) to stack. Return 0 on success or 1 on error.
 		*/
-		public static int lua_pushstring(CharPtr s)
+		public static int lua_pushstring (CharPtr s)
 		{
-//		 	if ((top - stack) >= MAXSTACK - 1)
-//		 	{
-//		  		lua_error("stack overflow");
-//		  		return 1;
-//		 	}
-//		 	tag(top) = T_STRING;
-//		 	svalue(top++) = lua_createstring(lua_strdup(ref s));
+			if ((top.minus(stack)) >= MAXSTACK-1)
+		 	{
+		  		lua_error ("stack overflow");
+		  		return 1;
+		 	}
+			tag(top.get(), Type.T_STRING);
+		 	svalue(top.inc(), lua_createstring(lua_strdup(s)));
 		 	return 0;
 		}
 	
 		/*
 		** Push an object (tag=cfunction) to stack. Return 0 on success or 1 on error.
 		*/
-		public static int lua_pushcfunction(lua_CFunction fn)
+		public static int lua_pushcfunction (lua_CFunction fn)
 		{
-//		 	if ((top - stack) >= MAXSTACK - 1)
-//		 	{
-//		  		lua_error("stack overflow");
-//		  		return 1;
-//		 	}
-//		 	tag(top) = T_CFUNCTION;
-//		 	fvalue(top++) = fn;
+			if ((top.minus(stack)) >= MAXSTACK-1)
+		 	{
+		  		lua_error ("stack overflow");
+		  		return 1;
+		 	}
+			tag(top.get(), Type.T_CFUNCTION);
+			fvalue(top.inc(), fn);
 		 	return 0;
 		}
 	
@@ -1094,27 +1042,27 @@ namespace KopiLua
 		*/
 		public static int lua_pushuserdata(object u)
 		{
-//		 	if ((top - stack) >= MAXSTACK - 1)
-//		 	{
-//		  		lua_error("stack overflow");
-//		  		return 1;
-//		 	}
-//		 	tag(top) = T_USERDATA;
-//		 	uvalue(top++) = u;
+			if ((top.minus(stack)) >= MAXSTACK-1)
+		 	{
+		  		lua_error ("stack overflow");
+		  		return 1;
+		 	}
+			tag(top.get(), Type.T_USERDATA);
+			uvalue(top.inc(), u);
 		 	return 0;
 		}
 	
 		/*
 		** Push an object to stack.
 		*/
-		public static int lua_pushobject(object o)
+		public static int lua_pushobject(Object_ o)
 		{
-//		 	if ((top - stack) >= MAXSTACK - 1)
-//		 	{
-//		  		lua_error("stack overflow");
-//		  		return 1;
-//			}
-//		 	top++= o;
+			if ((top.minus(stack)) >= MAXSTACK-1)
+		 	{
+		  		lua_error ("stack overflow");
+		  		return 1;
+			}
+			top.inc().set(o);
 		 	return 0;
 		}
 	
@@ -1122,47 +1070,32 @@ namespace KopiLua
 		** Store top of the stack at a global variable array field. 
 		** Return 1 on error, 0 on success.
 		*/
-		public static int lua_storeglobal(CharPtr name)
+		public static int lua_storeglobal (CharPtr name)
 		{
-//		 	int n = lua_findsymbol(name);
-//		 	if (n < 0)
-//		 	{
-//			 	return 1;
-//		 	}
-//		 	if (tag(top - 1) == T_MARK)
-//		 	{
-//			 	return 1;
-//		 	}
-//		 	s_object(n) = *(--top);
+		 	int n = lua_findsymbol (name);
+		 	if (n < 0) return 1;
+		 	if (tag(top.get(-1)) == Type.T_MARK) return 1;
+		 	top.dec(); s_object(n).set(top.get());
 		 	return 0;
 		}
 	
 		/*
 		** Store top of the stack at an array field. Return 1 on error, 0 on success.
 		*/
-		public static int lua_storefield(lua_Object @object, string field)
+		public static int lua_storefield (lua_Object @object, CharPtr field)
 		{
-//		 	if (tag(@object) != T_ARRAY)
-//		 	{
-//		  		return 1;
-//		 	}
-//		 	else
-//		 	{
-//		  		object @ref;
-//		  		object h;
-//		  		tag(@ref) = T_STRING;
-//		  		svalue(@ref) = lua_createstring(lua_strdup(ref field));
-//		  		h = lua_hashdefine(avalue(@object), @ref);
-//		  		if (h == null)
-//		  		{
-//			  		return 1;
-//		  		}
-//		  		if (tag(top - 1) == T_MARK)
-//		  		{
-//			  		return 1;
-//		  		}
-//		  		h = *(--top);
-//		 	}
+		 	if (tag(@object) != Type.T_ARRAY)
+		  		return 1;
+		 	else
+		 	{
+		 		Object_ @ref = new Object_(), h;
+		  		tag(@ref, Type.T_STRING);
+		  		svalue(@ref, lua_createstring(lua_strdup(field)));
+		  		h = lua_hashdefine(avalue(@object), @ref);
+		  		if (h == null) return 1;
+		  		if (tag(top.get(-1)) == Type.T_MARK) return 1;
+		  		top.dec(); h.set(top.get());
+		 	}
 		 	return 0;
 		}
 	
@@ -1170,29 +1103,20 @@ namespace KopiLua
 		/*
 		** Store top of the stack at an array index. Return 1 on error, 0 on success.
 		*/
-		public static int lua_storeindexed(lua_Object @object, float index)
+		public static int lua_storeindexed (lua_Object @object, float index)
 		{
-//		 	if (tag(@object) != T_ARRAY)
-//		 	{
-//		  		return 1;
-//		 	}
-//		 	else
-//		 	{
-//		  		object @ref;
-//		  		object h;
-//		  		tag(@ref) = T_NUMBER;
-//		  		nvalue(@ref) = index;
-//		  		h = lua_hashdefine(avalue(@object), @ref);
-//		  		if (h == null)
-//		  		{
-//			  		return 1;
-//		  		}
-//		  		if (tag(top - 1) == T_MARK)
-//		  		{
-//			  		return 1;
-//		  		}
-//		  		h = *(--top);
-//		 	}
+		 	if (tag(@object) != Type.T_ARRAY)
+		  		return 1;
+		 	else
+		 	{
+		 		Object_ @ref = new Object_(), h;
+		 		tag(@ref, Type.T_NUMBER);
+		 		nvalue(@ref, index); //FIXME:real->float
+		  		h = lua_hashdefine(avalue(@object), @ref);
+		  		if (h == null) return 1;
+		  		if (tag(top.get(-1)) == Type.T_MARK) return 1;
+		  		top.dec(); h.set(top.get());
+		 	}
 		 	return 0;
 		}
 	
@@ -1200,119 +1124,86 @@ namespace KopiLua
 		/*
 		** Given an object handle, return if it is nil.
 		*/
-		public static int lua_isnil(Object @object)
+		public static int lua_isnil (Object_ @object)
 		{
-//		 	return (@object != null && tag(@object) == T_NIL);
-			return 0;
+			return (@object != null && tag(@object) == Type.T_NIL) ? 1 : 0;
 		}
 	
 		/*
 		** Given an object handle, return if it is a number one.
 		*/
-		public static int lua_isnumber(Object @object)
+		public static int lua_isnumber (Object_ @object)
 		{
-//		 	return (@object != null && tag(@object) == T_NUMBER);
-			return 0;
+		 	return (@object != null && tag(@object) == Type.T_NUMBER) ? 1 : 0;
 		}
 	
 		/*
 		** Given an object handle, return if it is a string one.
 		*/
-		public static int lua_isstring(Object @object)
+		public static int lua_isstring (Object_ @object)
 		{
-//		 	return (@object != null && tag(@object) == T_STRING);
-			return 0;
+			return (@object != null && tag(@object) == Type.T_STRING) ? 1 : 0;
 		}
 	
 		/*
 		** Given an object handle, return if it is an array one.
 		*/
-		public static int lua_istable(Object @object)
+		public static int lua_istable (Object_ @object)
 		{
-//		 	return (@object != null && tag(@object) == T_ARRAY);
-			return 0;
+			return (@object != null && tag(@object) == Type.T_ARRAY) ? 1 : 0;
 		}
 	
 		/*
 		** Given an object handle, return if it is a cfunction one.
 		*/
-		public static int lua_iscfunction(Object @object)
+		public static int lua_iscfunction (Object_ @object)
 		{
-//		 	return (@object != null && tag(@object) == T_CFUNCTION);
-			return 0;
+			return (@object != null && tag(@object) == Type.T_CFUNCTION) ? 1 : 0;
 		}
 	
 		/*
 		** Given an object handle, return if it is an user data one.
 		*/
-		public static int lua_isuserdata(Object @object)
+		public static int lua_isuserdata (Object_ @object)
 		{
-//		 	return (@object != null && tag(@object) == T_USERDATA);
-			return 0;
+		 	return (@object != null && tag(@object) == Type.T_USERDATA) ? 1 : 0;
 		}
 	
 		/*
 		** Internal function: return an object type. 
 		*/
-		public static void lua_type()
+		public static void lua_type ()
 		{
-//		 	object o = lua_getparam(1);
-//		 	lua_pushstring(lua_constant[tag(o)]);
+		 	Object_ o = lua_getparam(1);
+		 	lua_pushstring (lua_constant[(int)tag(o)]);
 		}
 	
 		/*
 		** Internal function: convert an object to a number
 		*/
-		public static void lua_obj2number()
+		public static void lua_obj2number ()
 		{
-//		 	object o = lua_getparam(1);
-//		 	lua_pushobject(lua_convtonumber(o));
+		 	Object_ o = lua_getparam(1);
+		 	lua_pushobject (lua_convtonumber(o));
 		}
 	
 		/*
 		** Internal function: print object values
 		*/
-		public static void lua_print()
+		public static void lua_print ()
 		{
-//		 	int i = 1;
-//		 	object obj;
-//		 	while ((obj = lua_getparam(i++)) != null)
-//		 	{
-//		  		if (lua_isnumber(obj) != 0)
-//		  		{
-//			  		Console.Write("{0:g}\n",lua_getnumber(obj));
-//		  		}
-//		  		else if (lua_isstring(obj))
-//		  		{
-//			  		Console.Write("{0}\n",lua_getstring(obj));
-//		  		}
-//		  		else if (lua_iscfunction(obj))
-//		  		{
-//					//C++ TO C# CONVERTER TODO TASK: The following line has a C format specifier which cannot be directly translated to C#:
-//					//ORIGINAL LINE: printf("cfunction: %p\n",lua_getcfunction(obj));
-//			  		Console.Write("cfunction: %p\n",lua_getcfunction(obj));
-//		  		}
-//		  		else if (lua_isuserdata(obj))
-//		  		{
-//					//C++ TO C# CONVERTER TODO TASK: The following line has a C format specifier which cannot be directly translated to C#:
-//					//ORIGINAL LINE: printf("userdata: %p\n",lua_getuserdata(obj));
-//			  		Console.Write("userdata: %p\n",lua_getuserdata(obj));
-//		  		}
-//		  		else if (lua_istable(obj))
-//		  		{
-//					//C++ TO C# CONVERTER TODO TASK: The following line has a C format specifier which cannot be directly translated to C#:
-//					//ORIGINAL LINE: printf("table: %p\n",obj);
-//			  		Console.Write("table: %p\n",obj);
-//		  		}
-//		  		else if (lua_isnil(obj))
-//		  		{
-//			  		Console.Write("nil\n");
-//		  		}
-//		  		else
-//		  		{
-//			  		Console.Write("invalid value to print\n");
-//		  		}
-//		 	}
+		 	int i = 1;
+		 	Object_ obj;
+		 	while ((obj=lua_getparam (i++)) != null)
+		 	{
+				if      (lua_isnumber(obj)!=0)    printf("%g\n",lua_getnumber (obj));
+				else if (lua_isstring(obj)!=0)    printf("%s\n",lua_getstring (obj));
+				else if (lua_iscfunction(obj)!=0) printf("cfunction: %p\n",lua_getcfunction (obj));
+				else if (lua_isuserdata(obj)!=0)  printf("userdata: %p\n",lua_getuserdata (obj));
+				else if (lua_istable(obj)!=0)     printf("table: %p\n",obj);
+				else if (lua_isnil(obj)!=0)       printf("nil\n");
+				else			         printf("invalid value to print\n");
+		 	}
 		}
 	}
 }
