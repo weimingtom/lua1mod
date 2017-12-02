@@ -1,9 +1,13 @@
-﻿using System;
+﻿#define YYOPTIM
+//#define LEXDEBUG
+
+using System;
 
 namespace KopiLua
 {
 	using Word = System.UInt16; //unsigned short
 	using YYTYPE = System.SByte;
+	using yysvfArr = KopiLua.Lua.yysvfRef; //FIXME:same as yysvfRef, but arr is full of new yysvf()
 	
 	public partial class Lua
 	{		
@@ -25,27 +29,59 @@ namespace KopiLua
 		public static int yyleng;
 		//extern sbyte yytext[];
 		public static int yymorfg;
-		//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
 		//extern sbyte *yysptr, yysbuf[];
 		public static int yytchar;
 		public static FILE yyin = null;//new FILE(null); //FIXME:???
 		public static FILE yyout = null;//new FILE(null);
 		//extern int yylineno;
+
 		
+		public class yysvfRef 
+		{
+			private yysvf[] arr;
+			private int index;
+			
+			public yysvfRef(yysvf[] arr, int index)
+			{
+				this.arr = arr;
+				this.index = index;
+			}
+
+			public yysvfRef(yysvfRef yref)
+			{
+				this.arr = yref.arr;
+				this.index = yref.index;
+			}
+			
+			public void inc()
+			{
+				this.index++;
+			}
+			
+			public yysvf get()
+			{
+				return arr[index];
+			}
+			
+			public yysvf get(int offset)
+			{
+				return arr[index + offset];
+			}
+		}
 		public class yysvf
 		{
-			public yywork yystoff;
+			public yyworkRef yystoff;
 			public yysvf yyother;
 			public IntegerPtr yystops;
 			
-			public yysvf(yywork yystoff, yysvf yyother, IntegerPtr yystops)
+			public yysvf(yyworkRef yystoff, yysvf yyother, IntegerPtr yystops)
 			{
 				this.yystoff = yystoff;
 				this.yyother = yyother;
 				this.yystops = yystops;
 			}
 		}		
-		public static yysvf yyestate;
+		public static yysvfArr yyestate;
 		//extern struct yysvf yysvec[], *yybgin;
 		
 		//#undef input
@@ -338,6 +374,45 @@ namespace KopiLua
 			15, 33, 0,
 			3, 0, 0
 		};
+		public class yyworkRef
+		{
+			private yywork[] arr;
+			private int index;
+			
+			public yyworkRef()
+			{
+				
+			}
+			
+			public yyworkRef(yywork[] arr, int index)
+			{
+				this.arr = arr;
+				this.index = index;
+			}
+			public yyworkRef(yyworkRef yyref)
+			{
+				this.arr = yyref.arr;
+				this.index = yyref.index;
+			}
+			
+			public bool isEquals(yywork[] arr)
+			{
+				return this.arr == arr && this.index == 0;
+			}
+			
+			public yywork get()
+			{
+				return this.arr[this.index];
+			}
+			public yywork get(int offset)
+			{
+				return this.arr[this.index + offset];
+			}
+			public yyworkRef getRef(int offset)
+			{
+				return new yyworkRef(this.arr, this.index + offset);
+			}
+		}
 		public class yywork
 		{
 			public YYTYPE verify, advance;
@@ -458,9 +533,9 @@ namespace KopiLua
 			new yywork(0, 0)
 		};
 		
-		private static yywork yycrankOffset(int off) 
+		private static yyworkRef yycrankOffset(int off) 
 		{
-			return yycrank[off];
+			return new yyworkRef(yycrank, off);
 		}
 		private static yysvf yysvecOffset(int off)
 		{
@@ -470,9 +545,9 @@ namespace KopiLua
 		{
 			return new IntegerPtr(yyvstop, off);
 		}
-		private static yywork yycrankZero() 
+		private static yyworkRef yycrankZero() 
 		{
-			return null;
+			return new yyworkRef();
 		}
 		private static yysvf yysvecZero()
 		{
@@ -597,8 +672,8 @@ namespace KopiLua
 			new yysvf(yycrankZero(), yysvecZero(), yyvstopZero()),			
 		};
 		
-		public static yywork yytop = yycrankOffset(423);
-		public static yysvf yybgin = yysvecOffset(1);
+		public static yyworkRef yytop = yycrankOffset(423);
+		public static yysvfArr yybgin = new yysvfArr(yysvec, 1);
 		public static sbyte[] yymatch = { //FIXME:???sbyte, char???
 			0x0, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
 			0x1, 0x9, 0xA, 0x1, 0x1, 0x1, 0x1, 0x1, 
@@ -632,6 +707,7 @@ namespace KopiLua
 	
 		public static int yylineno = 1;
 		//#define YYU(x) x
+		public static sbyte YYU(sbyte x) {return x;}
 		//#define NLSTATE yyprevious=YYNEWLINE
 		public static CharPtr yytext = new CharPtr(new char[BUFSIZ]);
 		public static yysvf[] yylstate = new yysvf[BUFSIZ];
@@ -643,262 +719,152 @@ namespace KopiLua
 		public static int yyprevious = YYNEWLINE;
 		public static int yylook()
 		{
-//	//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//	//ORIGINAL LINE: register struct yysvf *yystate, **lsp;
-//			yysvf yystate;
-//			yysvf[] lsp;
-//	//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//	//ORIGINAL LINE: register struct yywork *yyt;
-//			yywork yyt;
-//			yysvf yyz;
-//			int yych;
-//			int yyfirst;
-//			yywork yyr;
-//		#if LEXDEBUG
-//			int debug;
-//		#endif
-//			string yylastch;
-//			/* start off machines */
-//		#if LEXDEBUG
-//			debug = 0;
-//		#endif
-//			yyfirst = 1;
-//			if (yymorfg == 0)
-//			{
-//				yylastch = yytext;
-//			}
-//			else
-//			{
-//				yymorfg = 0;
-//				yylastch = yytext.Substring(yyleng);
-//			}
-//			for (;;)
-//			{
-//				lsp = yylstate;
-//				yyestate = yystate = yybgin;
-//				if (yyprevious == DefineConstants.YYNEWLINE)
-//				{
-//					yystate++;
-//				}
-//				for (;;)
-//				{
-//		#if LEXDEBUG
-//					if (debug != 0)
-//					{
-//						fprintf(yyout,"state %d\n",yystate - yysvec - 1);
-//					}
-//		#endif
-//					yyt = yystate.yystoff;
-//					if (yyt == yycrank && yyfirst == 0)
-//					{ // may not be any transitions
-//						yyz = yystate.yyother;
-//						if (yyz == 0)
-//						{
-//							break;
-//						}
-//						if (yyz.yystoff == yycrank)
-//						{
-//							break;
-//						}
-//					}
-//					yylastch ++= yych = (((yytchar = yysptr > yysbuf != 0?*--yysptr:getc(yyin)) == 10?(yylineno++,yytchar):yytchar) == EOF?0:yytchar);
-//					yyfirst = 0;
-//				tryagain:
-//		#if LEXDEBUG
-//					if (debug != 0)
-//					{
-//						fprintf(yyout,"char ");
-//						allprint(yych);
-//						Console.Write('\n');
-//					}
-//		#endif
-//	//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to variables (in C#, the variable no longer points to the original when the original variable is re-assigned):
-//	//ORIGINAL LINE: yyr = yyt;
-//					yyr = yyt;
-//					if ((int)yyt > (int)yycrank)
-//					{
-//						yyt = yyr + yych;
-//						if (yyt <= yytop != null && yyt.verify + yysvec == yystate)
-//						{
-//							if (yyt.advance + yysvec == yysvec) // error transitions
-//							{
-//									{
-//										yytchar = (*--yylastch);
-//										if (yytchar == '\n')
-//										{
-//											yylineno--;
-//										}
-//										*yysptr++=yytchar;
-//								};
-//									break;
-//							}
-//							lsp[0]++= yystate = yyt.advance + yysvec;
-//							goto contin;
-//						}
-//					}
-//		#if YYOPTIM
-//					else if ((int)yyt < (int)yycrank)
-//					{ // r < yycrank
-//						yyt = yyr = yycrank + (yycrank - yyt);
-//		#if LEXDEBUG
-//						if (debug != 0)
-//						{
-//							fprintf(yyout,"compressed state\n");
-//						}
-//		#endif
-//						yyt = yyt + yych;
-//						if (yyt <= yytop != null && yyt.verify + yysvec == yystate)
-//						{
-//							if (yyt.advance + yysvec == yysvec) // error transitions
-//							{
-//									{
-//										yytchar = (*--yylastch);
-//										if (yytchar == '\n')
-//										{
-//											yylineno--;
-//										}
-//										*yysptr++=yytchar;
-//								};
-//									break;
-//							}
-//							lsp[0]++= yystate = yyt.advance + yysvec;
-//							goto contin;
-//						}
-//						yyt = yyr + yymatch[yych];
-//		#if LEXDEBUG
-//						if (debug != 0)
-//						{
-//							fprintf(yyout,"try fall back character ");
-//							allprint(yymatch[yych]);
-//							Console.Write('\n');
-//						}
-//		#endif
-//						if (yyt <= yytop != null && yyt.verify + yysvec == yystate)
-//						{
-//							if (yyt.advance + yysvec == yysvec) // error transition
-//							{
-//									{
-//										yytchar = (*--yylastch);
-//										if (yytchar == '\n')
-//										{
-//											yylineno--;
-//										}
-//										*yysptr++=yytchar;
-//								};
-//									break;
-//							}
-//							lsp[0]++= yystate = yyt.advance + yysvec;
-//							goto contin;
-//						}
-//					}
-//					if ((yystate = yystate.yyother) != null && (yyt = yystate.yystoff) != yycrank)
-//					{
-//		#if LEXDEBUG
-//						if (debug != 0)
-//						{
-//							fprintf(yyout,"fall back to state %d\n",yystate - yysvec - 1);
-//						}
-//		#endif
-//						goto tryagain;
-//					}
-//		#endif
-//					else
-//					{
-//							{
-//								yytchar = (*--yylastch);
-//								if (yytchar == '\n')
-//								{
-//									yylineno--;
-//								}
-//								*yysptr++=yytchar;
-//						};
-//							break;
-//					}
-//				contin:
-//		#if LEXDEBUG
-//					if (debug != 0)
-//					{
-//						fprintf(yyout,"state %d char ",yystate - yysvec - 1);
-//						allprint(yych);
-//						Console.Write('\n');
-//					}
-//		#endif
-//					;
-//				}
-//		#if LEXDEBUG
-//				if (debug != 0)
-//				{
-//					fprintf(yyout,"stopped at %d with ",*(lsp - 1) - yysvec - 1);
-//					allprint(yych);
-//					Console.Write('\n');
-//				}
-//		#endif
-//				while (lsp-- > yylstate)
-//				{
-//					yylastch--= 0;
-//					if (lsp[0] != 0 && (yyfnd = lsp.yystops) != 0 && *yyfnd > 0)
-//					{
-//						yyolsp = lsp;
-//						if (yyextra[*yyfnd] != 0)
-//						{ // must backup
-//							while (yyback(lsp.yystops,-*yyfnd) != 1 && lsp > yylstate)
-//							{
-//								lsp--;
-//								{
-//									yytchar = (yylastch--);
-//									if (yytchar == '\n')
-//									{
-//										yylineno--;
-//									}
-//									*yysptr++=yytchar;
-//								};
-//							}
-//						}
-//						yyprevious = yylastch;
-//						yylsp = lsp;
-//						yyleng = yylastch - yytext.Substring(1);
-//						yytext = yytext.Substring(0, yyleng);
-//		#if LEXDEBUG
-//						if (debug != 0)
-//						{
-//							fprintf(yyout,"\nmatch ");
-//							sprint(yytext);
-//							fprintf(yyout," action %d\n",*yyfnd);
-//						}
-//		#endif
-//						return (*yyfnd++);
-//					}
-//					{
-//						yytchar = yylastch;
-//						if (yytchar == '\n')
-//						{
-//							yylineno--;
-//						}
-//						*yysptr++=yytchar;
-//				};
-//				}
-//				if (yytext[0] == 0)
-//				{
-//					yysptr = yysbuf;
-//					return (0);
-//				}
-//				yyprevious = yytext[0] = (((yytchar = yysptr > yysbuf != 0?*--yysptr:getc(yyin)) == 10?(yylineno++,yytchar):yytchar) == EOF?0:yytchar);
-//				if (yyprevious > 0)
-//				{
-//					putc(yyprevious,yyout);
-//				}
-//				yylastch = yytext;
-//		#if LEXDEBUG
-//				if (debug != 0)
-//				{
-//					Console.Write('\n');
-//				}
-//		#endif
-//			}
-			
-			
-			
-			return 0;//FIXME:to be removed
+			yysvfArr yystate; yysvfRef lsp;
+			yyworkRef yyt = new yyworkRef();
+			yysvf yyz;
+			int yych, yyfirst;
+			yyworkRef yyr = new yyworkRef();
+#if LEXDEBUG
+			int debug;
+#endif
+			CharPtr yylastch;
+			/* start off machines */
+#if LEXDEBUG
+			debug = 0;
+#endif
+			yyfirst=1;
+			if (yymorfg==0)
+				yylastch = yytext;
+			else {
+				yymorfg=0;
+				yylastch = yytext+yyleng;
+			}
+			for(;;){
+				lsp = new yysvfRef(yylstate, 0);
+				yyestate = new yysvfArr(yybgin); yystate = new yysvfArr(yybgin);
+				if (yyprevious==YYNEWLINE) yystate.inc();
+				for (;;){
+#if LEXDEBUG
+					if(debug)fprintf(yyout,"state %d\n",yystate-yysvec-1);
+#endif
+					yyt = new yyworkRef(yystate.get().yystoff);
+					if(yyt.isEquals(yycrank) && yyfirst==0){  /* may not be any transitions */
+						yyz = yystate.get().yyother;
+						if(yyz == null)break;
+						if(yyz.yystoff.isEquals(yycrank))break;
+					}
+					int i_ = input(); yych = i_; yylastch[0] = (char)i_; yylastch.inc();
+					yyfirst=0;
+tryagain:
+#if LEXDEBUG
+					if(debug!=0){
+						fprintf(yyout,"char ");
+						allprint(yych);
+						putchar('\n');
+					}
+# endif
+					yyr = new yyworkRef(yyt);
+					if ( (int)yyt > (int)yycrank){
+						yyt = yyr.getRef(yych);
+						if (yyt <= yytop && yyt.get().verify+yysvec == yystate){
+							if(yyt->advance+yysvec == YYLERR)	/* error transitions */
+							{unput(*--yylastch);break;}
+							*lsp++ = yystate = yyt.get().advance+yysvec;
+							goto contin;
+						}
+					}
+#if YYOPTIM
+					else if((int)yyt < (int)yycrank) {		/* r < yycrank */
+						yyt = yyr = yycrank+(yycrank-yyt);
+#if LEXDEBUG
+						if(debug)fprintf(yyout,"compressed state\n");
+#endif
+						yyt = yyt + yych;
+						if(yyt <= yytop && yyt.verify+yysvec == yystate){
+							if(yyt.get().advance+yysvec == YYLERR)	/* error transitions */
+							{unput(*--yylastch);break;}
+							*lsp++ = yystate = yyt->advance+yysvec;
+							goto contin;
+						}
+						yyt = yyr + YYU(yymatch[yych]);
+#if LEXDEBUG
+						if(debug!=0){
+							fprintf(yyout,"try fall back character ");
+							allprint(YYU(yymatch[yych]));
+							putchar('\n');
+						}
+#endif
+						if(yyt <= yytop && yyt->verify+yysvec == yystate){
+							if(yyt->advance+yysvec == YYLERR)	/* error transition */
+							{unput(*--yylastch);break;}
+							*lsp++ = yystate = yyt->advance+yysvec;
+							goto contin;
+						}
+					}
+					if ((yystate = yystate.yyother) && (yyt= yystate.yystoff) != yycrank){
+#if LEXDEBUG
+						if(debug)fprintf(yyout,"fall back to state %d\n",yystate-yysvec-1);
+#endif
+						goto tryagain;
+					}
+#endif
+					else
+						{unput(*--yylastch);break;}
+contin:
+#if LEXDEBUG
+					if(debug){
+						fprintf(yyout,"state %d char ",yystate-yysvec-1);
+						allprint(yych);
+						putchar('\n');
+					}
+#endif
+					;
+				}
+#if LEXDEBUG
+				if(debug!=0){
+					fprintf(yyout,"stopped at %d with ",*(lsp-1)-yysvec-1);
+					allprint(yych);
+					putchar('\n');
+				}
+#endif
+				while (lsp-- > yylstate){
+					*yylastch-- = 0;
+					if (*lsp != 0 && (yyfnd= (*lsp)->yystops) && yyfnd[0] > 0){
+						yyolsp = lsp;
+						if(yyextra[yyfnd[0]]!=0){		/* must backup */
+							while(yyback((*lsp)->yystops,-*yyfnd) != 1 && lsp > yylstate){
+								lsp--;
+								unput(*yylastch--);
+							}
+						}
+						yyprevious = YYU((sbyte)yylastch[0]);
+						yylsp = lsp;
+						yyleng = yylastch-yytext+1;
+						yytext[yyleng] = (char)0;
+#if LEXDEBUG
+						if(debug){
+							fprintf(yyout,"\nmatch ");
+							sprint(yytext);
+							fprintf(yyout," action %d\n",*yyfnd);
+						}
+#endif
+						int yyfnd_=yyfnd[0];yyfnd.inc();return(yyfnd_);
+					}
+					unput(yylastch[0]);
+				}
+				if (yytext[0] == 0  /* && feof(yyin) */)
+				{
+					yysptr=yysbuf;
+					return(0);
+				}
+				int i__ = input(); yyprevious = i__; yytext[0] = (char)i__;
+				if (yyprevious>0)
+					output((char)yyprevious);
+				yylastch=yytext;
+#if LEXDEBUG
+				if(debug)putchar('\n');
+#endif
+			}
 		}
 		public static int yyback(IntegerPtr p, int m)
 		{
