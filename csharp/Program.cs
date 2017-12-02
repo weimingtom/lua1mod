@@ -158,6 +158,130 @@ namespace KopiLua
 //			}
 		}
 		
+		public class IntegerPtr
+		{
+			public int[] chars;
+			public int index;
+			
+			public int this[int offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public int this[uint offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public int this[long offset]
+			{
+				get { return chars[index + (int)offset]; }
+				set { chars[index + (int)offset] = value; }
+			}
+
+//			public static implicit operator CharPtr(string str) { return new CharPtr(str); }
+			public static implicit operator IntegerPtr(int[] chars) { return new IntegerPtr(chars); }
+
+			public IntegerPtr()
+			{
+				this.chars = null;
+				this.index = 0;
+			}
+
+//			public CharPtr(string str)
+//			{
+//				this.chars = (str + '\0').ToCharArray();
+//				this.index = 0;
+//			}
+
+			public IntegerPtr(IntegerPtr ptr)
+			{
+				this.chars = ptr.chars;
+				this.index = ptr.index;
+			}
+
+			public IntegerPtr(IntegerPtr ptr, int index)
+			{
+				this.chars = ptr.chars;
+				this.index = index;
+			}
+
+			public IntegerPtr(int[] chars)
+			{
+				this.chars = chars;
+				this.index = 0;
+			}
+
+			public IntegerPtr(int[] chars, int index)
+			{
+				this.chars = chars;
+				this.index = index;
+			}
+
+			public static IntegerPtr operator +(IntegerPtr ptr, int offset) {return new IntegerPtr(ptr.chars, ptr.index+offset);}
+			public static IntegerPtr operator -(IntegerPtr ptr, int offset) {return new IntegerPtr(ptr.chars, ptr.index-offset);}
+			public static IntegerPtr operator +(IntegerPtr ptr, uint offset) { return new IntegerPtr(ptr.chars, ptr.index + (int)offset); }
+			public static IntegerPtr operator -(IntegerPtr ptr, uint offset) { return new IntegerPtr(ptr.chars, ptr.index - (int)offset); }
+
+			public void inc() { this.index++; }
+			public void dec() { this.index--; }
+			public IntegerPtr next() { return new IntegerPtr(this.chars, this.index + 1); }
+			public IntegerPtr prev() { return new IntegerPtr(this.chars, this.index - 1); }
+			public IntegerPtr add(int ofs) { return new IntegerPtr(this.chars, this.index + ofs); }
+			public IntegerPtr sub(int ofs) { return new IntegerPtr(this.chars, this.index - ofs); }
+			
+			public static bool operator ==(IntegerPtr ptr, int ch) { return ptr[0] == ch; }
+			public static bool operator ==(int ch, IntegerPtr ptr) { return ptr[0] == ch; }
+			public static bool operator !=(IntegerPtr ptr, int ch) { return ptr[0] != ch; }
+			public static bool operator !=(int ch, IntegerPtr ptr) { return ptr[0] != ch; }
+
+//			public static CharPtr operator +(BytePtr ptr1, BytePtr ptr2)
+//			{
+//				string result = "";
+//				for (int i = 0; ptr1[i] != '\0'; i++)
+//					result += ptr1[i];
+//				for (int i = 0; ptr2[i] != '\0'; i++)
+//					result += ptr2[i];
+//				return new CharPtr(result);
+//			}
+			public static int operator -(IntegerPtr ptr1, IntegerPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index; }
+			public static bool operator <(IntegerPtr ptr1, IntegerPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index < ptr2.index; }
+			public static bool operator <=(IntegerPtr ptr1, IntegerPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index <= ptr2.index; }
+			public static bool operator >(IntegerPtr ptr1, IntegerPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index > ptr2.index; }
+			public static bool operator >=(IntegerPtr ptr1, IntegerPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index >= ptr2.index; }
+			public static bool operator ==(IntegerPtr ptr1, IntegerPtr ptr2) {
+				object o1 = ptr1 as IntegerPtr;
+				object o2 = ptr2 as IntegerPtr;
+				if ((o1 == null) && (o2 == null)) return true;
+				if (o1 == null) return false;
+				if (o2 == null) return false;
+				return (ptr1.chars == ptr2.chars) && (ptr1.index == ptr2.index); }
+			public static bool operator !=(IntegerPtr ptr1, IntegerPtr ptr2) {return !(ptr1 == ptr2); }
+
+			public override bool Equals(object o)
+			{
+				return this == (o as IntegerPtr);
+			}
+
+			public override int GetHashCode()
+			{
+				return 0;
+			}
+//			public override string ToString()
+//			{
+//				string result = "";
+//				for (int i = index; (i<chars.Length) && (chars[i] != '\0'); i++)
+//					result += chars[i];
+//				return result;
+//			}
+		}
+		
+		
 		public class CharPtr
 		{
 			public char[] chars;
@@ -559,6 +683,10 @@ namespace KopiLua
 		{
 			return 0;
 		}
+		public static int putc(int ch, FILE fp)
+		{
+			return 0;
+		}
 		
 		public static CharPtr strcat(CharPtr desc, CharPtr src)
 		{
@@ -573,6 +701,11 @@ namespace KopiLua
 		public static float bytesToFloat(byte byte0, byte byte1, byte byte2, byte byte3)
 		{
 			return BitConverter.ToSingle(new byte[]{byte0, byte1, byte2, byte3}, 0);
+		}
+		
+		public static double atof(CharPtr nptr)
+		{
+			return 0;
 		}
 	}
 }

@@ -7,20 +7,15 @@ namespace KopiLua
 	
 	public partial class Lua
 	{
-		//C++ TO C# CONVERTER TODO TASK: Unions are not supported in C#, but the following union can be replicated with the StructLayout and FieldOffset attributes:
-		//ORIGINAL LINE: union YYSTYPE
-		public class YYSTYPE
+		public class YYSTYPE //FIXME:union
 		{
 		 	public int vInt;
-		 	public int vLong;
+		 	public long vLong;
 		 	public float vFloat;
 		 	public Word vWord;
-		 	//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-			//ORIGINAL LINE: Byte *pByte;
-		 	public Byte[] pByte;
+		 	public BytePtr pByte;
 		}
 
-		//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
 		//extern YYSTYPE yylval;
 		
 		public const int NIL = 257;
@@ -48,11 +43,6 @@ namespace KopiLua
 		public const int GE = 279;
 		public const int CONC = 280;
 		public const int UNARY = 281;
-
-		//public static class GlobalMembers
-		//{
-		//	private delegate void fnDelegate(ref string s);
-		//}
 	}
 }
 

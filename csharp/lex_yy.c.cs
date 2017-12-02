@@ -3,122 +3,56 @@
 namespace KopiLua
 {
 	using Word = System.UInt16; //unsigned short
+	using YYTYPE = System.SByte;
 	
 	public partial class Lua
-	{
-		public class yysvf
-		{
-			public yywork yystoff;
-			public yysvf yyother;
-			//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-			//ORIGINAL LINE: int *yystops;
-			public int[] yystops;
-			
-			public yysvf(yywork yystoff, yysvf yyother, int[] yystops)
-			{
-				this.yystoff = yystoff;
-				this.yyother = yyother;
-				this.yystops = yystops;
-			}
-		}
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYTYPE char
-		public class yywork
-		{
-			public sbyte verify;
-			public sbyte advance;
-			
-			public yywork(sbyte verify, sbyte advance) 
-			{
-				this.verify = verify;
-				this.advance = advance;
-			}
-		}
-		
-//		public const int INITIAL = 0;
-//		public const int YYOPTIM = 1;
-//		public const int NIL = 257;
-//		public const int IF = 258;
-//		public const int THEN = 259;
-//		public const int ELSE = 260;
-//		public const int ELSEIF = 261;
-//		public const int WHILE = 262;
-//		public const int DO = 263;
-//		public const int REPEAT = 264;
-//		public const int UNTIL = 265;
-//		public const int END = 266;
-//		public const int RETURN = 267;
-//		public const int LOCAL = 268;
-//		public const int NUMBER = 269;
-//		public const int FUNCTION = 270;
-//		public const int NAME = 271;
-//		public const int STRING = 272;
-//		public const int DEBUG = 273;
-//		public const int NOT = 274;
-//		public const int AND = 275;
-//		public const int OR = 276;
-//		public const int NE = 277;
-//		public const int LE = 278;
-//		public const int GE = 279;
-//		public const int CONC = 280;
-//		public const int UNARY = 281;
-//		public const int YYNEWLINE = 10;
-		
-		
-		
-//		#define YYOPTIM
-	
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define U(x) x
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define NLSTATE yyprevious=YYNEWLINE
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define BEGIN yybgin = yysvec + 1 +
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYLERR yysvec
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYSTATE (yyestate-yysvec-1)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYLMAX BUFSIZ
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define output(c) putc(c,yyout)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define input() (((yytchar=yysptr>yysbuf?U(*--yysptr):getc(yyin))==10?(yylineno++,yytchar):yytchar)==EOF?0:yytchar)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define unput(c) {yytchar= (c);if(yytchar=='\n')yylineno--;*yysptr++=yytchar;}
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define yymore() (yymorfg=1)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define ECHO fprintf(yyout, "%s",yytext)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define REJECT { nstr = yyreject(); goto yyfussy;}
+	{		
+		//# define U(x) x
+		//# define NLSTATE yyprevious=YYNEWLINE
+		//# define BEGIN yybgin = yysvec + 1 +
+		//# define INITIAL 0
+		//# define YYLERR yysvec
+		//# define YYSTATE (yyestate-yysvec-1)
+		//# define YYOPTIM 1
+		//# define YYLMAX BUFSIZ
+		//# define output(c) putc(c,yyout)
+		public static void output(char c) { putc(c, yyout); }
+		//# define input() (((yytchar=yysptr>yysbuf?U(*--yysptr):getc(yyin))==10?(yylineno++,yytchar):yytchar)==EOF?0:yytchar)
+		//# define unput(c) {yytchar= (c);if(yytchar=='\n')yylineno--;*yysptr++=yytchar;}
+		//# define yymore() (yymorfg=1)
+		//# define ECHO fprintf(yyout, "%s",yytext)
+		//# define REJECT { nstr = yyreject(); goto yyfussy;}
 		public static int yyleng;
-		//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
 		//extern sbyte yytext[];
 		public static int yymorfg;
 		//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
 		//extern sbyte *yysptr, yysbuf[];
 		public static int yytchar;
-		public static FILE yyin = null;//new FILE(null);
+		public static FILE yyin = null;//new FILE(null); //FIXME:???
 		public static FILE yyout = null;//new FILE(null);
-		//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
 		//extern int yylineno;
+		
+		public class yysvf
+		{
+			public yywork yystoff;
+			public yysvf yyother;
+			public IntegerPtr yystops;
+			
+			public yysvf(yywork yystoff, yysvf yyother, IntegerPtr yystops)
+			{
+				this.yystoff = yystoff;
+				this.yyother = yyother;
+				this.yystops = yystops;
+			}
+		}		
 		public static yysvf yyestate;
-		//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
 		//extern struct yysvf yysvec[], *yybgin;
 		
-		
-		//C++ TO C# CONVERTER TODO TASK: The following line could not be converted:
-		//#include "opcode.h"
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define markarray(t) ((t)->mark)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_markstring(s) (*((s)-1))
-	
-	
-		internal static Input input = null;
-		internal static Unput unput = null;
+		//#undef input
+		//#undef unput
+
+		private static Input input = null;
+		private static Unput unput = null;
 	
 		public static void lua_setinput(Input fn)
 		{
@@ -130,595 +64,411 @@ namespace KopiLua
 		 	unput = fn;
 		}
 	
-		public static string lua_lasttext()
+		public static CharPtr lua_lasttext ()
 		{
 		 	return yytext;
 		}
 	
+		//# define YYNEWLINE 10
 		private const int YYNEWLINE = 10;
-		//C++ TO C# CONVERTER WARNING: The following constructor is declared outside of its associated class:
 		public static int yylex()
 		{
-//			int nstr;
-//			//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
-//		//extern int yyprevious;
-//		while ((nstr = yylook()) >= 0)
-//		{
-//		yyfussy:
-//		switch (nstr)
-//		{
-//		case 0:
-//		if (yywrap())
-//		{
-//			return (0);
-//		}
-//		break;
-//		case 1:
-//						;
-//		break;
-//		case 2:
-//		{
-//						yylval.vInt = 1;
-//						return DefineConstants.DEBUG;
-//		}
-//		break;
-//		case 3:
-//		{
-//						yylval.vInt = 0;
-//						return DefineConstants.DEBUG;
-//		}
-//		break;
-//		case 4:
-//						lua_linenumber++;
-//		break;
-//		case 5:
-//						;
-//		break;
-//		case 6:
-//						return DefineConstants.LOCAL;
-//		break;
-//		case 7:
-//						return DefineConstants.IF;
-//		break;
-//		case 8:
-//						return DefineConstants.THEN;
-//		break;
-//		case 9:
-//						return DefineConstants.ELSE;
-//		break;
-//		case 10:
-//					return DefineConstants.ELSEIF;
-//		break;
-//		case 11:
-//						return DefineConstants.WHILE;
-//		break;
-//		case 12:
-//						return DefineConstants.DO;
-//		break;
-//		case 13:
-//					return DefineConstants.REPEAT;
-//		break;
-//		case 14:
-//						return DefineConstants.UNTIL;
-//		break;
-//		case 15:
-//		{
-//												 yylval.vWord = lua_nfile-1;
-//												 return DefineConstants.FUNCTION;
-//		}
-//		break;
-//		case 16:
-//						return DefineConstants.END;
-//		break;
-//		case 17:
-//						return DefineConstants.RETURN;
-//		break;
-//		case 18:
-//						return DefineConstants.LOCAL;
-//		break;
-//		case 19:
-//						return DefineConstants.NIL;
-//		break;
-//		case 20:
-//						return DefineConstants.AND;
-//		break;
-//		case 21:
-//						return DefineConstants.OR;
-//		break;
-//		case 22:
-//						return DefineConstants.NOT;
-//		break;
-//		case 23:
-//						return DefineConstants.NE;
-//		break;
-//		case 24:
-//						return DefineConstants.LE;
-//		break;
-//		case 25:
-//						return DefineConstants.GE;
-//		break;
-//		case 26:
-//						return DefineConstants.CONC;
-//		break;
-//		case 27:
-//					case 28:
-//					{
-//							   yylval.vWord = lua_findenclosedconstant(ref yytext);
-//							   return DefineConstants.STRING;
-//					}
-//		break;
-//		case 29:
-//		case 30:
-//		case 31:
-//		case 32:
-//		{
-//								yylval.vFloat = Convert.ToDouble(yytext);
-//								return DefineConstants.NUMBER;
-//		}
-//		break;
-//		case 33:
-//		{
-//							yylval.vWord = lua_findsymbol(ref yytext);
-//							return DefineConstants.NAME;
-//		}
-//		break;
-//		case 34:
-//						return *yytext;
-//		break;
-//		case -1:
-//		break;
-//		default:
-//		fprintf(yyout,"bad switch yylook %d",nstr);
-//	break;
-//		}
-//		}
+			int nstr;
+			//extern int yyprevious;
+			while ((nstr = yylook()) >= 0)
+			{
+//yyfussy:
+				switch (nstr)
+				{
+				case 0:
+					if (yywrap() != 0)
+					{
+						return (0);
+					}
+					break;
+		
+				case 1:
+					;
+					break;
+		
+				case 2:
+					{
+						yylval.vInt = 1;
+						return DEBUG;
+					}
+					//break;
+		
+				case 3:
+					{
+						yylval.vInt = 0;
+						return DEBUG;
+					}
+					//break;
+		
+				case 4:
+					lua_linenumber++;
+					break;
+		
+				case 5:
+					;
+					break;
+		
+				case 6:
+					return LOCAL;
+					//break;
+		
+				case 7:
+					return IF;
+					//break;
+		
+				case 8:
+					return THEN;
+					//break;
+		
+				case 9:
+					return ELSE;
+					//break;
+		
+				case 10:
+					return ELSEIF;
+					//break;
+		
+				case 11:
+					return WHILE;
+					//break;
+		
+				case 12:
+					return DO;
+					//break;
+		
+				case 13:
+					return REPEAT;
+					//break;
+		
+				case 14:
+					return UNTIL;
+					//break;
+		
+				case 15:
+					{
+						yylval.vWord = (Word)(lua_nfile-1);
+						return FUNCTION;
+					}
+					//break;
+		
+				case 16:
+					return END;
+					//break;
+		
+				case 17:
+					return RETURN;
+					//break;
+		
+				case 18:
+					return LOCAL;
+					//break;
+		
+				case 19:
+					return NIL;
+					//break;
+		
+				case 20:
+					return AND;
+					//break;
+		
+				case 21:
+					return OR;
+					//break;
+		
+				case 22:
+					return NOT;
+					//break;
+		
+				case 23:
+					return NE;
+					//break;
+		
+				case 24:
+					return LE;
+					//break;
+		
+				case 25:
+					return GE;
+					//break;
+		
+				case 26:
+					return CONC;
+					//break;
+		
+				case 27:
+				case 28:
+					{
+						yylval.vWord = (Word)lua_findenclosedconstant(yytext);
+						return STRING;
+					}
+					//break;
+		
+				case 29:
+				case 30:
+				case 31:
+				case 32:
+					{
+						yylval.vFloat = (float)atof(yytext);
+						return NUMBER;
+					}
+					//break;
+		
+				case 33:
+					{
+						yylval.vWord = (Word)lua_findsymbol(yytext);
+						return NAME;
+					}
+					//break;
+					
+				case 34:
+					return (int)yytext[0];
+					//break;
+				
+				case -1:
+					break;
+	
+				default:
+					fprintf(yyout,"bad switch yylook %d",nstr);
+					break;
+				}
+			}
 			return (0);
 		}
 		/* end of yylex */
 		
 		
 		
-		public static int[] yyvstop = {0, 1, 0, 1, 0, 34, 0, 1, 34, 0, 4, 0, 34, 0, 34, 0, 34, 0, 34, 0, 29, 34, 0, 34, 0, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 33, 34, 0, 34, 0, 34, 0, 1, 0, 27, 0, 28, 0, 5, 0, 26, 0, 30, 0, 29, 0, 29, 0, 24, 0, 25, 0, 33, 0, 33, 0, 12, 33, 0, 33, 0, 33, 0, 33, 0, 7, 33, 0, 33, 0, 33, 0, 33, 0, 21, 33, 0, 33, 0, 33, 0, 33, 0, 33, 0, 23, 0, 29, 30, 0, 31, 0, 20, 33, 0, 33, 0, 16, 33, 0, 33, 0, 33, 0, 19, 33, 0, 22, 33, 0, 33, 0, 33, 0, 33, 0, 33, 0, 33, 0, 32, 0, 9, 33, 0, 33, 0, 33, 0, 33, 0, 33, 0, 8, 33, 0, 33, 0, 33, 0, 31, 32, 0, 33, 0, 33, 0, 6, 18, 33, 0, 33, 0, 33, 0, 14, 33, 0, 11, 33, 0, 10, 33, 0, 33, 0, 13, 33, 0, 17, 33, 0, 2, 0, 33, 0, 15, 33, 0, 3, 0, 0};
-		public static yywork[] yycrank =
+		public static int[] yyvstop = {
+			0, 
+			1, 0, 
+			1, 0, 
+			34, 0, 
+			1, 34, 0, 
+			4, 0, 
+			34, 0, 
+			34, 0, 
+			34, 0, 
+			34, 0, 
+			29, 34, 0, 
+			34, 0, 
+			34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			33, 34, 0, 
+			34, 0, 
+			34, 0, 
+			1, 0, 
+			27, 0, 
+			28, 0, 
+			5, 0, 
+			26, 0, 
+			30, 0,
+			29, 0,
+			29, 0,
+			24, 0,
+			25, 0,
+			33, 0,
+			33, 0,
+			12, 33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			7, 33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			21, 33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			23, 0,
+			29, 30, 0,
+			31, 0,
+			20, 33, 0,
+			33, 0,
+			16, 33, 0,
+			33, 0,
+			33, 0,
+			19, 33, 0,
+			22, 33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			32, 0,
+			9, 33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			33, 0,
+			8, 33, 0,
+			33, 0,
+			33, 0,
+			31, 32, 0,
+			33, 0,
+			33, 0,
+			6, 18, 33, 0,
+			33, 0,
+			33, 0,
+			14, 33, 0,
+			11, 33, 0,
+			10, 33, 0,
+			33, 0,
+			13, 33, 0,
+			17, 33, 0,
+			2, 0,
+			33, 0,
+			15, 33, 0,
+			3, 0, 0
+		};
+		public class yywork
 		{
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(1, 3),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(1, 4),
-			new yywork(1, 5),
-			new yywork(6, 29),
-			new yywork(4, 28),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(7, 31),
-			new yywork(0, 0),
-			new yywork(6, 29),
-			new yywork(6, 29),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(7, 31),
-			new yywork(7, 31),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(1, 6),
-			new yywork(4, 28),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(1, 7),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(1, 3),
-			new yywork(6, 30),
-			new yywork(1, 8),
-			new yywork(1, 9),
-			new yywork(0, 0),
-			new yywork(1, 10),
-			new yywork(6, 29),
-			new yywork(7, 31),
-			new yywork(8, 33),
-			new yywork(0, 0),
-			new yywork(6, 29),
-			new yywork(0, 0),
-			new yywork(7, 32),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(6, 29),
-			new yywork(7, 31),
-			new yywork(1, 11),
-			new yywork(0, 0),
-			new yywork(1, 12),
-			new yywork(2, 27),
-			new yywork(7, 31),
-			new yywork(1, 13),
-			new yywork(11, 39),
-			new yywork(12, 40),
-			new yywork(1, 13),
-			new yywork(26, 56),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(2, 8),
-			new yywork(2, 9),
-			new yywork(0, 0),
-			new yywork(6, 29),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(6, 29),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(7, 31),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(7, 31),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(2, 11),
-			new yywork(0, 0),
-			new yywork(2, 12),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(1, 14),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(1, 15),
-			new yywork(1, 16),
-			new yywork(1, 17),
-			new yywork(0, 0),
-			new yywork(22, 52),
-			new yywork(1, 18),
-			new yywork(18, 47),
-			new yywork(23, 53),
-			new yywork(1, 19),
-			new yywork(42, 63),
-			new yywork(1, 20),
-			new yywork(1, 21),
-			new yywork(25, 55),
-			new yywork(14, 42),
-			new yywork(1, 22),
-			new yywork(15, 43),
-			new yywork(1, 23),
-			new yywork(1, 24),
-			new yywork(16, 44),
-			new yywork(1, 25),
-			new yywork(16, 45),
-			new yywork(17, 46),
-			new yywork(19, 48),
-			new yywork(21, 51),
-			new yywork(2, 14),
-			new yywork(20, 49),
-			new yywork(1, 26),
-			new yywork(2, 15),
-			new yywork(2, 16),
-			new yywork(2, 17),
-			new yywork(24, 54),
-			new yywork(20, 50),
-			new yywork(2, 18),
-			new yywork(44, 64),
-			new yywork(45, 65),
-			new yywork(2, 19),
-			new yywork(46, 66),
-			new yywork(2, 20),
-			new yywork(2, 21),
-			new yywork(27, 57),
-			new yywork(48, 67),
-			new yywork(2, 22),
-			new yywork(49, 68),
-			new yywork(2, 23),
-			new yywork(2, 24),
-			new yywork(50, 69),
-			new yywork(2, 25),
-			new yywork(52, 70),
-			new yywork(53, 72),
-			new yywork(27, 58),
-			new yywork(54, 73),
-			new yywork(52, 71),
-			new yywork(9, 34),
-			new yywork(2, 26),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(9, 35),
-			new yywork(10, 36),
-			new yywork(55, 74),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(10, 37),
-			new yywork(57, 75),
-			new yywork(58, 76),
-			new yywork(64, 80),
-			new yywork(66, 81),
-			new yywork(67, 82),
-			new yywork(70, 83),
-			new yywork(71, 84),
-			new yywork(72, 85),
-			new yywork(73, 86),
-			new yywork(74, 87),
-			new yywork(10, 38),
-			new yywork(10, 38),
-			new yywork(38, 61),
-			new yywork(10, 38),
-			new yywork(38, 61),
-			new yywork(75, 88),
-			new yywork(76, 89),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(38, 62),
-			new yywork(80, 92),
-			new yywork(81, 93),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(82, 94),
-			new yywork(83, 95),
-			new yywork(84, 96),
-			new yywork(10, 38),
-			new yywork(10, 38),
-			new yywork(86, 97),
-			new yywork(10, 38),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(87, 98),
-			new yywork(88, 99),
-			new yywork(60, 79),
-			new yywork(60, 79),
-			new yywork(13, 41),
-			new yywork(60, 79),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(13, 41),
-			new yywork(33, 33),
-			new yywork(89, 100),
-			new yywork(60, 79),
-			new yywork(60, 79),
-			new yywork(92, 101),
-			new yywork(60, 79),
-			new yywork(93, 102),
-			new yywork(95, 103),
-			new yywork(33, 33),
-			new yywork(33, 0),
-			new yywork(96, 104),
-			new yywork(99, 105),
-			new yywork(100, 106),
-			new yywork(102, 107),
-			new yywork(106, 108),
-			new yywork(107, 109),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(35, 35),
-			new yywork(108, 110),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(33, 33),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(35, 59),
-			new yywork(35, 59),
-			new yywork(33, 33),
-			new yywork(35, 59),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(33, 33),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(33, 33),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(36, 60),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(33, 33),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(33, 33),
-			new yywork(35, 59),
-			new yywork(35, 59),
-			new yywork(0, 0),
-			new yywork(35, 59),
-			new yywork(36, 38),
-			new yywork(36, 38),
-			new yywork(59, 77),
-			new yywork(36, 38),
-			new yywork(59, 77),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(59, 78),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(61, 62),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(36, 38),
-			new yywork(36, 38),
-			new yywork(0, 0),
-			new yywork(36, 38),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(77, 78),
-			new yywork(79, 90),
-			new yywork(0, 0),
-			new yywork(79, 90),
-			new yywork(0, 0),
-			new yywork(0, 0),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(79, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
-			new yywork(90, 91),
+			public YYTYPE verify, advance;
+			
+			public yywork(YYTYPE verify, YYTYPE advance) 
+			{
+				this.verify = verify;
+				this.advance = advance;
+			}
+		}
+		public static yywork[] yycrank = {
+			new yywork(0, 0), new yywork(0, 0), new yywork(1, 3), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(1, 4), new yywork(1, 5),
+			new yywork(6, 29), new yywork(4, 28), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(7, 31), new yywork(0, 0),
+			new yywork(6, 29), new yywork(6, 29), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(7, 31), new yywork(7, 31),
+			new yywork(0, 0), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(0, 0), new yywork(1, 6),
+			new yywork(4, 28), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(1, 7), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(1, 3), new yywork(6, 30), new yywork(1, 8), new yywork(1, 9),
+			new yywork(0, 0), new yywork(1, 10), new yywork(6, 29), new yywork(7, 31),
+			new yywork(8, 33), new yywork(0, 0), new yywork(6, 29), new yywork(0, 0),
+			new yywork(7, 32), new yywork(0, 0), new yywork(0, 0), new yywork(6, 29),
+			new yywork(7, 31), new yywork(1, 11), new yywork(0, 0), new yywork(1, 12),
+			new yywork(2, 27), new yywork(7, 31), new yywork(1, 13), new yywork(11, 39),
+			new yywork(12, 40), new yywork(1, 13), new yywork(26, 56), new yywork(0, 0),
+			new yywork(0, 0), new yywork(2, 8), new yywork(2, 9), new yywork(0, 0),
+			new yywork(6, 29), new yywork(0, 0), new yywork(0, 0), new yywork(6, 29),
+			new yywork(0, 0), new yywork(0, 0), new yywork(7, 31), new yywork(0, 0),
+			new yywork(0, 0), new yywork(7, 31), new yywork(0, 0), new yywork(0, 0),
+			new yywork(2, 11), new yywork(0, 0), new yywork(2, 12), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(1, 14), new yywork(0, 0),
+			new yywork(0, 0), new yywork(1, 15), new yywork(1, 16), new yywork(1, 17),
+			new yywork(0, 0), new yywork(22, 52), new yywork(1, 18), new yywork(18, 47),
+			new yywork(23, 53), new yywork(1, 19), new yywork(42, 63), new yywork(1, 20),
+			new yywork(1, 21), new yywork(25, 55), new yywork(14, 42), new yywork(1, 22),
+			new yywork(15, 43), new yywork(1, 23), new yywork(1, 24), new yywork(16, 44),
+			new yywork(1, 25), new yywork(16, 45), new yywork(17, 46), new yywork(19, 48),
+			new yywork(21, 51), new yywork(2, 14), new yywork(20, 49), new yywork(1, 26),
+			new yywork(2, 15), new yywork(2, 16), new yywork(2, 17), new yywork(24, 54),
+			new yywork(20, 50), new yywork(2, 18), new yywork(44, 64), new yywork(45, 65),
+			new yywork(2, 19), new yywork(46, 66), new yywork(2, 20), new yywork(2, 21),
+			new yywork(27, 57), new yywork(48, 67), new yywork(2, 22), new yywork(49, 68),
+			new yywork(2, 23), new yywork(2, 24), new yywork(50, 69), new yywork(2, 25),
+			new yywork(52, 70), new yywork(53, 72), new yywork(27, 58), new yywork(54, 73),
+			new yywork(52, 71), new yywork(9, 34), new yywork(2, 26), new yywork(9, 35),
+			new yywork(9, 35), new yywork(9, 35), new yywork(9, 35), new yywork(9, 35),
+			new yywork(9, 35), new yywork(9, 35), new yywork(9, 35), new yywork(9, 35),
+			new yywork(9, 35), new yywork(10, 36), new yywork(55, 74), new yywork(10, 37),
+			new yywork(10, 37), new yywork(10, 37), new yywork(10, 37), new yywork(10, 37),
+			new yywork(10, 37), new yywork(10, 37), new yywork(10, 37), new yywork(10, 37),
+			new yywork(10, 37), new yywork(57, 75), new yywork(58, 76), new yywork(64, 80),
+			new yywork(66, 81), new yywork(67, 82), new yywork(70, 83), new yywork(71, 84),
+			new yywork(72, 85), new yywork(73, 86), new yywork(74, 87), new yywork(10, 38),
+			new yywork(10, 38), new yywork(38, 61), new yywork(10, 38), new yywork(38, 61),
+			new yywork(75, 88), new yywork(76, 89), new yywork(38, 62), new yywork(38, 62),
+			new yywork(38, 62), new yywork(38, 62), new yywork(38, 62), new yywork(38, 62),
+			new yywork(38, 62), new yywork(38, 62), new yywork(38, 62), new yywork(38, 62),
+			new yywork(80, 92), new yywork(81, 93), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(82, 94), new yywork(83, 95), new yywork(84, 96), new yywork(10, 38),
+			new yywork(10, 38), new yywork(86, 97), new yywork(10, 38), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(87, 98), new yywork(88, 99), new yywork(60, 79),
+			new yywork(60, 79), new yywork(13, 41), new yywork(60, 79), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(13, 41), new yywork(13, 41), new yywork(13, 41),
+			new yywork(13, 41), new yywork(33, 33), new yywork(89, 100), new yywork(60, 79),
+			new yywork(60, 79), new yywork(92, 101), new yywork(60, 79), new yywork(93, 102),
+			new yywork(95, 103), new yywork(33, 33), new yywork(33, 0), new yywork(96, 104),
+			new yywork(99, 105), new yywork(100, 106), new yywork(102, 107), new yywork(106, 108),
+			new yywork(107, 109), new yywork(35, 35), new yywork(35, 35), new yywork(35, 35),
+			new yywork(35, 35), new yywork(35, 35), new yywork(35, 35), new yywork(35, 35),
+			new yywork(35, 35), new yywork(35, 35), new yywork(35, 35), new yywork(108, 110),
+			new yywork(0, 0), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(0, 0), new yywork(33, 33), new yywork(0, 0),
+			new yywork(0, 0), new yywork(35, 59), new yywork(35, 59), new yywork(33, 33),
+			new yywork(35, 59), new yywork(0, 0), new yywork(0, 0), new yywork(33, 33),
+			new yywork(0, 0), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(33, 33), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(36, 60), new yywork(36, 60), new yywork(36, 60),
+			new yywork(36, 60), new yywork(36, 60), new yywork(36, 60), new yywork(36, 60),
+			new yywork(36, 60), new yywork(36, 60), new yywork(36, 60), new yywork(0, 0),
+			new yywork(0, 0), new yywork(33, 33), new yywork(0, 0), new yywork(0, 0),
+			new yywork(33, 33), new yywork(35, 59), new yywork(35, 59), new yywork(0, 0),
+			new yywork(35, 59), new yywork(36, 38), new yywork(36, 38), new yywork(59, 77),
+			new yywork(36, 38), new yywork(59, 77), new yywork(0, 0), new yywork(0, 0),
+			new yywork(59, 78), new yywork(59, 78), new yywork(59, 78), new yywork(59, 78),
+			new yywork(59, 78), new yywork(59, 78), new yywork(59, 78), new yywork(59, 78),
+			new yywork(59, 78), new yywork(59, 78), new yywork(61, 62), new yywork(61, 62),
+			new yywork(61, 62), new yywork(61, 62), new yywork(61, 62), new yywork(61, 62),
+			new yywork(61, 62), new yywork(61, 62), new yywork(61, 62), new yywork(61, 62),
+			new yywork(0, 0), new yywork(0, 0), new yywork(0, 0), new yywork(0, 0),
+			new yywork(0, 0), new yywork(36, 38), new yywork(36, 38), new yywork(0, 0),
+			new yywork(36, 38), new yywork(77, 78), new yywork(77, 78), new yywork(77, 78),
+			new yywork(77, 78), new yywork(77, 78), new yywork(77, 78), new yywork(77, 78),
+			new yywork(77, 78), new yywork(77, 78), new yywork(77, 78), new yywork(79, 90),
+			new yywork(0, 0), new yywork(79, 90), new yywork(0, 0), new yywork(0, 0),
+			new yywork(79, 91), new yywork(79, 91), new yywork(79, 91), new yywork(79, 91),
+			new yywork(79, 91), new yywork(79, 91), new yywork(79, 91), new yywork(79, 91),
+			new yywork(79, 91), new yywork(79, 91), new yywork(90, 91), new yywork(90, 91),
+			new yywork(90, 91), new yywork(90, 91), new yywork(90, 91), new yywork(90, 91),
+			new yywork(90, 91), new yywork(90, 91), new yywork(90, 91), new yywork(90, 91),
 			new yywork(0, 0)
 		};
 		
 		private static yywork yycrankOffset(int off) 
 		{
-			return null;
+			return yycrank[off];
 		}
 		private static yysvf yysvecOffset(int off)
 		{
-			return null;
+			return yysvec[off];
 		}
-		private static int[] yyvstopOffset(int off)
+		private static IntegerPtr yyvstopOffset(int off)
 		{
-			return null;
+			return new IntegerPtr(yyvstop, off);
 		}
 		private static yywork yycrankZero() 
 		{
@@ -728,7 +478,7 @@ namespace KopiLua
 		{
 			return null;
 		}
-		private static int[] yyvstopZero()
+		private static IntegerPtr yyvstopZero()
 		{
 			return null;
 		}
@@ -807,7 +557,6 @@ namespace KopiLua
 			new yysvf(yycrankOffset(66), yysvecOffset(13), yyvstopOffset(150)),
 			new yysvf(yycrankOffset(74), yysvecOffset(13), yyvstopOffset(152)),
 			new yysvf(yycrankOffset(80), yysvecOffset(13), yyvstopOffset(154)),	
-
 			new yysvf(yycrankOffset(78), yysvecOffset(13), yyvstopOffset(156)),
 			new yysvf(yycrankOffset(94), yysvecZero(), yyvstopZero()),
 			new yysvf(yycrankOffset(93), yysvecZero(), yyvstopZero()),
@@ -850,32 +599,49 @@ namespace KopiLua
 		
 		public static yywork yytop = yycrankOffset(423);
 		public static yysvf yybgin = yysvecOffset(1);
-		public static sbyte[] yymatch = {0x0, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x9, 0xA, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x9, 0x1, (sbyte)'"', 0x1, 0x1, 0x1, 0x1, 0x27, 0x1, 0x1, 0x1, (sbyte)'+', 0x1, (sbyte)'+', 0x1, 0x1, (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'D', (sbyte)'D', (sbyte)'A', (sbyte)'D', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', 0x1, 0x1, 0x1, 0x1, (sbyte)'A', 0x1, (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'D', (sbyte)'D', (sbyte)'A', (sbyte)'D', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', 0x1, 0x1, 0x1, 0x1, 0x1, 0};
-		public static sbyte[] yyextra = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		
-//		#if ! lint
-		internal static string ncform_sccsid = "@(#)ncform 1.6 88/02/08 SMI"; // from S5R2 1.2
-//		#endif
+		public static sbyte[] yymatch = { //FIXME:???sbyte, char???
+			0x0, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
+			0x1, 0x9, 0xA, 0x1, 0x1, 0x1, 0x1, 0x1, 
+			0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
+			0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
+			0x9, 0x1, (sbyte)'"', 0x1, 0x1, 0x1, 0x1, 0x27, 
+			0x1, 0x1, 0x1, (sbyte)'+', 0x1, (sbyte)'+', 0x1, 0x1, 
+			(sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', (sbyte)'0', 
+			(sbyte)'0', (sbyte)'0', 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
+			0x1, (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'D', (sbyte)'D', (sbyte)'A', (sbyte)'D', 
+			(sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', 
+			(sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', 
+			(sbyte)'A', (sbyte)'A', (sbyte)'A', 0x1, 0x1, 0x1, 0x1, (sbyte)'A', 
+			0x1, (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'D', (sbyte)'D', (sbyte)'A', (sbyte)'D', 
+			(sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', 
+			(sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', (sbyte)'A', 
+			(sbyte)'A', (sbyte)'A', (sbyte)'A', 0x1, 0x1, 0x1, 0x1, 0x1, 
+			0
+		};
+		public static sbyte[] yyextra = { //FIXME:sbyte???char???
+			0, 0, 0, 0, 0, 0, 0, 0, 
+			0, 0, 0, 0, 0, 0, 0, 0, 
+			0, 0, 0, 0, 0, 0, 0, 0, 
+			0, 0, 0, 0, 0, 0, 0, 0, 
+			0, 0, 0, 0, 0, 0, 0, 0, 
+			0
+		};
+		//#if ! lint
+		private static CharPtr ncform_sccsid = "@(#)ncform 1.6 88/02/08 SMI"; /* from S5R2 1.2 */
+		//#endif
 	
 		public static int yylineno = 1;
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYU(x) x
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define NLSTATE yyprevious=YYNEWLINE
-		public static string yytext = new string(new char[BUFSIZ]);
-		public static yysvf[] yylstate = new yysvf[BUFSIZ];//Arrays.InitializeWithDefaultInstances<yysvf>(BUFSIZ);
-		public static yysvf[] yylsp;
-		public static yysvf[] yyolsp;
-		public static string yysbuf = new string(new char[BUFSIZ]);
-		//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
-		public static string yysptr = yysbuf;
-		//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
-		public static int[] yyfnd;
-		//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
+		//#define YYU(x) x
+		//#define NLSTATE yyprevious=YYNEWLINE
+		public static CharPtr yytext = new CharPtr(new char[BUFSIZ]);
+		public static yysvf[] yylstate = new yysvf[BUFSIZ];
+		public static yysvf[] yylsp, yyolsp; //FIXME:????
+		public static CharPtr yysbuf = new CharPtr(new char[BUFSIZ]);
+		public static CharPtr yysptr = new CharPtr(yysbuf);
+		public static IntegerPtr yyfnd;
 		//extern struct yysvf *yyestate;
 		public static int yyprevious = YYNEWLINE;
-		//C++ TO C# CONVERTER WARNING: The following constructor is declared outside of its associated class:
-		public static void yylook()
+		public static int yylook()
 		{
 //	//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
 //	//ORIGINAL LINE: register struct yysvf *yystate, **lsp;
@@ -1129,56 +895,34 @@ namespace KopiLua
 //				}
 //		#endif
 //			}
+			
+			
+			
+			return 0;//FIXME:to be removed
 		}
-		
-		
-		
-		
-		//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-		public static int yyback(int[] p, int m)
+		public static int yyback(IntegerPtr p, int m)
 		{
-//	//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-//		if (p == 0)
-//	//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-//			return (0);
-//	//C++ TO C# CONVERTER TODO TASK: The following method format was not recognized, possibly due to an unrecognized macro:
-//		while (*p)
-//		{
-//			if (*p++== m)
-//			{
-//				return (1);
-//			}
-//		}
-//	//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-			return (0);
+			if (p==0) return(0);
+			while (p[0] != 0)
+			{
+				int p_ = p[0]; p.inc();
+				if (p_ == m)
+					return(1);
+			}
+			return(0);
 		}
-		
 		/* the following are only used in the lex library */
-		//C++ TO C# CONVERTER WARNING: The following constructor is declared outside of its associated class:
-		public static void yyinput()
+		public static int yyinput()
 		{
-//			return ((((yytchar = yysptr > yysbuf != 0?*--yysptr:getc(yyin)) == 10?(yylineno++,yytchar):yytchar) == EOF?0:yytchar));
+			return(input());
 		}
-	
-		//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
 		public static void yyoutput(int c)
 		{
-//			//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-//			putc(c,yyout);
+			output((char)c);
 		}
-	
-		//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
 		public static void yyunput(int c)
 		{
-//				{
-//		//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-//					yytchar = (c);
-//		//C++ TO C# CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-//					if (yytchar == '\n')
-//						public static yylineno--;
-//		//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
-//					 public static * yysptr++=yytchar;
-//				}
+			unput(c);
 		}
 	}
 }
