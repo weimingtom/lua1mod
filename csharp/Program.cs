@@ -707,5 +707,10 @@ namespace KopiLua
 		{
 			return 0;
 		}
+		
+		public static int putchar(int ch)
+		{
+		 	return 0;
+		}
 	}
 }

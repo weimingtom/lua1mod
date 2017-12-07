@@ -16,6 +16,7 @@ namespace KopiLua
 		//# define BEGIN yybgin = yysvec + 1 +
 		//# define INITIAL 0
 		//# define YYLERR yysvec
+		public static yysvf[] YYLERR() {return yysvec;}
 		//# define YYSTATE (yyestate-yysvec-1)
 		//# define YYOPTIM 1
 		//# define YYLMAX BUFSIZ
@@ -41,6 +42,15 @@ namespace KopiLua
 			private yysvf[] arr;
 			private int index;
 			
+			public yysvfRef()
+			{
+				
+			}
+			public yysvfRef(int index, yysvf[] arr)
+			{
+				this.arr = arr;
+				this.index = index;
+			}			
 			public yysvfRef(yysvf[] arr, int index)
 			{
 				this.arr = arr;
@@ -57,6 +67,23 @@ namespace KopiLua
 			{
 				this.index++;
 			}
+			public yysvfRef dec()
+			{
+				this.index--;
+				return this;
+			}
+			public bool isLargerThan(yysvf[] arr)
+			{
+				return this.arr == arr && this.index > 0;
+			}
+			public int minus(yysvf[] arr)
+			{
+				if (this.arr == arr)
+				{
+					return this.index - 0;
+				}
+				throw new Exception("minus");
+			}
 			
 			public yysvf get()
 			{
@@ -67,18 +94,46 @@ namespace KopiLua
 			{
 				return arr[index + offset];
 			}
+			public yysvfRef getRef(int offset)
+			{
+				return new yysvfRef(arr, index + offset);
+			}
+			public void set(yysvfRef v)
+			{
+				arr[index + 0].set(v.get());
+			}
+			public void set(int offset, yysvfRef v)
+			{
+				arr[index + offset].set(v.get());
+			}
+			
+			public bool isEquals(yysvfRef yyref)
+			{
+				return this.arr == yyref.arr && this.index == yyref.index;
+			}
+			public bool isEquals(yysvf[] arr)
+			{
+				return this.arr == arr && this.index == 0;
+			}
 		}
 		public class yysvf
 		{
 			public yyworkRef yystoff;
-			public yysvf yyother;
+			public yysvfRef yyother;
 			public IntegerPtr yystops;
 			
-			public yysvf(yyworkRef yystoff, yysvf yyother, IntegerPtr yystops)
+			public yysvf(yyworkRef yystoff, yysvfRef yyother, IntegerPtr yystops)
 			{
 				this.yystoff = yystoff;
 				this.yyother = yyother;
 				this.yystops = yystops;
+			}
+			
+			public void set(yysvf yyref)
+			{
+				this.yystoff = new yyworkRef(yyref.yystoff);
+				this.yyother = new yysvfRef(yyref.yyother);
+				this.yystops = new IntegerPtr(yyref.yystops);
 			}
 		}		
 		public static yysvfArr yyestate;
@@ -399,6 +454,32 @@ namespace KopiLua
 			{
 				return this.arr == arr && this.index == 0;
 			}
+			public bool isNotEquals(yywork[] arr)
+			{
+				return !isEquals(arr);
+			}
+			public bool isLargerThan(yywork[] arr)
+			{
+				return this.arr == arr && this.index > 0;
+			}
+			public bool isLessThan(yywork[] arr)
+			{
+				return this.arr == arr && this.index < 0;
+			}
+			public bool isLessEqualThan(yyworkRef yyref)
+			{
+				return this.arr == yyref.arr && this.index <= yyref.index;
+			}
+
+
+			public int minus(yywork[] arr)
+			{
+				if (this.arr == arr)
+				{
+					return 0 - this.index;
+				}
+				throw new Exception("minus");
+			}
 			
 			public yywork get()
 			{
@@ -537,9 +618,9 @@ namespace KopiLua
 		{
 			return new yyworkRef(yycrank, off);
 		}
-		private static yysvf yysvecOffset(int off)
+		private static yysvfRef yysvecOffset(int off)
 		{
-			return yysvec[off];
+			return new yysvfRef(yysvec, off);
 		}
 		private static IntegerPtr yyvstopOffset(int off)
 		{
@@ -549,7 +630,7 @@ namespace KopiLua
 		{
 			return new yyworkRef();
 		}
-		private static yysvf yysvecZero()
+		private static yysvfRef yysvecZero()
 		{
 			return null;
 		}
@@ -711,7 +792,7 @@ namespace KopiLua
 		//#define NLSTATE yyprevious=YYNEWLINE
 		public static CharPtr yytext = new CharPtr(new char[BUFSIZ]);
 		public static yysvf[] yylstate = new yysvf[BUFSIZ];
-		public static yysvf[] yylsp, yyolsp; //FIXME:????
+		public static yysvfRef yylsp, yyolsp; //FIXME:????
 		public static CharPtr yysbuf = new CharPtr(new char[BUFSIZ]);
 		public static CharPtr yysptr = new CharPtr(yysbuf);
 		public static IntegerPtr yyfnd;
@@ -721,8 +802,8 @@ namespace KopiLua
 		{
 			yysvfArr yystate; yysvfRef lsp;
 			yyworkRef yyt = new yyworkRef();
-			yysvf yyz;
-			int yych, yyfirst;
+			yysvfRef yyz = new yysvfRef();
+			int yych=0, yyfirst=0;
 			yyworkRef yyr = new yyworkRef();
 #if LEXDEBUG
 			int debug;
@@ -745,17 +826,19 @@ namespace KopiLua
 				if (yyprevious==YYNEWLINE) yystate.inc();
 				for (;;){
 #if LEXDEBUG
-					if(debug)fprintf(yyout,"state %d\n",yystate-yysvec-1);
+				if(debug!=0)fprintf(yyout,"state %d\n",yystate.minus(yysvec)-1);
 #endif
 					yyt = new yyworkRef(yystate.get().yystoff);
 					if(yyt.isEquals(yycrank) && yyfirst==0){  /* may not be any transitions */
 						yyz = yystate.get().yyother;
 						if(yyz == null)break;
-						if(yyz.yystoff.isEquals(yycrank))break;
+						if(yyz.get().yystoff.isEquals(yycrank))break;
 					}
 					int i_ = input(); yych = i_; yylastch[0] = (char)i_; yylastch.inc();
 					yyfirst=0;
+#if YYOPTIM
 tryagain:
+#endif
 #if LEXDEBUG
 					if(debug!=0){
 						fprintf(yyout,"char ");
@@ -764,29 +847,29 @@ tryagain:
 					}
 # endif
 					yyr = new yyworkRef(yyt);
-					if ( (int)yyt > (int)yycrank){
+					if ( yyt.isLargerThan(yycrank) ){
 						yyt = yyr.getRef(yych);
-						if (yyt <= yytop && yyt.get().verify+yysvec == yystate){
-							if(yyt->advance+yysvec == YYLERR)	/* error transitions */
-							{unput(*--yylastch);break;}
-							*lsp++ = yystate = yyt.get().advance+yysvec;
+						if (yyt.isLessEqualThan(yytop) && new yysvfRef(yyt.get().verify, yysvec).isEquals(yystate)){
+							if(new yysvfRef(yyt.get().advance, yysvec).isEquals(YYLERR()))	/* error transitions */
+							{yylastch.dec();unput(yylastch[0]);break;}
+							yystate = new yysvfRef(yyt.get().advance, yysvec); lsp.set(yystate); lsp.inc();
 							goto contin;
 						}
 					}
 #if YYOPTIM
-					else if((int)yyt < (int)yycrank) {		/* r < yycrank */
-						yyt = yyr = yycrank+(yycrank-yyt);
+					else if(yyt.isLessThan(yycrank)) {		/* r < yycrank */
+						yyr = new yyworkRef(yycrank, (-yyt.minus(yycrank))); yyt = new yyworkRef(yyr);
 #if LEXDEBUG
-						if(debug)fprintf(yyout,"compressed state\n");
+						if(debug!=0)fprintf(yyout,"compressed state\n");
 #endif
-						yyt = yyt + yych;
-						if(yyt <= yytop && yyt.verify+yysvec == yystate){
-							if(yyt.get().advance+yysvec == YYLERR)	/* error transitions */
-							{unput(*--yylastch);break;}
-							*lsp++ = yystate = yyt->advance+yysvec;
+						yyt = yyt.getRef(yych);
+						if(yyt.isLessEqualThan(yytop) && new yysvfRef(yyt.get().verify, yysvec).isEquals(yystate)){
+							if(new yysvfRef(yyt.get().advance, yysvec).isEquals(YYLERR()))	/* error transitions */
+							{yylastch.dec();unput(yylastch[0]);break;}
+							yystate = new yysvfRef(yyt.get().advance, yysvec); lsp.set(yystate); lsp.inc();
 							goto contin;
 						}
-						yyt = yyr + YYU(yymatch[yych]);
+						yyt = yyr.getRef(YYU(yymatch[yych]));
 #if LEXDEBUG
 						if(debug!=0){
 							fprintf(yyout,"try fall back character ");
@@ -794,26 +877,26 @@ tryagain:
 							putchar('\n');
 						}
 #endif
-						if(yyt <= yytop && yyt->verify+yysvec == yystate){
-							if(yyt->advance+yysvec == YYLERR)	/* error transition */
-							{unput(*--yylastch);break;}
-							*lsp++ = yystate = yyt->advance+yysvec;
+						if(yyt.isLessEqualThan(yytop) && new yysvfRef(yyt.get().verify, yysvec).isEquals(yystate)){
+							if(new yysvfRef(yyt.get().advance, yysvec).isEquals(YYLERR()))	/* error transition */
+							{yylastch.dec();unput(yylastch[0]);break;}
+							yystate = new yysvfRef(yyt.get().advance, yysvec); lsp.set(yystate); lsp.inc();
 							goto contin;
 						}
 					}
-					if ((yystate = yystate.yyother) && (yyt= yystate.yystoff) != yycrank){
+					if ((yystate = yystate.get().yyother)!=null && (yyt= yystate.get().yystoff).isNotEquals(yycrank)){
 #if LEXDEBUG
-						if(debug)fprintf(yyout,"fall back to state %d\n",yystate-yysvec-1);
+						if(debug!=0)fprintf(yyout,"fall back to state %d\n",yystate.minus(yysvec)-1);
 #endif
 						goto tryagain;
 					}
 #endif
 					else
-						{unput(*--yylastch);break;}
+						{yylastch.dec();unput(yylastch[0]);break;}
 contin:
 #if LEXDEBUG
-					if(debug){
-						fprintf(yyout,"state %d char ",yystate-yysvec-1);
+					if(debug!=0){
+						fprintf(yyout,"state %d char ",yystate.minus(yysvec)-1);
 						allprint(yych);
 						putchar('\n');
 					}
@@ -822,19 +905,19 @@ contin:
 				}
 #if LEXDEBUG
 				if(debug!=0){
-					fprintf(yyout,"stopped at %d with ",*(lsp-1)-yysvec-1);
+					fprintf(yyout,"stopped at %d with ",lsp.getRef(-1).minus(yysvec)-1);
 					allprint(yych);
 					putchar('\n');
 				}
 #endif
-				while (lsp-- > yylstate){
-					*yylastch-- = 0;
-					if (*lsp != 0 && (yyfnd= (*lsp)->yystops) && yyfnd[0] > 0){
+				while (lsp.dec().isLargerThan(yylstate)){
+					yylastch[0] = (char)0; yylastch.dec();
+					if (lsp.get() != null && (yyfnd= lsp.get().yystops)!=null && yyfnd[0] > 0){
 						yyolsp = lsp;
 						if(yyextra[yyfnd[0]]!=0){		/* must backup */
-							while(yyback((*lsp)->yystops,-*yyfnd) != 1 && lsp > yylstate){
-								lsp--;
-								unput(*yylastch--);
+							while(yyback(lsp.get().yystops,-yyfnd[0]) != 1 && lsp.isLargerThan(yylstate)){
+								lsp.dec();
+								unput(yylastch[0]);yylastch.dec();
 							}
 						}
 						yyprevious = YYU((sbyte)yylastch[0]);
@@ -842,10 +925,10 @@ contin:
 						yyleng = yylastch-yytext+1;
 						yytext[yyleng] = (char)0;
 #if LEXDEBUG
-						if(debug){
+						if(debug!=0){
 							fprintf(yyout,"\nmatch ");
 							sprint(yytext);
-							fprintf(yyout," action %d\n",*yyfnd);
+							fprintf(yyout," action %d\n",yyfnd[0]);
 						}
 #endif
 						int yyfnd_=yyfnd[0];yyfnd.inc();return(yyfnd_);
@@ -862,7 +945,7 @@ contin:
 					output((char)yyprevious);
 				yylastch=yytext;
 #if LEXDEBUG
-				if(debug)putchar('\n');
+				if(debug!=0)putchar('\n');
 #endif
 			}
 		}
@@ -890,6 +973,19 @@ contin:
 		{
 			unput(c);
 		}
+		
+//FIXME:added
+#if LEXDEBUG
+		public static void allprint(int i)
+		{
+			
+		}
+		
+		public static void sprint(CharPtr ch)
+		{
+			
+		}
+#endif
 	}
 }
 
