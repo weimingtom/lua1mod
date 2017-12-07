@@ -978,12 +978,12 @@ contin:
 #if LEXDEBUG
 		public static void allprint(int i)
 		{
-			
+			printf("\"%d\"[\'%c\']", i, (char)i);
 		}
 		
 		public static void sprint(CharPtr ch)
 		{
-			
+			printf("\"%s\"", ch.ToString());
 		}
 #endif
 	}
