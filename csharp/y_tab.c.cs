@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define YYDEBUG
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace KopiLua
@@ -117,7 +119,7 @@ namespace KopiLua
 		 	}
 		}
 	
-		internal static void align_n (uint size)
+		private static void align_n (uint size)
 		{
 		 	if (size > ALIGNMENT) size = ALIGNMENT;
 		 	while (((pc+1-code)%size) != 0) // +1 to include BYTECODE
@@ -151,132 +153,66 @@ namespace KopiLua
 		  	incr_ntemp();
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//#line 140 "lua.stx"
-		//C++ TO C# CONVERTER TODO TASK: Unions are not supported in C#, but the following union can be replicated with the StructLayout and FieldOffset attributes:
-		//ORIGINAL LINE: union YYSTYPE
-//		[StructLayout(LayoutKind.Explicit)]
-//		public struct YYSTYPE
-//		{
-//		 	[FieldOffset(0)]
-//		 	public int vInt;
-//		 	[FieldOffset(0)]
-//		 	public int vLong;
-//		 	[FieldOffset(0)]
-//		 	public float vFloat;
-//		 	[FieldOffset(0)]
-//			public Word vWord;
-//			//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//			//ORIGINAL LINE: Byte *pByte;
-//		 	[FieldOffset(0)]
-//		 	public Byte pByte;
-//		}
-		
-		public class yytoktype
-		{
-			public string t_name;
-			public int t_val;
-		}
-		
-		//#if ! YYDEBUG
-		//# define YYDEBUG 0
-		//#endif
-		public const int YYDEBUG = 0;
-		
-//		internal static class DefineConstants
-//		{
-//			public const int MAXCODE = 1024;
-//			public const int MAXVAR = 32;
-//			public const int NIL = 257;
-//			public const int IF = 258;
-//			public const int THEN = 259;
-//			public const int ELSE = 260;
-//			public const int ELSEIF = 261;
-//			public const int WHILE = 262;
-//			public const int DO = 263;
-//			public const int REPEAT = 264;
-//			public const int UNTIL = 265;
-//			public const int END = 266;
-//			public const int RETURN = 267;
-//			public const int LOCAL = 268;
-//			public const int NUMBER = 269;
-//			public const int FUNCTION = 270;
-//			public const int NAME = 271;
-//			public const int STRING = 272;
-//			public const int DEBUG = 273;
-//			public const int NOT = 274;
-//			public const int AND = 275;
-//			public const int OR = 276;
-//			public const int NE = 277;
-//			public const int LE = 278;
-//			public const int GE = 279;
-//			public const int CONC = 280;
-//			public const int UNARY = 281;
-//			public const int YYMAXDEPTH = 150;
-//			public const int YYERRCODE = 256;
-//			public const int YYNPROD = 105;
-//			public const int YYLAST = 318;
-//			public const int YYFLAG = -1000;
-//		}
 
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define yyclearin yychar = -1
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define yyerrok yyerrflag = 0
-	//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
+//		#line 140 "lua.stx"
+//		public struct YYSTYPE //union
+//		{
+//		 	public int vInt;
+//		 	public int vLong;
+//		 	public float vFloat;
+//		 	public Word vWord;
+//			public BytePtr pByte;
+//		}
+//		# define NIL 257
+//		# define IF 258
+//		# define THEN 259
+//		# define ELSE 260
+//		# define ELSEIF 261
+//		# define WHILE 262
+//		# define DO 263
+//		# define REPEAT 264
+//		# define UNTIL 265
+//		# define END 266
+//		# define RETURN 267
+//		# define LOCAL 268
+//		# define NUMBER 269
+//		# define FUNCTION 270
+//		# define NAME 271
+//		# define STRING 272
+//		# define DEBUG 273
+//		# define NOT 274
+//		# define AND 275
+//		# define OR 276
+//		# define NE 277
+//		# define LE 278
+//		# define GE 279
+//		# define CONC 280
+//		# define UNARY 281
+		//#define yyclearin yychar = -1
+		//#define yyerrok yyerrflag = 0
 		//extern int yychar;
-	//C++ TO C# CONVERTER NOTE: 'extern' variable declarations are not required in C#:
 		//extern int yyerrflag;
-		public static YYSTYPE yylval = new YYSTYPE();
-		public static YYSTYPE yyval = new YYSTYPE();
-	
+//		#ifndef YYMAXDEPTH
+//		#define YYMAXDEPTH 150
+//		#endif
+		private const int YYMAXDEPTH = 150; 
+		public static YYSTYPE yylval = new YYSTYPE(), yyval = new YYSTYPE();
+//		# define YYERRCODE 256
+		private const int YYERRCODE = 256;
+		
 		//#line 530 "lua.stx"
 	
 	
 		/*
 		** Search a local name and if find return its index. If do not find return -1
 		*/
-		internal static int lua_localname(Word n)
+		private static int lua_localname (Word n)
 		{
-		 int i;
-		 for (i = nlocalvar - 1; i >= 0; i--)
-		 {
-		  if (n == localvar[i])
-		  {
-			  return i; // local var
-		  }
-		 }
-		 return -1; // global var
+		 	int i;
+		 	for (i=nlocalvar-1; i >= 0; i--)
+		  		if (n == localvar[i]) return i;	/* local var */
+		 	return -1;		        /* global var */
 		}
 	
 		/*
@@ -284,103 +220,91 @@ namespace KopiLua
 		** indexed by (number -1). If negative, push local indexed by ABS(number)-1.
 		** Otherwise, if zero, push indexed variable (record).
 		*/
-		internal static void lua_pushvar(int number)
+		private static void lua_pushvar (int number)
 		{
-//		 if (number > 0) // global var
-//		 {
-//		  align_n(sizeof(Word));
-//		  code_byte(PUSHGLOBAL);
-//		  code_word(number - 1);
-//		  incr_ntemp();
-//		 }
-//		 else if (number < 0) // local var
-//		 {
-//		  number = (-number) - 1;
-//		  if (number < 10)
-//		  {
-//			  code_byte(PUSHLOCAL0 + number);
-//		  }
-//		  else
-//		  {
-//		   code_byte(PUSHLOCAL);
-//		   code_byte(number);
-//		  }
-//		  incr_ntemp();
-//		 }
-//		 else
-//		 {
-//		  code_byte(PUSHINDEXED);
-//		  ntemp--;
-//		 }
+		 	if (number > 0)	/* global var */
+		 	{
+		  		align_n(2);
+		  		code_byte((byte)OpCode.PUSHGLOBAL);
+		  		code_word((Word)(number-1));
+		  		incr_ntemp();
+		 	}
+		 	else if (number < 0)	/* local var */
+		 	{
+		  		number = (-number) - 1;
+		  		if (number < 10) code_byte((byte)(OpCode.PUSHLOCAL0 + number));
+		  		else
+		  		{
+		  			code_byte((byte)OpCode.PUSHLOCAL);
+		  			code_byte((byte)(Word)number);
+		  		}
+		  		incr_ntemp();
+		 	}
+		 	else
+		 	{
+		 		code_byte((byte)OpCode.PUSHINDEXED);
+		  		ntemp--;
+		 	}
 		}
 	
 		internal static void lua_codeadjust(int n)
 		{
-//		 code_byte(ADJUST);
-//		 code_byte(n + nlocalvar);
+			code_byte((byte)OpCode.ADJUST);
+			code_byte((byte)(n + nlocalvar));
 		}
 	
 		internal static void lua_codestore(int i)
 		{
-//		 if (varbuffer[i] > 0) // global var
-//		 {
-//		  align_n(sizeof(Word));
-//		  code_byte(STOREGLOBAL);
-//		  code_word(varbuffer[i] - 1);
-//		 }
-//		 else if (varbuffer[i] < 0) // local var
-//		 {
-//		  int number = (-varbuffer[i]) - 1;
-//		  if (number < 10)
-//		  {
-//			  code_byte(STORELOCAL0 + number);
-//		  }
-//		  else
-//		  {
-//		   code_byte(STORELOCAL);
-//		   code_byte(number);
-//		  }
-//		 }
-//		 else // indexed var
-//		 {
-//		  int j;
-//		  int upper = 0; // number of indexed variables upper
-//		  int param; // number of itens until indexed expression
-//		  for (j = i + 1; j < nvarbuffer; j++)
-//		  {
-//		   if (varbuffer[j] == 0)
-//		   {
-//			   upper++;
-//		   }
-//		  }
-//		  param = upper * 2 + i;
-//		  if (param == 0)
-//		  {
-//		   code_byte(STOREINDEXED0);
-//		  }
-//		  else
-//		  {
-//		   code_byte(STOREINDEXED);
-//		   code_byte(param);
-//		  }
-//		 }
+			if (varbuffer[i] > 0)		/* global var */
+			{
+				align_n(sizeof(Word));
+				code_byte((byte)OpCode.STOREGLOBAL);
+				code_word((Word)(varbuffer[i]-1));
+			}
+			else if (varbuffer[i] < 0)      /* local var */
+			{
+				int number = (-varbuffer[i]) - 1;
+				if (number < 10)
+				{
+					code_byte((byte)(OpCode.STORELOCAL0 + number));
+				}
+				else
+				{
+					code_byte((byte)OpCode.STORELOCAL);
+					code_byte((byte)number);
+				}
+			}
+			else				  /* indexed var */
+			{
+				int j;
+				int upper = 0;      	/* number of indexed variables upper */
+				int param;		/* number of itens until indexed expression */
+				for (j = i + 1; j < nvarbuffer; j++)
+					if (varbuffer[j] == 0) upper++;
+				param = upper * 2 + i;
+				if (param == 0)
+					code_byte((byte)OpCode.STOREINDEXED0);
+				else
+				{
+					code_byte((byte)OpCode.STOREINDEXED);
+					code_byte((byte)param);
+				}
+			}
 		}
 	
-		//C++ TO C# CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in C#):
 		private static string yyerror_msg = new string(new char[256]);
-	
 		public static void yyerror(string s)
 		{
-		//C++ TO C# CONVERTER NOTE: This static local variable declaration (not allowed in C#) has been moved just prior to the method:
-		// static sbyte msg[256];
-		 yyerror_msg = string.Format("{0} near \"{1}\" at line {2:D} in file \"{3}\"", s, lua_lasttext(), lua_linenumber, lua_filename());
-		 lua_error(yyerror_msg);
-		 err = 1;
+			//static char msg[256];
+			sprintf (yyerror_msg,"%s near \"%s\" at line %d in file \"%s\"",
+			      s, lua_lasttext (), lua_linenumber, lua_filename());
+			lua_error (yyerror_msg);
+			err = 1;
 		}
 	
 		public static int yywrap()
 		{
-		 return 1;
+		 	return 1;
 		}
 	
 	
@@ -390,25 +314,17 @@ namespace KopiLua
 		*/
 		public static int lua_parse()
 		{
-//	//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//	//ORIGINAL LINE: Byte *initcode = maincode;
-//		 Byte initcode = maincode;
-//		 err = 0;
-//		 if (yyparse() || (err == 1))
-//		 {
-//			 return 1;
-//		 }
-//		 maincode++= HALT;
-//		 if (lua_execute(initcode))
-//		 {
-//			 return 1;
-//		 }
-//		 maincode = initcode;
-		 return 0;
+			BytePtr initcode = new BytePtr(maincode);
+		 	err = 0;
+		 	if (yyparse() != 0 || (err == 1)) return 1;
+		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
+		 	if (lua_execute(initcode) != 0) return 1;
+		 	maincode = new BytePtr(initcode);
+		 	return 0;
 		}
 	
 	
-		#if false
+#if false
 		//
 		//static void PrintCode (void)
 		//{
@@ -524,19 +440,217 @@ namespace KopiLua
 		//  }
 		// }
 		//}
-		#endif
+#endif
 	
-		public static int[] yyexca = {-1, 1, 0, -1, -2, 2, -1, 19, 40, 65, 91, 95, 46, 97, -2, 92, -1, 29, 40, 65, 91, 95, 46, 97, -2, 51, -1, 70, 275, 33, 276, 33, 61, 33, 277, 33, 62, 33, 60, 33, 278, 33, 279, 33, 280, 33, 43, 33, 45, 33, 42, 33, 47, 33, -2, 68, -1, 71, 91, 95, 46, 97, -2, 93, -1, 102, 260, 27, 261, 27, 265, 27, 266, 27, 267, 27, -2, 11, -1, 117, 93, 85, -2, 87, -1, 122, 267, 30, -2, 29, -1, 145, 275, 33, 276, 33, 61, 33, 277, 33, 62, 33, 60, 33, 278, 33, 279, 33, 280, 33, 43, 33, 45, 33, 42, 33, 47, 33, -2, 70};
-		public static int[] yyact = {54, 52, 136, 53, 13, 55, 54, 52, 14, 53, 15, 55, 5, 166, 18, 6, 129, 21, 47, 46, 48, 107, 104, 97, 47, 46, 48, 54, 52, 80, 53, 21, 55, 54, 52, 40, 53, 9, 55, 54, 52, 158, 53, 160, 55, 47, 46, 48, 159, 101, 81, 47, 46, 48, 10, 54, 52, 126, 53, 67, 55, 54, 52, 60, 53, 155, 55, 148, 149, 135, 147, 108, 150, 47, 46, 48, 73, 23, 75, 47, 46, 48, 7, 25, 38, 153, 26, 164, 27, 117, 61, 62, 74, 11, 76, 54, 24, 127, 65, 66, 55, 37, 154, 151, 103, 111, 72, 28, 93, 94, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 116, 59, 77, 54, 52, 118, 53, 99, 55, 110, 95, 64, 44, 70, 109, 29, 33, 105, 106, 42, 112, 41, 165, 139, 19, 17, 152, 79, 123, 43, 119, 20, 114, 113, 98, 63, 144, 143, 122, 68, 39, 36, 130, 35, 120, 12, 8, 102, 125, 128, 141, 78, 69, 70, 71, 142, 131, 132, 140, 22, 124, 4, 3, 2, 121, 96, 138, 146, 137, 134, 157, 133, 115, 16, 1, 0, 0, 0, 0, 0, 0, 0, 156, 0, 0, 0, 0, 161, 0, 0, 0, 0, 162, 0, 0, 0, 168, 0, 172, 145, 163, 171, 0, 174, 0, 0, 0, 169, 156, 167, 170, 173, 57, 58, 49, 50, 51, 56, 57, 58, 49, 50, 51, 56, 175, 0, 0, 100, 0, 45, 0, 0, 0, 0, 70, 0, 0, 0, 0, 57, 58, 49, 50, 51, 56, 57, 58, 49, 50, 51, 56, 0, 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57, 58, 49, 50, 51, 56, 0, 0, 49, 50, 51, 56, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 21, 31, 0, 34};
-		public static int[] yypact = {-1000, -258, -1000, -1000, -1000, -234, -1000, 34, -254, -1000, -1000, -1000, -1000, 43, -1000, -1000, 40, -1000, -236, -1000, -1000, -1000, 93, -9, -1000, 43, 43, 43, 92, -1000, -1000, -1000, -1000, -1000, 43, 43, -1000, 43, -240, 62, 31, -13, 48, 83, -242, -1000, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, -1000, -1000, 90, 13, -1000, -1000, -248, 43, 19, -15, -216, -1000, 60, -1000, -1000, -249, -1000, -1000, 43, -250, 43, 89, 61, -1000, -1000, -3, -3, -3, -3, -3, -3, 53, 53, -1000, -1000, 82, -1000, -1000, -1000, -2, -1000, 85, 13, -1000, 43, -1000, -1000, 31, 43, -36, -1000, 56, 60, -1000, -255, -1000, 43, 43, -1000, -269, -1000, -1000, -1000, 13, 34, -1000, 43, -1000, 13, -1000, -1000, -1000, -1000, -193, 19, 19, -53, 59, -1000, -1000, -8, 58, 43, -1000, -1000, -1000, -1000, -226, -1000, -218, -223, -1000, 43, -1000, -269, 26, -1000, -1000, -1000, 13, -253, 43, -1000, -1000, -1000, -42, -1000, 43, 43, -1000, 34, -1000, 13, -1000, -1000, -1000, -1000, -193, -1000};
-		public static int[] yypgo = {0, 195, 50, 96, 71, 135, 194, 193, 192, 190, 189, 187, 136, 186, 184, 82, 54, 183, 182, 180, 172, 170, 59, 168, 167, 166, 63, 70, 164, 162, 137, 161, 160, 159, 158, 157, 156, 155, 154, 153, 152, 150, 149, 148, 69, 147, 144, 65, 143, 142, 140, 76, 138};
-		public static int[] yyr1 = {0, 1, 14, 1, 1, 1, 19, 21, 17, 23, 23, 24, 15, 16, 16, 25, 28, 25, 29, 25, 25, 25, 25, 27, 27, 27, 32, 33, 22, 34, 35, 34, 2, 26, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 36, 3, 3, 3, 3, 3, 3, 3, 3, 38, 3, 39, 3, 37, 37, 41, 30, 40, 4, 4, 5, 42, 5, 20, 20, 43, 43, 13, 13, 7, 7, 8, 8, 9, 9, 45, 44, 10, 10, 46, 11, 48, 11, 47, 6, 6, 12, 49, 12, 50, 12, 31, 31, 51, 52, 51, 18};
-		public static int[] yyr2 = {0, 0, 1, 9, 4, 4, 1, 1, 19, 0, 6, 1, 4, 0, 2, 17, 1, 17, 1, 13, 7, 3, 4, 0, 4, 15, 1, 1, 9, 0, 1, 9, 1, 3, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 5, 5, 1, 9, 9, 3, 3, 3, 3, 3, 5, 1, 11, 1, 11, 1, 2, 1, 11, 3, 1, 3, 3, 1, 9, 0, 2, 3, 7, 1, 3, 7, 7, 1, 3, 3, 7, 1, 9, 1, 3, 1, 5, 1, 9, 3, 3, 7, 3, 1, 11, 1, 9, 5, 9, 1, 1, 6, 3};
-		public static int[] yychk = {-1000, -1, -14, -17, -18, 270, 273, -15, -24, 271, -16, 59, -25, 258, 262, 264, -6, -30, 268, -12, -40, 271, -19, -26, -3, 40, 43, 45, 64, -12, 269, 272, 257, -30, 274, -28, -29, 61, 44, -31, 271, -49, -50, -41, 40, 259, 61, 60, 62, 277, 278, 279, 43, 45, 42, 47, 280, 275, 276, -3, -26, -26, -26, -36, 40, -26, -26, -22, -32, -5, -3, -12, 44, -51, 61, 91, 46, 40, -20, -43, 271, -2, -26, -26, -26, -26, -26, -26, -26, -26, -26, -26, -26, -2, -2, 41, -13, 271, -37, -26, 263, 265, -23, 44, 271, -52, -26, 271, -4, -5, 41, 44, -22, -38, -39, -7, 123, 91, 41, -2, -26, -15, -33, -42, -51, -26, 93, 41, -21, 271, -2, -26, -26, -8, -9, -44, 271, -10, -11, -46, -22, -2, -16, -34, -35, -3, -22, -27, 260, 261, 125, 44, -45, 93, 44, -47, -26, -2, 267, 266, 266, -22, -26, -44, 61, -48, 266, -4, 259, -26, -47, -16, -2, -22, -2, -27};
-		public static int[] yydef = {1, -2, 11, 4, 5, 0, 104, 13, 0, 6, 3, 14, 12, 0, 16, 18, 0, 21, 0, -2, 63, 94, 0, 0, 33, 0, 0, 0, 48, -2, 52, 53, 54, 55, 0, 0, 26, 0, 0, 22, 101, 0, 0, 0, 71, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 32, 33, 0, 46, 47, 75, 61, 56, 0, 0, 9, 20, -2, -2, 0, 99, 102, 0, 0, 66, 0, 72, 73, 26, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 57, 59, 34, 0, 76, 0, 62, 32, 0, -2, 69, 101, 0, 0, 98, 0, 67, 7, 0, 32, 0, 0, 49, 79, -2, 50, 26, 32, 13, -2, 0, 100, 103, 96, 64, 26, 74, 23, 58, 60, 0, 80, 81, 83, 0, 86, 0, 32, 19, 10, 28, 0, -2, 0, 0, 26, 0, 77, 0, 0, 78, 89, 88, 91, 0, 66, 8, 15, 24, 0, 82, 0, 0, 17, 13, 32, 84, 90, 31, 26, 32, 23, 25};
-	
-		#if YYDEBUG
-	
+		public static int[] yyexca = {
+			-1, 1, 
+			0, -1, 
+			-2, 2, 
+			
+			-1, 19, 
+			40, 65, 
+			91, 95, 
+			46, 97, 
+			-2, 92, 
+			
+			-1, 29, 
+			40, 65, 
+			91, 95, 
+			46, 97, 
+			-2, 51, 
+			
+			-1, 70, 
+			275, 33, 
+			276, 33, 
+			61, 33, 
+			277, 33, 
+			62, 33, 
+			60, 33, 
+			278, 33, 
+			279, 33, 
+			280, 33, 
+			43, 33, 
+			45, 33, 
+			42, 33, 
+			47, 33, 
+			-2, 68, 
+			
+			-1, 71, 
+			91, 95, 
+			46, 97, 
+			-2, 93, 
+			
+			-1, 102, 
+			260, 27, 
+			261, 27, 
+			265, 27, 
+			266, 27, 
+			267, 27, 
+			-2, 11, 
+			
+			-1, 117,
+			93, 85, 
+			-2, 87, 
+			
+			-1, 122, 
+			267, 30, 
+			-2, 29, 
+			
+			-1, 145, 
+			275, 33, 
+			276, 33, 
+			61, 33, 
+			277, 33, 
+			62, 33, 
+			60, 33, 
+			278, 33, 
+			279, 33, 
+			280, 33, 
+			43, 33, 
+			45, 33, 
+			42, 33, 
+			47, 33, 
+			-2, 70
+		};
+//		# define YYNPROD 105
+//		# define YYLAST 318
+		private const int YYNPROD = 105;
+		private const int YYLAST = 318;
+		public static int[] yyact = {
+			54, 52, 136, 53, 13, 55, 54, 52, 14, 53, 
+			15, 55, 5, 166, 18, 6, 129, 21, 47, 46, 
+			48, 107, 104, 97, 47, 46, 48, 54, 52, 80, 
+			53, 21, 55, 54, 52, 40, 53, 9, 55, 54, 
+			52, 158, 53, 160, 55, 47, 46, 48, 159, 101, 
+			81, 47, 46, 48, 10, 54, 52, 126, 53, 67, 
+			55, 54, 52, 60, 53, 155, 55, 148, 149, 135, 
+			147, 108, 150, 47, 46, 48, 73, 23, 75, 47, 
+			46, 48, 7, 25, 38, 153, 26, 164, 27, 117, 
+			61, 62, 74, 11, 76, 54, 24, 127, 65, 66, 
+			55, 37, 154, 151, 103, 111, 72, 28, 93, 94, 
+			82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 
+			92, 116, 59, 77, 54, 52, 118, 53, 99, 55, 
+			110, 95, 64, 44, 70, 109, 29, 33, 105, 106, 
+			42, 112, 41, 165, 139, 19, 17, 152, 79, 123, 
+			43, 119, 20, 114, 113, 98, 63, 144, 143, 122, 
+			68, 39, 36, 130, 35, 120, 12, 8, 102, 125, 
+			128, 141, 78, 69, 70, 71, 142, 131, 132, 140, 
+			22, 124, 4, 3, 2, 121, 96, 138, 146, 137, 
+			134, 157, 133, 115, 16, 1, 0, 0, 0, 0, 
+			0, 0, 0, 156, 0, 0, 0, 0, 161, 0, 
+			0, 0, 0, 162, 0, 0, 0, 168, 0, 172, 
+			145, 163, 171, 0, 174, 0, 0, 0, 169, 156, 
+			167, 170, 173, 57, 58, 49, 50, 51, 56, 57, 
+			58, 49, 50, 51, 56, 175, 0, 0, 100, 0, 
+			45, 0, 0, 0, 0, 70, 0, 0, 0, 0, 
+			57, 58, 49, 50, 51, 56, 57, 58, 49, 50, 
+			51, 56, 0, 0, 0, 0, 0, 56, 0, 0, 
+			0, 0, 0, 0, 0, 0, 0, 0, 57, 58, 
+			49, 50, 51, 56, 0, 0, 49, 50, 51, 56, 
+			32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+			0, 0, 30, 0, 21, 31, 0, 34
+		};
+		public static int[] yypact = {
+			-1000, -258, -1000, -1000, -1000, -234, -1000, 34, -254, -1000,
+			-1000, -1000, -1000, 43, -1000, -1000, 40, -1000, -236, -1000, 
+			-1000, -1000, 93, -9, -1000, 43, 43, 43, 92, -1000, 
+			-1000, -1000, -1000, -1000, 43, 43, -1000, 43, -240, 62, 
+			31, -13, 48, 83, -242, -1000, 43, 43, 43, 43, 
+			43, 43, 43, 43, 43, 43, 43, -1000, -1000, 90, 
+			13, -1000, -1000, -248, 43, 19, -15, -216, -1000, 60, 
+			-1000, -1000, -249, -1000, -1000, 43, -250, 43, 89, 61, 
+			-1000, -1000, -3, -3, -3, -3, -3, -3, 53, 53, 
+			-1000, -1000, 82, -1000, -1000, -1000, -2, -1000, 85, 13, 
+			-1000, 43, -1000, -1000, 31, 43, -36, -1000, 56, 60, 
+			-1000, -255, -1000, 43, 43, -1000, -269, -1000, -1000, -1000, 
+			13, 34, -1000, 43, -1000, 13, -1000, -1000, -1000, -1000, 
+			-193, 19, 19, -53, 59, -1000, -1000, -8, 58, 43, 
+			-1000, -1000, -1000, -1000, -226, -1000, -218, -223, -1000, 43, 
+			-1000, -269, 26, -1000, -1000, -1000, 13, -253, 43, -1000, 
+			-1000, -1000, -42, -1000, 43, 43, -1000, 34, -1000, 13, 
+			-1000, -1000, -1000, -1000, -193, -1000
+		};
+		public static int[] yypgo = {
+			0, 195, 50, 96, 71, 135, 194, 193, 192, 190, 
+			189, 187, 136, 186, 184, 82, 54, 183, 182, 180, 
+			172, 170, 59, 168, 167, 166, 63, 70, 164, 162, 
+			137, 161, 160, 159, 158, 157, 156, 155, 154, 153, 
+			152, 150, 149, 148, 69, 147, 144, 65, 143, 142, 
+			140, 76, 138
+		};
+		public static int[] yyr1 = {
+			0, 1, 14, 1, 1, 1, 19, 21, 17, 23, 
+			23, 24, 15, 16, 16, 25, 28, 25, 29, 25, 
+			25, 25, 25, 27, 27, 27, 32, 33, 22, 34, 
+			35, 34, 2, 26, 3, 3, 3, 3, 3, 3, 
+			3, 3, 3, 3, 3, 3, 3, 3, 36, 3, 
+			3, 3, 3, 3, 3, 3, 3, 38, 3, 39, 
+			3, 37, 37, 41, 30, 40, 4, 4, 5, 42, 
+			5, 20, 20, 43, 43, 13, 13, 7, 7, 8, 
+			8, 9, 9, 45, 44, 10, 10, 46, 11, 48, 
+			11, 47, 6, 6, 12, 49, 12, 50, 12, 31, 
+			31, 51, 52, 51, 18
+		};
+		public static int[] yyr2 = {
+			0, 0, 1, 9, 4, 4, 1, 1, 19, 0, 
+			6, 1, 4, 0, 2, 17, 1, 17, 1, 13, 
+			7, 3, 4, 0, 4, 15, 1, 1, 9, 0, 
+			1, 9, 1, 3, 7, 7, 7, 7, 7, 7, 
+			7, 7, 7, 7, 7, 7, 5, 5, 1, 9, 
+			9, 3, 3, 3, 3, 3, 5, 1, 11, 1, 
+			11, 1, 2, 1, 11, 3, 1, 3, 3, 1, 
+			9, 0, 2, 3, 7, 1, 3, 7, 7, 1, 
+			3, 3, 7, 1, 9, 1, 3, 1, 5, 1, 
+			9, 3, 3, 7, 3, 1, 11, 1, 9, 5, 
+			9, 1, 1, 6, 3
+		};
+		public static int[] yychk = {
+			-1000, -1, -14, -17, -18, 270, 273, -15, -24, 271, 
+			-16, 59, -25, 258, 262, 264, -6, -30, 268, -12, 
+			-40, 271, -19, -26, -3, 40, 43, 45, 64, -12, 
+			269, 272, 257, -30, 274, -28, -29, 61, 44, -31, 
+			271, -49, -50, -41, 40, 259, 61, 60, 62, 277, 
+			278, 279, 43, 45, 42, 47, 280, 275, 276, -3, 
+			-26, -26, -26, -36, 40, -26, -26, -22, -32, -5, 
+			-3, -12, 44, -51, 61, 91, 46, 40, -20, -43, 
+			271, -2, -26, -26, -26, -26, -26, -26, -26, -26, 
+			-26, -26, -26, -2, -2, 41, -13, 271, -37, -26, 
+			263, 265, -23, 44, 271, -52, -26, 271, -4, -5, 
+			41, 44, -22, -38, -39, -7, 123, 91, 41, -2, 
+			-26, -15, -33, -42, -51, -26, 93, 41, -21, 271, 
+			-2, -26, -26, -8, -9, -44, 271, -10, -11, -46, 
+			-22, -2, -16, -34, -35, -3, -22, -27, 260, 261, 
+			125, 44, -45, 93, 44, -47, -26, -2, 267, 266, 
+			266, -22, -26, -44, 61, -48, 266, -4, 259, -26, 
+			-47, -16, -2, -22, -2, -27
+		};
+		public static int[] yydef = {
+			1, -2, 11, 4, 5, 0, 104, 13, 0, 6, 
+			3, 14, 12, 0, 16, 18, 0, 21, 0, -2, 
+			63, 94, 0, 0, 33, 0, 0, 0, 48, -2, 
+			52, 53, 54, 55, 0, 0, 26, 0, 0, 22, 
+			101, 0, 0, 0, 71, 32, 0, 0, 0, 0, 
+			0, 0, 0, 0, 0, 0, 0, 32, 32, 33, 
+			0, 46, 47, 75, 61, 56, 0, 0, 9, 20, 
+			-2, -2, 0, 99, 102, 0, 0, 66, 0, 72, 
+			73, 26, 35, 36, 37, 38, 39, 40, 41, 42, 
+			43, 44, 45, 57, 59, 34, 0, 76, 0, 62, 
+			32, 0, -2, 69, 101, 0, 0, 98, 0, 67, 
+			7, 0, 32, 0, 0, 49, 79, -2, 50, 26, 
+			32, 13, -2, 0, 100, 103, 96, 64, 26, 74, 
+			23, 58, 60, 0, 80, 81, 83, 0, 86, 0, 
+			32, 19, 10, 28, 0, -2, 0, 0, 26, 0, 
+			77, 0, 0, 78, 89, 88, 91, 0, 66, 8, 
+			15, 24, 0, 82, 0, 0, 17, 13, 32, 84, 
+			90, 31, 26, 32, 23, 25
+		};
+		public class yytoktype {public CharPtr t_name; public int t_val; }	
+//		#ifndef YYDEBUG
+//		#	define YYDEBUG	0	/* don't allow debugging */
+//		#endif
+
+#if YYDEBUG
+		
 		public static yytoktype[] yytoks =
 		{
 			new yytoktype("NIL", 257),
@@ -572,11 +686,116 @@ namespace KopiLua
 			new yytoktype("/", 47),
 			new yytoktype("%", 37),
 			new yytoktype("UNARY", 281),
-			new yytoktype("-unknown-", -1)
+			new yytoktype("-unknown-", -1)	/* ends search */
 		};
 	
-		public static string[] yyreds = {"-no such reduction-", "functionlist : /* empty */", "functionlist : functionlist", "functionlist : functionlist stat sc", "functionlist : functionlist function", "functionlist : functionlist setdebug", "function : FUNCTION NAME", "function : FUNCTION NAME '(' parlist ')'", "function : FUNCTION NAME '(' parlist ')' block END", "statlist : /* empty */", "statlist : statlist stat sc", "stat : /* empty */", "stat : stat1", "sc : /* empty */", "sc : ';'", "stat1 : IF expr1 THEN PrepJump block PrepJump elsepart END", "stat1 : WHILE", "stat1 : WHILE expr1 DO PrepJump block PrepJump END", "stat1 : REPEAT", "stat1 : REPEAT block UNTIL expr1 PrepJump", "stat1 : varlist1 '=' exprlist1", "stat1 : functioncall", "stat1 : LOCAL declist", "elsepart : /* empty */", "elsepart : ELSE block", "elsepart : ELSEIF expr1 THEN PrepJump block PrepJump elsepart", "block : /* empty */", "block : statlist", "block : statlist ret", "ret : /* empty */", "ret : /* empty */", "ret : RETURN exprlist sc", "PrepJump : /* empty */", "expr1 : expr", "expr : '(' expr ')'", "expr : expr1 '=' expr1", "expr : expr1 '<' expr1", "expr : expr1 '>' expr1", "expr : expr1 NE expr1", "expr : expr1 LE expr1", "expr : expr1 GE expr1", "expr : expr1 '+' expr1", "expr : expr1 '-' expr1", "expr : expr1 '*' expr1", "expr : expr1 '/' expr1", "expr : expr1 CONC expr1", "expr : '+' expr1", "expr : '-' expr1", "expr : '@'", "expr : '@' objectname fieldlist", "expr : '@' '(' dimension ')'", "expr : var", "expr : NUMBER", "expr : STRING", "expr : NIL", "expr : functioncall", "expr : NOT expr1", "expr : expr1 AND PrepJump", "expr : expr1 AND PrepJump expr1", "expr : expr1 OR PrepJump", "expr : expr1 OR PrepJump expr1", "dimension : /* empty */", "dimension : expr1", "functioncall : functionvalue", "functioncall : functionvalue '(' exprlist ')'", "functionvalue : var", "exprlist : /* empty */", "exprlist : exprlist1", "exprlist1 : expr", "exprlist1 : exprlist1 ','", "exprlist1 : exprlist1 ',' expr", "parlist : /* empty */", "parlist : parlist1", "parlist1 : NAME", "parlist1 : parlist1 ',' NAME", "objectname : /* empty */", "objectname : NAME", "fieldlist : '{' ffieldlist '}'", "fieldlist : '[' lfieldlist ']'", "ffieldlist : /* empty */", "ffieldlist : ffieldlist1", "ffieldlist1 : ffield", "ffieldlist1 : ffieldlist1 ',' ffield", "ffield : NAME", "ffield : NAME '=' expr1", "lfieldlist : /* empty */", "lfieldlist : lfieldlist1", "lfieldlist1 : /* empty */", "lfieldlist1 : lfield", "lfieldlist1 : lfieldlist1 ','", "lfieldlist1 : lfieldlist1 ',' lfield", "lfield : expr1", "varlist1 : var", "varlist1 : varlist1 ',' var", "var : NAME", "var : var", "var : var '[' expr1 ']'", "var : var", "var : var '.' NAME", "declist : NAME init", "declist : declist ',' NAME init", "init : /* empty */", "init : '='", "init : '=' expr1", "setdebug : DEBUG"};
-		#endif
+		public static string[] yyreds = {
+			"-no such reduction-", 
+			"functionlist : /* empty */", 
+			"functionlist : functionlist", 
+			"functionlist : functionlist stat sc", 
+			"functionlist : functionlist function", 
+			"functionlist : functionlist setdebug", 
+			"function : FUNCTION NAME", 
+			"function : FUNCTION NAME '(' parlist ')'", 
+			"function : FUNCTION NAME '(' parlist ')' block END", 
+			"statlist : /* empty */", 
+			"statlist : statlist stat sc", 
+			"stat : /* empty */", 
+			"stat : stat1", 
+			"sc : /* empty */", 
+			"sc : ';'", 
+			"stat1 : IF expr1 THEN PrepJump block PrepJump elsepart END", 
+			"stat1 : WHILE", 
+			"stat1 : WHILE expr1 DO PrepJump block PrepJump END", 
+			"stat1 : REPEAT", 
+			"stat1 : REPEAT block UNTIL expr1 PrepJump", 
+			"stat1 : varlist1 '=' exprlist1", 
+			"stat1 : functioncall", 
+			"stat1 : LOCAL declist", 
+			"elsepart : /* empty */", 
+			"elsepart : ELSE block", 
+			"elsepart : ELSEIF expr1 THEN PrepJump block PrepJump elsepart", 
+			"block : /* empty */", 
+			"block : statlist", 
+			"block : statlist ret", 
+			"ret : /* empty */", 
+			"ret : /* empty */", 
+			"ret : RETURN exprlist sc", 
+			"PrepJump : /* empty */", 
+			"expr1 : expr", 
+			"expr : '(' expr ')'", 
+			"expr : expr1 '=' expr1", 
+			"expr : expr1 '<' expr1", 
+			"expr : expr1 '>' expr1", 
+			"expr : expr1 NE expr1", 
+			"expr : expr1 LE expr1", 
+			"expr : expr1 GE expr1", 
+			"expr : expr1 '+' expr1", 
+			"expr : expr1 '-' expr1", 
+			"expr : expr1 '*' expr1", 
+			"expr : expr1 '/' expr1", 
+			"expr : expr1 CONC expr1", 
+			"expr : '+' expr1", 
+			"expr : '-' expr1", 
+			"expr : '@'", "expr : '@' objectname fieldlist", 
+			"expr : '@' '(' dimension ')'", 
+			"expr : var", 
+			"expr : NUMBER", 
+			"expr : STRING", 
+			"expr : NIL", 
+			"expr : functioncall", 
+			"expr : NOT expr1", 
+			"expr : expr1 AND PrepJump", 
+			"expr : expr1 AND PrepJump expr1", 
+			"expr : expr1 OR PrepJump", 
+			"expr : expr1 OR PrepJump expr1", 
+			"dimension : /* empty */", 
+			"dimension : expr1", 
+			"functioncall : functionvalue", 
+			"functioncall : functionvalue '(' exprlist ')'", 
+			"functionvalue : var", 
+			"exprlist : /* empty */", 
+			"exprlist : exprlist1", 
+			"exprlist1 : expr", 
+			"exprlist1 : exprlist1 ','", 
+			"exprlist1 : exprlist1 ',' expr", 
+			"parlist : /* empty */", 
+			"parlist : parlist1", 
+			"parlist1 : NAME", 
+			"parlist1 : parlist1 ',' NAME", 
+			"objectname : /* empty */", 
+			"objectname : NAME", 
+			"fieldlist : '{' ffieldlist '}'", 
+			"fieldlist : '[' lfieldlist ']'", 
+			"ffieldlist : /* empty */", 
+			"ffieldlist : ffieldlist1", 
+			"ffieldlist1 : ffield", 
+			"ffieldlist1 : ffieldlist1 ',' ffield", 
+			"ffield : NAME", 
+			"ffield : NAME '=' expr1", 
+			"lfieldlist : /* empty */", 
+			"lfieldlist : lfieldlist1", 
+			"lfieldlist1 : /* empty */", 
+			"lfieldlist1 : lfield", 
+			"lfieldlist1 : lfieldlist1 ','", 
+			"lfieldlist1 : lfieldlist1 ',' lfield", 
+			"lfield : expr1", 
+			"varlist1 : var", 
+			"varlist1 : varlist1 ',' var", 
+			"var : NAME", 
+			"var : var", 
+			"var : var '[' expr1 ']'", 
+			"var : var", 
+			"var : var '.' NAME", 
+			"declist : NAME init", 
+			"declist : declist ',' NAME init", 
+			"init : /* empty */", 
+			"init : '='", 
+			"init : '=' expr1", 
+			"setdebug : DEBUG"
+		};
+#endif
 		//#line 1 "/usr/lib/yaccpar"
 		/*	@(#)yaccpar 1.10 89/04/04 SMI; from S5R3 1.10	*/
 	
@@ -587,19 +806,25 @@ namespace KopiLua
 		/*
 		** yacc user known macros and defines
 		*/
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYERROR goto yyerrlab
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYACCEPT { free(yys); free(yyv); return(0); }
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYABORT { free(yys); free(yyv); return(1); }
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYBACKUP( newtoken, newvalue ){ if ( yychar >= 0 || ( yyr2[ yytmp ] >> 1 ) != 1 ) { yyerror( "syntax error - cannot backup" ); goto yyerrlab; } yychar = newtoken; yystate = *yyps; yylval = newvalue; goto yynewstate;}
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define YYRECOVERING() (!!yyerrflag)
-		//#if ! YYDEBUG
-		//# define YYDEBUG 1
-		//#endif
+//		#define YYERROR		goto yyerrlab
+//		#define YYACCEPT	{ free(yys); free(yyv); return(0); }
+//		#define YYABORT		{ free(yys); free(yyv); return(1); }
+//		#define YYBACKUP( newtoken, newvalue )\
+//		{\
+//			if ( yychar >= 0 || ( yyr2[ yytmp ] >> 1 ) != 1 )\
+//			{\
+//				yyerror( "syntax error - cannot backup" );\
+//				goto yyerrlab;\
+//			}\
+//			yychar = newtoken;\
+//			yystate = *yyps;\
+//			yylval = newvalue;\
+//			goto yynewstate;\
+//		}
+//		#define YYRECOVERING()	(!!yyerrflag)
+//		#ifndef YYDEBUG
+//		#	define YYDEBUG	1	/* make debugging available */
+//		#endif
 	
 		/*
 		** user known globals
@@ -609,27 +834,25 @@ namespace KopiLua
 		/*
 		** driver internal defines
 		*/
-	
+//		#define YYFLAG		(-1000)
+		private const int YYFLAG = -1000;
+		
 		/*
 		** static variables used by the parser
 		*/
-		internal static YYSTYPE yyv = null; // value stack
-	//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-	//ORIGINAL LINE: static int *yys;
-		internal static int yys = 0; // state stack
+		private static YYSTYPE yyv;			/* value stack */
+		private static IntegerPtr yys;			/* state stack */
 	
-		internal static YYSTYPE yypv = null; // top of value stack
-	//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-	//ORIGINAL LINE: static int *yyps;
-		internal static int yyps = 0; // top of state stack
+		private static YYSTYPE yypv;			/* top of value stack */
+		private static IntegerPtr yyps;			/* top of state stack */
 	
-		internal static int yystate = 0; // current state
-		internal static int yytmp = 0; // extra var (lasts between blocks)
+		private static int yystate;			/* current state */
+		private static int yytmp;			/* extra var (lasts between blocks) */
 	
-		public static int yynerrs = 0; // number of errors
+		public static int yynerrs;			/* number of errors */
 	
-		public static int yyerrflag = 0; // error recovery flag
-		public static int yychar = 0; // current input token number
+		public static int yyerrflag;			/* error recovery flag */
+		public static int yychar;			/* current input token number */
 		
 
 		/*
