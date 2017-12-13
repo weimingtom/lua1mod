@@ -9,23 +9,157 @@ namespace KopiLua
 	{
 		//#line 2 "lua.stx"
 		
+//		#include <stdio.h>
+//		#include <stdlib.h>
+//		#include <string.h>
+//		
+//		#include "opcode.h"
+//		#include "hash.h"
+//		#include "inout.h"
+//		#include "table.h"
+//		#include "lua.h"
 		
-		//C++ TO C# CONVERTER TODO TASK: The following line could not be converted:
-		//#line "opcode.h"
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define markarray(t) ((t)->mark)
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_markstring(s) (*((s)-1))
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define lua_register(n,f) (lua_pushcfunction(f), lua_storeglobal(n))
-		
-		//#if ! ALIGNMENT
-		//C++ TO C# CONVERTER TODO TASK: #define macros defined in multiple preprocessor conditionals can only be replaced within the scope of the preprocessor conditional:
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define ALIGNMENT (sizeof(void *))
-		//#define ALIGNMENT
-		//#endif
+//		#ifndef ALIGNMENT
+//		#define ALIGNMENT	(sizeof(void *))
+//		#endif
 		public const int ALIGNMENT = 1;
+		
+//		#ifndef MAXCODE
+//		#define MAXCODE 1024
+//		#endif	
+		public const int MAXCODE = 1024;
+		
+		//private static long[] buffer = new long[MAXCODE];
+		private static byte[] buffer_ = new byte[MAXCODE * 8];
+		private static BytePtr code = new BytePtr(buffer_);
+		//private static int[] mainbuffer = new int[MAXCODE];
+		private static byte[] mainbuffer_ = new byte[MAXCODE * 4];
+		private static BytePtr maincode = new BytePtr(mainbuffer_);
+		private static BytePtr basepc = null;
+		private static BytePtr pc = null;
+	
+		//#define MAXVAR 32
+		public const int MAXVAR = 32;
+		internal static byte[] varbuffer = new byte[MAXVAR * 8];
+		internal static byte nvarbuffer=0; // number of variables at a list
+	
+		internal static Word[] localvar = new Word[STACKGAP];
+		internal static Byte nlocalvar=0; // number of local variables
+		internal static int ntemp=0; // number of temporary var into stack
+		internal static int err=0; // flag to indicate error
+	
+		/* Internal functions */
+		//#define align(n)  align_n(sizeof(n))
+		private static void align (uint n) { align_n(n); }
+		
+		private static void code_byte(Byte c)
+		{
+		 	if (pc-basepc>MAXCODE-1)
+		 	{
+		  		lua_error ("code buffer overflow");
+		  		err = 1;
+			}
+		 	pc[0] = c; pc.inc();
+		}
+	
+		private static void code_word (Word n)
+		{
+		 	if (pc-basepc>MAXCODE-2)
+		 	{
+		  		lua_error("code buffer overflow");
+		  		err = 1;
+		 	}
+		 	pc[0] = (byte)(n & 0xff); pc[1] = (byte)((n >> 8) & 0xff);
+		 	pc += 2;
+		}
+	
+		private static void code_float (float n)
+		{
+		 	if (pc-basepc>MAXCODE-4)
+		 	{
+		  		lua_error("code buffer overflow");
+		  		err = 1;
+		 	}
+		 	byte[] bytes = BitConverter.GetBytes((Single)n); pc[0] = bytes[0]; pc[1] = bytes[1]; pc[2] = bytes[2]; pc[3] = bytes[3];
+		 	pc += 4;
+		}
+	
+		private static void incr_ntemp ()
+		{
+		 	if (ntemp+nlocalvar+MAXVAR+1 < STACKGAP)
+		  		ntemp++;
+		 	else
+		 	{
+		  		lua_error ("stack overflow");
+		  		err = 1;
+		 	}
+		}
+	
+		private static void incr_nlocalvar ()
+		{
+		 	if (ntemp+nlocalvar+MAXVAR+1 < STACKGAP)
+		 		nlocalvar++;
+		 	else
+		 	{
+		  		lua_error ("too many local variables or expression too complicate");
+		  		err = 1;
+		 	}
+		}
+	
+		private static void incr_nvarbuffer ()
+		{
+		 	if (nvarbuffer < MAXVAR-1)
+		  		nvarbuffer++;
+		 	else
+		 	{
+		  		lua_error ("variable buffer overflow");
+		  		err = 1;
+		 	}
+		}
+	
+		internal static void align_n (uint size)
+		{
+		 	if (size > ALIGNMENT) size = ALIGNMENT;
+		 	while (((pc+1-code)%size) != 0) // +1 to include BYTECODE
+		 		code_byte ((byte)OpCode.NOP);
+		}
+	
+		private static void code_number (float f)
+		{
+			int i = BitConverter.ToInt32(BitConverter.GetBytes(f), 0);
+		  	if (f == i)  /* f has an integer value */
+		  	{
+		  		if (i <= 2) code_byte((byte)((int)OpCode.PUSH0 + i));
+		   		else if (i <= 255)
+		   		{
+		   			code_byte((byte)OpCode.PUSHBYTE);
+					code_byte((byte)i);
+		   		}
+		   		else
+		   		{
+					align_n(2);
+					code_byte((byte)OpCode.PUSHWORD);
+					code_word((byte)i);
+		   		}
+		  	}
+		  	else
+		  	{
+		   		align_n(4); //FIXME:float
+		   		code_byte((byte)OpCode.PUSHFLOAT);
+		   		code_float(f);
+		  	}
+		  	incr_ntemp();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		//#line 140 "lua.stx"
@@ -94,147 +228,27 @@ namespace KopiLua
 //			public const int YYLAST = 318;
 //			public const int YYFLAG = -1000;
 //		}
+
 		
-		public const int MAXCODE = 1024;
-		internal static int[] buffer = new int[MAXCODE];
-		//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-		//ORIGINAL LINE: static Byte *code = (Byte *)buffer;
-		internal static Byte[] code = null;//(Byte[] )buffer;
-		internal static int[] mainbuffer = new int[MAXCODE];
-		//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-		//ORIGINAL LINE: static Byte *maincode = (Byte *)mainbuffer;
-		internal static Byte[] maincode = null;//(Byte[])mainbuffer;
-		//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-		//ORIGINAL LINE: static Byte *basepc;
-		internal static Byte basepc = 0;
-		//C++ TO C# CONVERTER TODO TASK: Pointer arithmetic is detected on this variable, so pointers on this variable are left unchanged:
-		internal static Byte[] pc = null;
-	
-		public const int MAXVAR = 32;
-		internal static int[] varbuffer = new int[MAXVAR];
-		internal static Byte nvarbuffer = 0; // number of variables at a list
-	
-		internal static Word[] localvar = Arrays.InitializeWithDefaultInstances<Word>(STACKGAP);
-		internal static Byte nlocalvar = 0; // number of local variables
-		internal static int ntemp = 0; // number of temporary var into stack
-		internal static int err = 0; // flag to indicate error
-	
-		/* Internal functions */
-		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-		//ORIGINAL LINE: #define align(n) align_n(sizeof(n))
-	
-		internal static void code_byte(Byte c)
-		{
-//		 if (pc - basepc > DefineConstants.MAXCODE-1)
-//		 {
-//		  lua_error("code buffer overflow");
-//		  err = 1;
-//		 }
-//		 *pc++= c;
-		}
-	
-		internal static void code_word(Word n)
-		{
-//		 if (pc - basepc > DefineConstants.MAXCODE - sizeof(Word))
-//		 {
-//		  lua_error("code buffer overflow");
-//		  err = 1;
-//		 }
-//		 (Word)pc = n;
-//		 pc += sizeof(Word);
-		}
-	
-		internal static void code_float(float n)
-		{
-//		 if (pc - basepc > DefineConstants.MAXCODE - sizeof(float))
-//		 {
-//		  lua_error("code buffer overflow");
-//		  err = 1;
-//		 }
-//		 (float)pc = n;
-//		 pc += sizeof(float);
-		}
-	
-		internal static void incr_ntemp()
-		{
-//		 if (ntemp + nlocalvar + DefineConstants.MAXVAR + 1 < STACKGAP)
-//		 {
-//		  ntemp++;
-//		 }
-//		 else
-//		 {
-//		  lua_error("stack overflow");
-//		  err = 1;
-//		 }
-		}
-	
-		internal static void incr_nlocalvar()
-		{
-//		 if (ntemp + nlocalvar + DefineConstants.MAXVAR + 1 < STACKGAP)
-//		 {
-//		  nlocalvar++;
-//		 }
-//		 else
-//		 {
-//		  lua_error("too many local variables or expression too complicate");
-//		  err = 1;
-//		 }
-		}
-	
-		internal static void incr_nvarbuffer()
-		{
-//		 if (nvarbuffer < DefineConstants.MAXVAR - 1)
-//		 {
-//		  nvarbuffer++;
-//		 }
-//		 else
-//		 {
-//		  lua_error("variable buffer overflow");
-//		  err = 1;
-//		 }
-		}
-	
-		internal static void align_n(uint size)
-		{
-//		 if (size > (sizeof(object)))
-//		 {
-//			 size = (sizeof(object));
-//		 }
-//		 while (((pc + 1 - code) % size) != 0) // +1 to include BYTECODE
-//		 {
-//		  code_byte(NOP);
-//		 }
-		}
-	
-		internal static void code_number(float f)
-		{
-//			int i = f;
-//		  if (f == i) // f has an integer value
-//		  {
-//		   if (i <= 2)
-//		   {
-//			   code_byte(PUSH0 + i);
-//		   }
-//		   else if (i <= 255)
-//		   {
-//			code_byte(PUSHBYTE);
-//			code_byte(i);
-//		   }
-//		   else
-//		   {
-//			align_n(sizeof(Word));
-//			code_byte(PUSHWORD);
-//			code_word(i);
-//		   }
-//		  }
-//		  else
-//		  {
-//		   align_n(sizeof(float));
-//		   code_byte(PUSHFLOAT);
-//		   code_float(f);
-//		  }
-//		  incr_ntemp();
-		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
 		//ORIGINAL LINE: #define yyclearin yychar = -1
 		//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
