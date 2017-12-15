@@ -840,10 +840,10 @@ namespace KopiLua
 		/*
 		** static variables used by the parser
 		*/
-		private static YYSTYPE yyv;			/* value stack */
-		private static IntegerPtr yys;			/* state stack */
+		private static YYSTYPE[] yyv;			/* value stack */
+		private static int[] yys;			/* state stack */
 	
-		private static YYSTYPE yypv;			/* top of value stack */
+		private static YYSTYPEPtr yypv;			/* top of value stack */
 		private static IntegerPtr yyps;			/* top of state stack */
 	
 		private static int yystate;			/* current state */
@@ -860,65 +860,53 @@ namespace KopiLua
 		*/
 		public static int yyparse()
 		{
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register YYSTYPE *yypvt;
-//				YYSTYPE yypvt; // top of value stack for $vars
-//				uint yymaxdepth = YYMAXDEPTH;
-//		
-//				/*
-//				** Initialize externals - yyparse may be called more than once
-//				*/
-//		//C++ TO C# CONVERTER TODO TASK: The memory management function 'malloc' has no equivalent in C#:
-//				yyv = (YYSTYPE)malloc(yymaxdepth * sizeof(YYSTYPE));
-//		//C++ TO C# CONVERTER TODO TASK: The memory management function 'malloc' has no equivalent in C#:
-//				yys = (int)malloc(yymaxdepth * sizeof(int));
-//				if (!yyv || !yys)
-//				{
-//					yyerror("out of memory");
-//					return (1);
-//				}
-//				yypv = &yyv[-1];
-//				yyps = &yys[-1];
-//				yystate = 0;
-//				yytmp = 0;
-//				yynerrs = 0;
-//				yyerrflag = 0;
-//				yychar = -1;
-//		
-//				goto yystack;
-//				{
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register YYSTYPE *yy_pv;
-//					YYSTYPE yy_pv; // top of value stack
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register int *yy_ps;
-//		//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//					int yy_ps; // top of state stack
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register int yy_state;
-//					int yy_state; // current state
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register int yy_n;
-//					int yy_n; // internal state number info
-//		
-//					/*
-//					** get globals into registers.
-//					** branch to here only if YYBACKUP was called.
-//					*/
-//				yynewstate:
-//					yy_pv = yypv;
-//					yy_ps = yyps;
-//					yy_state = yystate;
-//					goto yy_newstate;
-//		
-//					/*
-//					** get globals into registers.
-//					** either we just started, or we just finished a reduction
-//					*/
-//				yystack:
-//					yy_pv = yypv;
-//					yy_ps = yyps;
-//					yy_state = yystate;
+			YYSTYPEPtr yypvt = null;	/* top of value stack for $vars */
+			uint yymaxdepth = YYMAXDEPTH;
+	
+			/*
+			** Initialize externals - yyparse may be called more than once
+			*/
+			yyv = new YYSTYPE[yymaxdepth]; for (int i = 0; i < yymaxdepth; ++i) yyv[i] = new YYSTYPE();
+			yys = new int[yymaxdepth];
+			if (yyv==null || yys==null) 
+			{
+				yyerror( "out of memory" );
+				return (1);
+			}
+			yypv = new YYSTYPEPtr(yyv, -1);
+			yyps = new IntegerPtr(yys, -1);
+			yystate = 0;
+			yytmp = 0;
+			yynerrs = 0;
+			yyerrflag = 0;
+			yychar = -1;
+	
+			goto yystack;
+//			{
+			
+				YYSTYPEPtr yy_pv; // top of value stack
+				IntegerPtr yy_ps; // top of state stack
+				int yy_state; // current state
+				int yy_n; // internal state number info
+		
+				/*
+				** get globals into registers.
+				** branch to here only if YYBACKUP was called.
+				*/
+yynewstate:
+				yy_pv = yypv;
+				yy_ps = yyps;
+				yy_state = yystate;
+				goto yy_newstate;
+
+				/*
+				** get globals into registers.
+				** either we just started, or we just finished a reduction
+				*/
+yystack:
+				yy_pv = yypv;
+				yy_ps = yyps;
+				yy_state = yystate;
 //		
 //					/*
 //					** top of for (;;) loop while no reductions done
@@ -988,10 +976,11 @@ namespace KopiLua
 //					yy_ps = yy_state;
 //					*++yy_pv = yyval;
 //		
-//					/*
-//					** we have a new state - find out what to do
-//					*/
-//				yy_newstate:
+				/*
+				** we have a new state - find out what to do
+				*/
+yy_newstate:
+Console.WriteLine("======================================================");//FIXME:added
 //					if ((yy_n = yypact[yy_state]) <= YYFLAG)
 //					{
 //						goto yydefault; // simple state
@@ -1280,103 +1269,108 @@ namespace KopiLua
 //					yystate = yy_state;
 //					yyps = yy_ps;
 //					yypv = yy_pv;
-//				}
-//				/*
-//				** code supplied by user is placed in this switch
-//				*/
-//				switch (yytmp)
-//				{
-//		
-//			case 2:
-//			//#line 179 "lua.stx"
-//			{
-//				pc = basepc = maincode;
-//				nlocalvar = 0;
+				
 //			}
-//			break;
-//			case 3:
-//			//#line 179 "lua.stx"
-//			{
-//				maincode = pc;
-//			}
-//			break;
-//			case 6:
-//			//#line 184 "lua.stx"
-//			{
-//				pc = basepc = code;
-//				nlocalvar = 0;
-//			}
-//			break;
-//			case 7:
-//			//#line 185 "lua.stx"
-//			{
-//						if (lua_debug)
-//						{
-//					 align(Word);
-//						 code_byte(SETFUNCTION);
-//							 code_word(yypvt[-5].vWord);
-//					 code_word(yypvt[-4].vWord);
-//						}
-//						lua_codeadjust(0);
-//			}
-//					   break;
-//			case 8:
-//			//#line 197 "lua.stx"
-//			{
-//							if (lua_debug)
-//							{
-//								code_byte(RESET);
-//							}
-//						code_byte(RETCODE);
-//						code_byte(nlocalvar);
-//						s_tag(yypvt[-7].vWord) = T_FUNCTION;
-//		//C++ TO C# CONVERTER TODO TASK: The memory management function 'calloc' has no equivalent in C#:
-//						s_bvalue(yypvt[-7].vWord) = calloc(pc - code, sizeof(Byte));
-//		//C++ TO C# CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in C#:
-//						memcpy(s_bvalue(yypvt[-7].vWord), code, (pc - code) * sizeof(Byte));
-//			}
-//					   break;
-//			case 11:
-//			//#line 210 "lua.stx"
-//			{
-//						ntemp = 0;
-//						if (lua_debug)
-//						{
-//						 align(Word);
-//						 code_byte(SETLINE);
-//						 code_word(lua_linenumber);
-//						}
-//			}
-//				   break;
-//			case 15:
-//			//#line 223 "lua.stx"
-//			{
-//					{
-//		//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//		//ORIGINAL LINE: Byte *elseinit = yypvt[-2].pByte + sizeof(Word)+1;
-//				 Byte elseinit = yypvt[-2].pByte + sizeof(Word) + 1;
-//				 if (pc - elseinit == 0) // no else
-//				 {
-//				  pc -= sizeof(Word) + 1;
-//				 /* if (*(pc-1) == NOP) --pc; */
-//				  elseinit = pc;
-//				 }
-//				 else
-//				 {
-//				  *(yypvt[-2].pByte) = JMP;
-//				  (Word)(yypvt[-2].pByte+1) = pc - elseinit;
-//				 }
-//				 *(yypvt[-4].pByte) = IFFJMP;
-//				 (Word)(yypvt[-4].pByte+1) = elseinit - (yypvt[-4].pByte + sizeof(Word) + 1);
-//			}
-//			}
-//				   break;
-//			case 16:
-//			//#line 242 "lua.stx"
-//			{
-//				yyval.pByte = pc;
-//			}
-//			break;
+			
+			/*
+			** code supplied by user is placed in this switch
+			*/
+			switch (yytmp)
+			{		
+			case 2:
+				//#line 179 "lua.stx"
+				{
+					pc = basepc = maincode;
+					nlocalvar = 0;
+				}
+				break;
+				
+			case 3:
+				//#line 179 "lua.stx"
+				{
+					maincode = pc;
+				}
+				break;
+				
+			case 6:
+				//#line 184 "lua.stx"
+				{
+					pc = basepc = code;
+					nlocalvar = 0;
+				}
+				break;
+				
+			case 7:
+				//#line 185 "lua.stx"
+				{
+					if (lua_debug != 0)
+					{
+						align(2);
+						code_byte((byte)OpCode.SETFUNCTION);
+						code_word(yypvt[-5].vWord);
+						code_word(yypvt[-4].vWord);
+					}
+					lua_codeadjust(0);
+				}
+				break;
+				
+			case 8:
+				//#line 197 "lua.stx"
+				{
+					if (lua_debug != 0)
+					{
+						code_byte((byte)OpCode.RESET);
+					}
+					code_byte((byte)OpCode.RETCODE);
+					code_byte(nlocalvar);
+					s_tag(yypvt[-7].vWord, Type.T_FUNCTION);
+					s_bvalue(yypvt[-7].vWord, new BytePtr(new byte[pc - code]));
+					memcpy(s_bvalue(yypvt[-7].vWord), code, (uint)((pc - code) * 1));
+				}
+				break;
+				
+			case 11:
+				//#line 210 "lua.stx"
+				{
+					ntemp = 0;
+					if (lua_debug != 0)
+					{
+				 		align(2);
+				 		code_byte((byte)OpCode.SETLINE);
+				 		code_word((Word)lua_linenumber);
+					}
+				}
+				break;
+				
+			case 15:
+				//#line 223 "lua.stx"
+				{
+					{
+						BytePtr elseinit = yypvt[-2].pByte + 2+1;
+						if (pc - elseinit == 0) // no else
+						{
+						  	pc -= 2 + 1;
+						 	/* if (*(pc-1) == NOP) --pc; */
+						  	elseinit = pc;
+						}
+						else
+						{
+							yypvt[-2].pByte[0] = (byte)OpCode.JMP;
+							Word tempWord = (Word)(pc - elseinit); yypvt[-2].pByte[+1] = (byte)(tempWord & 0xff); yypvt[-2].pByte[+1+1] = (byte)((tempWord >> 8) & 0xff);
+						}
+						yypvt[-4].pByte[0] = (byte)OpCode.IFFJMP;
+						Word tempWord2 = (Word)(elseinit - (yypvt[-4].pByte + 2+1)); yypvt[-4].pByte[+1] = (byte)(tempWord2 & 0xff); yypvt[-4].pByte[+1+1] = (byte)((tempWord2 >> 8) & 0xff);
+					}
+				}
+				break;
+				   
+			case 16:
+				//#line 242 "lua.stx"
+				{
+					yyval.pByte = pc;
+				}
+				break;
+
 //			case 17:
 //			//#line 244 "lua.stx"
 //			{
@@ -2021,10 +2015,8 @@ namespace KopiLua
 //				lua_debug = yypvt[-0].vInt;
 //			}
 //			break;
-//			}
-//			goto yystack; // reset registers in driver code
-			
-			return 1; //FIXME:added
+			}
+			goto yystack; // reset registers in driver code
 		}
 	}
 }

@@ -175,6 +175,7 @@ namespace KopiLua
 		public static CharPtr s_svalue(int i) {return svalue(s_object(i));}
 		//#define s_bvalue(i) (bvalue(&s_object(i)))
 		public static BytePtr s_bvalue(int i) {return bvalue(s_object(i));}
+		public static void s_bvalue(int i, BytePtr ptr) {bvalue(s_object(i), ptr);}
 		//#define s_avalue(i) (avalue(&s_object(i)))
 		public static Hash s_avalue(int i) {return avalue(s_object(i));}
 		//#define s_fvalue(i) (fvalue(&s_object(i)))

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace KopiLua
 {
@@ -14,6 +14,128 @@ namespace KopiLua
 		 	public float vFloat;
 		 	public Word vWord;
 		 	public BytePtr pByte;
+		}
+		public class YYSTYPEPtr
+		{
+			public YYSTYPE[] chars;
+			public int index;
+			
+			public YYSTYPE this[int offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public YYSTYPE this[uint offset]
+			{
+				get { return chars[index + offset]; }
+				set { chars[index + offset] = value; }
+			}
+			public YYSTYPE this[long offset]
+			{
+				get { return chars[index + (int)offset]; }
+				set { chars[index + (int)offset] = value; }
+			}
+
+//			public static implicit operator CharPtr(string str) { return new CharPtr(str); }
+			public static implicit operator YYSTYPEPtr(int[] chars) { return new YYSTYPEPtr(chars); }
+
+			public YYSTYPEPtr()
+			{
+				this.chars = null;
+				this.index = 0;
+			}
+
+//			public CharPtr(string str)
+//			{
+//				this.chars = (str + '\0').ToCharArray();
+//				this.index = 0;
+//			}
+
+			public YYSTYPEPtr(YYSTYPEPtr ptr)
+			{
+				this.chars = ptr.chars;
+				this.index = ptr.index;
+			}
+
+			public YYSTYPEPtr(YYSTYPEPtr ptr, int index)
+			{
+				this.chars = ptr.chars;
+				this.index = index;
+			}
+
+			public YYSTYPEPtr(YYSTYPE[] chars)
+			{
+				this.chars = chars;
+				this.index = 0;
+			}
+
+			public YYSTYPEPtr(YYSTYPE[] chars, int index)
+			{
+				this.chars = chars;
+				this.index = index;
+			}
+
+			public static YYSTYPEPtr operator +(YYSTYPEPtr ptr, int offset) {return new YYSTYPEPtr(ptr.chars, ptr.index+offset);}
+			public static YYSTYPEPtr operator -(YYSTYPEPtr ptr, int offset) {return new YYSTYPEPtr(ptr.chars, ptr.index-offset);}
+			public static YYSTYPEPtr operator +(YYSTYPEPtr ptr, uint offset) { return new YYSTYPEPtr(ptr.chars, ptr.index + (int)offset); }
+			public static YYSTYPEPtr operator -(YYSTYPEPtr ptr, uint offset) { return new YYSTYPEPtr(ptr.chars, ptr.index - (int)offset); }
+
+			public void inc() { this.index++; }
+			public void dec() { this.index--; }
+			public YYSTYPEPtr next() { return new YYSTYPEPtr(this.chars, this.index + 1); }
+			public YYSTYPEPtr prev() { return new YYSTYPEPtr(this.chars, this.index - 1); }
+			public YYSTYPEPtr add(int ofs) { return new YYSTYPEPtr(this.chars, this.index + ofs); }
+			public YYSTYPEPtr sub(int ofs) { return new YYSTYPEPtr(this.chars, this.index - ofs); }
+			
+			public static bool operator ==(YYSTYPEPtr ptr, YYSTYPE ch) { return ptr[0] == ch; }
+			public static bool operator ==(YYSTYPE ch, YYSTYPEPtr ptr) { return ptr[0] == ch; }
+			public static bool operator !=(YYSTYPEPtr ptr, YYSTYPE ch) { return ptr[0] != ch; }
+			public static bool operator !=(YYSTYPE ch, YYSTYPEPtr ptr) { return ptr[0] != ch; }
+
+//			public static CharPtr operator +(BytePtr ptr1, BytePtr ptr2)
+//			{
+//				string result = "";
+//				for (int i = 0; ptr1[i] != '\0'; i++)
+//					result += ptr1[i];
+//				for (int i = 0; ptr2[i] != '\0'; i++)
+//					result += ptr2[i];
+//				return new CharPtr(result);
+//			}
+			public static int operator -(YYSTYPEPtr ptr1, YYSTYPEPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index; }
+			public static bool operator <(YYSTYPEPtr ptr1, YYSTYPEPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index < ptr2.index; }
+			public static bool operator <=(YYSTYPEPtr ptr1, YYSTYPEPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index <= ptr2.index; }
+			public static bool operator >(YYSTYPEPtr ptr1, YYSTYPEPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index > ptr2.index; }
+			public static bool operator >=(YYSTYPEPtr ptr1, YYSTYPEPtr ptr2) {
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index >= ptr2.index; }
+			public static bool operator ==(YYSTYPEPtr ptr1, YYSTYPEPtr ptr2) {
+				object o1 = ptr1 as YYSTYPEPtr;
+				object o2 = ptr2 as YYSTYPEPtr;
+				if ((o1 == null) && (o2 == null)) return true;
+				if (o1 == null) return false;
+				if (o2 == null) return false;
+				return (ptr1.chars == ptr2.chars) && (ptr1.index == ptr2.index); }
+			public static bool operator !=(YYSTYPEPtr ptr1, YYSTYPEPtr ptr2) {return !(ptr1 == ptr2); }
+
+			public override bool Equals(object o)
+			{
+				return this == (o as YYSTYPEPtr);
+			}
+
+			public override int GetHashCode()
+			{
+				return 0;
+			}
+//			public override string ToString()
+//			{
+//				string result = "";
+//				for (int i = index; (i<chars.Length) && (chars[i] != '\0'); i++)
+//					result += chars[i];
+//				return result;
+//			}
 		}
 
 		//extern YYSTYPE yylval;

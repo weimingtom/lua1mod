@@ -466,6 +466,11 @@ namespace KopiLua
 			return 0;
 		}
 		
+		public static BytePtr memcpy(BytePtr dest, BytePtr src, uint n)
+		{
+			return null;
+		}
+		
 		public static CharPtr objToCharPtr(object obj)
 		{
 			return null;
