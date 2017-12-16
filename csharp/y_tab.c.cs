@@ -1371,29 +1371,32 @@ Console.WriteLine("======================================================");//FI
 				}
 				break;
 
-//			case 17:
-//			//#line 244 "lua.stx"
-//			{
-//					*(yypvt[-3].pByte) = IFFJMP;
-//					(Word)(yypvt[-3].pByte+1) = pc - (yypvt[-3].pByte + sizeof(Word) + 1);
-//		
-//					*(yypvt[-1].pByte) = UPJMP;
-//					(Word)(yypvt[-1].pByte+1) = pc - yypvt[-6].pByte;
-//			}
-//				   break;
-//			case 18:
-//			//#line 252 "lua.stx"
-//			{
-//				yyval.pByte = pc;
-//			}
-//			break;
-//			case 19:
-//			//#line 254 "lua.stx"
-//			{
-//					*(yypvt[-0].pByte) = IFFUPJMP;
-//					(Word)(yypvt[-0].pByte+1) = pc - yypvt[-4].pByte;
-//			}
-//				   break;
+			case 17:
+				//#line 244 "lua.stx"
+				{
+					yypvt[-3].pByte[0] = (byte)OpCode.IFFJMP;
+					Word tempWord = (Word)(pc - (yypvt[-3].pByte + 2 + 1)); yypvt[-3].pByte[+1] = (byte)(tempWord & 0xff); yypvt[-3].pByte[+1+1] = (byte)((tempWord >> 8) & 0xff);
+			
+					yypvt[-1].pByte[0] = (byte)OpCode.UPJMP;
+					Word tempWord2 = (Word)(pc - yypvt[-6].pByte); yypvt[-1].pByte[+1] = (byte)(tempWord2 & 0xff); yypvt[-1].pByte[+1+1] = (byte)((tempWord2 >> 8) & 0xff);
+				}
+				break;
+				
+			case 18:
+				//#line 252 "lua.stx"
+				{
+					yyval.pByte = pc;
+				}
+				break;
+				
+			case 19:
+				//#line 254 "lua.stx"
+				{
+					yypvt[-0].pByte[0] = (byte)OpCode.IFFUPJMP;
+					Word tempWord = (Word)(pc - yypvt[-4].pByte); yypvt[-0].pByte[+1] = (byte)(tempWord & 0xff); yypvt[-0].pByte[+1+1] = (byte)((tempWord >> 8) & 0xff);
+				}
+				break;
+				
 //			case 20:
 //			//#line 261 "lua.stx"
 //			{
