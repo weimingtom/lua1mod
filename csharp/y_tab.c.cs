@@ -221,7 +221,7 @@ namespace KopiLua
 		** indexed by (number -1). If negative, push local indexed by ABS(number)-1.
 		** Otherwise, if zero, push indexed variable (record).
 		*/
-		private static void lua_pushvar (int number)
+		private static void lua_pushvar (int number) //FIXME:???long???
 		{
 		 	if (number > 0)	/* global var */
 		 	{
@@ -808,7 +808,7 @@ namespace KopiLua
 		** yacc user known macros and defines
 		*/
 //		#define YYERROR		goto yyerrlab
-//		#define YYACCEPT	{ free(yys); free(yyv); return(0); }
+		public static int YYACCEPT()	{ free(yys); free(yyv); return(0); }
 //		#define YYABORT		{ free(yys); free(yyv); return(1); }
 //		#define YYBACKUP( newtoken, newvalue )\
 //		{\
@@ -885,224 +885,201 @@ namespace KopiLua
 			goto yystack;
 //			{
 			
-				YYSTYPEPtr yy_pv; // top of value stack
-				IntegerPtr yy_ps; // top of state stack
-				int yy_state; // current state
-				int yy_n; // internal state number info
-		
-				/*
-				** get globals into registers.
-				** branch to here only if YYBACKUP was called.
-				*/
+			YYSTYPEPtr yy_pv; // top of value stack
+			IntegerPtr yy_ps; // top of state stack
+			int yy_state; // current state
+			int yy_n; // internal state number info
+	
+			/*
+			** get globals into registers.
+			** branch to here only if YYBACKUP was called.
+			*/
 yynewstate:
-				yy_pv = yypv;
-				yy_ps = yyps;
-				yy_state = yystate;
-				goto yy_newstate;
+			yy_pv = yypv;
+			yy_ps = yyps;
+			yy_state = yystate;
+			goto yy_newstate;
 
-				/*
-				** get globals into registers.
-				** either we just started, or we just finished a reduction
-				*/
+			/*
+			** get globals into registers.
+			** either we just started, or we just finished a reduction
+			*/
 yystack:
-				yy_pv = yypv;
-				yy_ps = yyps;
-				yy_state = yystate;
-//		
-//					/*
-//					** top of for (;;) loop while no reductions done
-//					*/
-//				yy_stack:
-//					/*
-//					** put a state and value onto the stacks
-//					*/
-//			#if YYDEBUG
-//					/*
-//					** if debugging, look up token value in list of value vs.
-//					** name pairs.  0 and negative (-1) are special values.
-//					** Note: linear search is used since time is not a real
-//					** consideration while debugging.
-//					*/
-//					if (yydebug)
-//					{
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register int yy_i;
-//						int yy_i;
-//		
-//						Console.Write("State {0:D}, token ", yy_state);
-//						if (yychar == 0)
-//						{
-//							Console.Write("end-of-file\n");
-//						}
-//						else if (yychar < 0)
-//						{
-//							Console.Write("-none-\n");
-//						}
-//						else
-//						{
-//							for (yy_i = 0; yytoks[yy_i].t_val >= 0; yy_i++)
-//							{
-//								if (yytoks[yy_i].t_val == yychar)
-//								{
-//									break;
-//								}
-//							}
-//							Console.Write("{0}\n", yytoks[yy_i].t_name);
-//						}
-//					}
-//			#endif
-//					if (++yy_ps >= &yys[yymaxdepth]) // room on stack?
-//					{
-//						/*
-//						** reallocate and recover.  Note that pointers
-//						** have to be reset, or bad things will happen
-//						*/
-//						int yyps_index = (yy_ps - yys);
-//						int yypv_index = (yy_pv - yyv);
-//						int yypvt_index = (yypvt - yyv);
-//						yymaxdepth += YYMAXDEPTH;
-//		//C++ TO C# CONVERTER TODO TASK: The memory management function 'realloc' has no equivalent in C#:
-//						yyv = (YYSTYPE)realloc((string)yyv, yymaxdepth * sizeof(YYSTYPE));
-//		//C++ TO C# CONVERTER TODO TASK: The memory management function 'realloc' has no equivalent in C#:
-//						yys = (int)realloc((string)yys, yymaxdepth * sizeof(int));
-//						if (!yyv || !yys)
-//						{
-//							yyerror("yacc stack overflow");
-//							return (1);
-//						}
-//						yy_ps = yys + yyps_index;
-//						yy_pv = yyv + yypv_index;
-//						yypvt = yyv + yypvt_index;
-//					}
-//					yy_ps = yy_state;
-//					*++yy_pv = yyval;
-//		
+			yy_pv = yypv;
+			yy_ps = yyps;
+			yy_state = yystate;
+	
+			/*
+			** top of for (;;) loop while no reductions done
+			*/
+yy_stack:
+			/*
+			** put a state and value onto the stacks
+			*/
+#if YYDEBUG
+			/*
+			** if debugging, look up token value in list of value vs.
+			** name pairs.  0 and negative (-1) are special values.
+			** Note: linear search is used since time is not a real
+			** consideration while debugging.
+			*/
+			if (yydebug != 0)
+			{
+				int yy_i;
+	
+				printf( "State %d, token ", yy_state );
+				if ( yychar == 0 )
+					printf( "end-of-file\n" );
+				else if ( yychar < 0 )
+					printf( "-none-\n" );
+				else
+				{
+					for ( yy_i = 0; yytoks[yy_i].t_val >= 0;
+						yy_i++ )
+					{
+						if ( yytoks[yy_i].t_val == yychar )
+							break;
+					}
+					printf( "%s\n", yytoks[yy_i].t_name );
+				}
+			}
+#endif
+			yy_ps.inc();
+			if ( yy_ps >= new IntegerPtr(yys, (int)yymaxdepth) )	/* room on stack? */
+			{
 				/*
-				** we have a new state - find out what to do
+				** reallocate and recover.  Note that pointers
+				** have to be reset, or bad things will happen
 				*/
+				int yyps_index = (yy_ps - yys);
+				int yypv_index = (yy_pv - yyv);
+				int yypvt_index = (yypvt - yyv);
+				yymaxdepth += YYMAXDEPTH;
+				yyv = (YYSTYPE[])realloc(yyv,
+					yymaxdepth, sizeOf("YYSTYPE"));
+				yys = (int[])realloc(yys,
+					yymaxdepth, sizeOf("int"));
+				if (yyv==null || yys==null)
+				{
+					yyerror( "yacc stack overflow" );
+					return(1);
+				}
+				yy_ps = new IntegerPtr(yys, yyps_index);
+				yy_pv = new YYSTYPEPtr(yyv, yypv_index);
+				yypvt = new YYSTYPEPtr(yyv, yypvt_index);
+			}
+			yy_ps[0] = yy_state;
+			yy_pv.inc(); yy_pv[0] = yyval;
+			
+			/*
+			** we have a new state - find out what to do
+			*/
 yy_newstate:
-Console.WriteLine("======================================================");//FIXME:added
-//					if ((yy_n = yypact[yy_state]) <= YYFLAG)
-//					{
-//						goto yydefault; // simple state
-//					}
-//			#if YYDEBUG
-//					/*
-//					** if debugging, need to mark whether new token grabbed
-//					*/
-//					yytmp = yychar < 0;
-//			#endif
-//					if ((yychar < 0) && ((yychar = yylex()) < 0))
-//					{
-//						yychar = 0; // reached EOF
-//					}
-//			#if YYDEBUG
-//					if (yydebug && yytmp)
-//					{
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register int yy_i;
-//						int yy_i;
-//		
-//						Console.Write("Received token ");
-//						if (yychar == 0)
-//						{
-//							Console.Write("end-of-file\n");
-//						}
-//						else if (yychar < 0)
-//						{
-//							Console.Write("-none-\n");
-//						}
-//						else
-//						{
-//							for (yy_i = 0; yytoks[yy_i].t_val >= 0; yy_i++)
-//							{
-//								if (yytoks[yy_i].t_val == yychar)
-//								{
-//									break;
-//								}
-//							}
-//							Console.Write("{0}\n", yytoks[yy_i].t_name);
-//						}
-//					}
-//			#endif
-//					if (((yy_n += yychar) < 0) || (yy_n >= YYLAST))
-//					{
-//						goto yydefault;
-//					}
-//					if (yychk[yy_n = yyact[yy_n]] == yychar) //valid shift
-//					{
-//						yychar = -1;
-//						yyval = yylval;
-//						yy_state = yy_n;
-//						if (yyerrflag > 0)
-//						{
-//							yyerrflag--;
-//						}
-//						goto yy_stack;
-//					}
-//		
-//				yydefault:
-//					if ((yy_n = yydef[yy_state]) == -2)
-//					{
-//			#if YYDEBUG
-//						yytmp = yychar < 0;
-//			#endif
-//						if ((yychar < 0) && ((yychar = yylex()) < 0))
-//						{
-//							yychar = 0; // reached EOF
-//						}
-//			#if YYDEBUG
-//						if (yydebug && yytmp)
-//						{
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register int yy_i;
-//							int yy_i;
-//		
-//							Console.Write("Received token ");
-//							if (yychar == 0)
-//							{
-//								Console.Write("end-of-file\n");
-//							}
-//							else if (yychar < 0)
-//							{
-//								Console.Write("-none-\n");
-//							}
-//							else
-//							{
-//								for (yy_i = 0; yytoks[yy_i].t_val >= 0; yy_i++)
-//								{
-//									if (yytoks[yy_i].t_val == yychar)
-//									{
-//										break;
-//									}
-//								}
-//								Console.Write("{0}\n", yytoks[yy_i].t_name);
-//							}
-//						}
-//			#endif
-//						/*
-//						** look through exception table
-//						*/
-//						{
-//		//C++ TO C# CONVERTER NOTE: 'register' variable declarations are not supported in C#:
-//		//ORIGINAL LINE: register int *yyxi = yyexca;
-//							int[] yyxi = yyexca;
-//		
-//							while ((yyxi[0] != -1) || (yyxi[1] != yy_state))
-//							{
-//								yyxi += 2;
-//							}
-//							while ((yyxi[= 2] >= 0) && (yyxi[0] != yychar))
-//							{
-//								;
-//							}
-//							if ((yy_n = yyxi[1]) < 0)
-//							{
-//								YYACCEPT;
-//							}
-//					}
-//					}
-//		
+			if ( ( yy_n = yypact[ yy_state ] ) <= YYFLAG )
+				goto yydefault;		/* simple state */
+#if YYDEBUG
+			/*
+			** if debugging, need to mark whether new token grabbed
+			*/
+			yytmp = yychar < 0 ? 1 : 0;
+#endif
+			if ((yychar < 0) && ((yychar = yylex()) < 0))
+			{
+				yychar = 0; // reached EOF
+			}
+#if YYDEBUG
+			if ( yydebug!=0 && yytmp!=0 )
+			{
+				int yy_i;
+
+				printf( "Received token " );
+				if ( yychar == 0 )
+					printf( "end-of-file\n" );
+				else if ( yychar < 0 )
+					printf( "-none-\n" );
+				else
+				{
+					for ( yy_i = 0;
+						yytoks[yy_i].t_val >= 0;
+						yy_i++ )
+					{
+						if ( yytoks[yy_i].t_val
+							== yychar )
+						{
+							break;
+						}
+					}
+					printf( "%s\n", yytoks[yy_i].t_name );
+				}
+			}
+#endif
+			if ( ( ( yy_n += yychar ) < 0 ) || ( yy_n >= YYLAST ) )
+				goto yydefault;
+			if ( yychk[ yy_n = yyact[ yy_n ] ] == yychar )	/*valid shift*/
+			{
+				yychar = -1;
+				yyval = yylval;
+				yy_state = yy_n;
+				if ( yyerrflag > 0 )
+					yyerrflag--;
+				goto yy_stack;
+			}
+	
+yydefault:
+			if ( ( yy_n = yydef[ yy_state ] ) == -2 )
+			{
+#if YYDEBUG
+				yytmp = yychar < 0;
+#endif
+				if ( ( yychar < 0 ) && ( ( yychar = yylex() ) < 0 ) )
+					yychar = 0;		/* reached EOF */
+#if YYDEBUG
+				if ( yydebug && yytmp )
+				{
+					register int yy_i;
+	
+					printf( "Received token " );
+					if ( yychar == 0 )
+						printf( "end-of-file\n" );
+					else if ( yychar < 0 )
+						printf( "-none-\n" );
+					else
+					{
+						for ( yy_i = 0;
+							yytoks[yy_i].t_val >= 0;
+							yy_i++ )
+						{
+							if ( yytoks[yy_i].t_val
+								== yychar )
+							{
+								break;
+							}
+						}
+						printf( "%s\n", yytoks[yy_i].t_name );
+					}
+				}
+#endif
+				/*
+				** look through exception table
+				*/
+				{
+					IntegerPtr yyxi = new IntegerPtr(yyexca);
+	
+					while ( ( yyxi[0] != -1 ) ||
+						( yyxi[1] != yy_state ) )
+					{
+						yyxi += 2;
+					}
+					while ( ( (yyxi += 2)[0] >= 0 ) &&
+					    ( yyxi[0] != yychar ) )
+						;
+					if ( ( yy_n = yyxi[1] ) < 0 )
+						return YYACCEPT();
+				}
+			}
+
+
+				
 //					/*
 //					** check for syntax error
 //					*/
@@ -1271,8 +1248,9 @@ Console.WriteLine("======================================================");//FI
 //					yyps = yy_ps;
 //					yypv = yy_pv;
 				
-//			}
-			
+
+
+//			} //FIXME:end: goto yystack;				
 			/*
 			** code supplied by user is placed in this switch
 			*/
@@ -1371,7 +1349,7 @@ Console.WriteLine("======================================================");//FI
 					yyval.pByte = pc;
 				}
 				break;
-
+	
 			case 17:
 				//#line 244 "lua.stx"
 				{
@@ -1419,7 +1397,7 @@ Console.WriteLine("======================================================");//FI
 					lua_codeadjust (0);
 				}
 				break;
-
+	
 			case 25:
 				//#line 279 "lua.stx"
 				{
@@ -1441,21 +1419,21 @@ Console.WriteLine("======================================================");//FI
 					 }
 				}
 				break;
-
+	
 			case 26:
 				//#line 299 "lua.stx"
 				{
 					yyval.vInt = nlocalvar;
 				}
 				break;
-
+	
 			case 27:
 				//#line 299 "lua.stx"
 				{
 					ntemp = 0;
 				}
 				break;
-
+	
 			case 28:
 				//#line 300 "lua.stx"
 				{
@@ -1466,7 +1444,7 @@ Console.WriteLine("======================================================");//FI
 					}
 				}
 				break;
-
+	
 			case 30:
 				//#line 310 "lua.stx"
 				{
@@ -1478,7 +1456,7 @@ Console.WriteLine("======================================================");//FI
 					}
 				}
 				break;
-
+	
 			case 31:
 				//#line 312 "lua.stx"
 				{
@@ -1496,7 +1474,7 @@ Console.WriteLine("======================================================");//FI
 					code_word (0);
 				}
 				break;
-
+	
 			case 33:
 				//#line 326 "lua.stx"
 				{
@@ -1510,63 +1488,63 @@ Console.WriteLine("======================================================");//FI
 					yyval.vInt = yypvt[-1].vInt;
 				}
 				break;
-
+	
 			case 35:
 				//#line 330 "lua.stx"
 				{
 					code_byte((byte)OpCode.EQOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 36:
 				//#line 331 "lua.stx"
 				{
 					code_byte((byte)OpCode.LTOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 37:
 				//#line 332 "lua.stx"
 				{
 					code_byte((byte)OpCode.LEOP); code_byte((byte)OpCode.NOTOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 38:
 				//#line 333 "lua.stx"
 				{
 					code_byte((byte)OpCode.EQOP); code_byte((byte)OpCode.NOTOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 39:
 				//#line 334 "lua.stx"
 				{
 					code_byte((byte)OpCode.LEOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 40:
 				//#line 335 "lua.stx"
 				{
 					code_byte((byte)OpCode.LTOP); code_byte((byte)OpCode.NOTOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 41:
 				//#line 336 "lua.stx"
 				{
 					code_byte((byte)OpCode.ADDOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 42:
 				//#line 337 "lua.stx"
 				{
 					code_byte((byte)OpCode.SUBOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 43:
 				//#line 338 "lua.stx"
 				{
@@ -1580,7 +1558,7 @@ Console.WriteLine("======================================================");//FI
 					code_byte((byte)OpCode.DIVOP); yyval.vInt = 1; ntemp--;
 				}
 				break;
-
+	
 			case 45:
 				//#line 340 "lua.stx"
 				{
@@ -1594,14 +1572,14 @@ Console.WriteLine("======================================================");//FI
 					yyval.vInt = 1;
 				}
 				break;
-
+	
 			case 47:
 				//#line 342 "lua.stx"
 				{
 					code_byte((byte)OpCode.MINUSOP); yyval.vInt = 1;
 				}
 				break;
-
+	
 			case 48:
 				//#line 344 "lua.stx"
 				{
@@ -1611,306 +1589,332 @@ Console.WriteLine("======================================================");//FI
 					code_byte((byte)OpCode.CREATEARRAY);
 				}
 				break;
-
-//			case 49:
-//			//#line 351 "lua.stx"
-//			{
-//				  *(yypvt[-2].pByte) = yypvt[-0].vInt;
-//				  if (yypvt[-1].vLong < 0) // there is no function to be called
-//				  {
-//				   yyval.vInt = 1;
-//				  }
-//				  else
-//				  {
-//				   lua_pushvar(yypvt[-1].vLong + 1);
-//				   code_byte(PUSHMARK);
-//				   incr_ntemp();
-//				   code_byte(PUSHOBJECT);
-//				   incr_ntemp();
-//				   code_byte(CALLFUNC);
-//				   ntemp -= 4;
-//				   yyval.vInt = 0;
-//				   if (lua_debug)
-//				   {
-//					align(Word);
-//					code_byte(SETLINE);
-//					code_word(lua_linenumber);
-//				   }
-//				  }
-//			}
-//				 break;
-//			case 50:
-//			//#line 374 "lua.stx"
-//			{
-//				  code_byte(CREATEARRAY);
-//				  yyval.vInt = 1;
-//			}
-//				 break;
-//			case 51:
-//			//#line 378 "lua.stx"
-//			{
-//				lua_pushvar(yypvt[-0].vLong);
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 52:
-//			//#line 379 "lua.stx"
-//			{
-//				code_number(yypvt[-0].vFloat);
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 53:
-//			//#line 381 "lua.stx"
-//			{
-//				  align(Word);
-//				  code_byte(PUSHSTRING);
-//				  code_word(yypvt[-0].vWord);
-//				  yyval.vInt = 1;
-//				  incr_ntemp();
-//			}
-//				 break;
-//			case 54:
-//			//#line 388 "lua.stx"
-//			{
-//				code_byte(PUSHNIL);
-//				yyval.vInt = 1;
-//				incr_ntemp();
-//			}
-//			break;
-//			case 55:
-//			//#line 390 "lua.stx"
-//			{
-//				  yyval.vInt = 0;
-//				  if (lua_debug)
-//				  {
-//				   align(Word);
-//				   code_byte(SETLINE);
-//				   code_word(lua_linenumber);
-//				  }
-//			}
-//				 break;
-//			case 56:
-//			//#line 397 "lua.stx"
-//			{
-//				code_byte(NOTOP);
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 57:
-//			//#line 398 "lua.stx"
-//			{
-//				code_byte(POP);
-//				ntemp--;
-//			}
-//			break;
-//			case 58:
-//			//#line 399 "lua.stx"
-//			{
-//				  *(yypvt[-2].pByte) = ONFJMP;
-//				  (Word)(yypvt[-2].pByte+1) = pc - (yypvt[-2].pByte + sizeof(Word) + 1);
-//				  yyval.vInt = 1;
-//			}
-//				 break;
-//			case 59:
-//			//#line 404 "lua.stx"
-//			{
-//				code_byte(POP);
-//				ntemp--;
-//			}
-//			break;
-//			case 60:
-//			//#line 405 "lua.stx"
-//			{
-//				  *(yypvt[-2].pByte) = ONTJMP;
-//				  (Word)(yypvt[-2].pByte+1) = pc - (yypvt[-2].pByte + sizeof(Word) + 1);
-//				  yyval.vInt = 1;
-//			}
-//				 break;
-//			case 61:
-//			//#line 412 "lua.stx"
-//			{
-//				code_byte(PUSHNIL);
-//				incr_ntemp();
-//			}
-//			break;
-//			case 63:
-//			//#line 416 "lua.stx"
-//			{
-//				code_byte(PUSHMARK);
-//				yyval.vInt = ntemp;
-//				incr_ntemp();
-//			}
-//			break;
-//			case 64:
-//			//#line 417 "lua.stx"
-//			{
-//				code_byte(CALLFUNC);
-//				ntemp = yypvt[-3].vInt - 1;
-//			}
-//			break;
-//			case 65:
-//			//#line 419 "lua.stx"
-//			{
-//				lua_pushvar(yypvt[-0].vLong);
-//			}
-//			break;
-//			case 66:
-//			//#line 422 "lua.stx"
-//			{
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 67:
-//			//#line 423 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-0].vInt;
-//			}
-//			break;
-//			case 68:
-//			//#line 426 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-0].vInt;
-//			}
-//			break;
-//			case 69:
-//			//#line 427 "lua.stx"
-//			{
-//				if (!yypvt[-1].vInt)
-//				{
-//					lua_codeadjust(ntemp + 1);
-//					incr_ntemp();
-//				}
-//			}
-//			break;
-//			case 70:
-//			//#line 428 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-0].vInt;
-//			}
-//			break;
-//			case 73:
-//			//#line 435 "lua.stx"
-//			{
-//				localvar[nlocalvar] = yypvt[-0].vWord;
-//				incr_nlocalvar();
-//			}
-//			break;
-//			case 74:
-//			//#line 436 "lua.stx"
-//			{
-//				localvar[nlocalvar] = yypvt[-0].vWord;
-//				incr_nlocalvar();
-//			}
-//			break;
-//			case 75:
-//			//#line 439 "lua.stx"
-//			{
-//				yyval.vLong = -1;
-//			}
-//			break;
-//			case 76:
-//			//#line 440 "lua.stx"
-//			{
-//				yyval.vLong = yypvt[-0].vWord;
-//			}
-//			break;
-//			case 77:
-//			//#line 443 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-1].vInt;
-//			}
-//			break;
-//			case 78:
-//			//#line 444 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-1].vInt;
-//			}
-//			break;
-//			case 79:
-//			//#line 447 "lua.stx"
-//			{
-//				yyval.vInt = 0;
-//			}
-//			break;
-//			case 80:
-//			//#line 448 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-0].vInt;
-//			}
-//			break;
-//			case 81:
-//			//#line 451 "lua.stx"
-//			{
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 82:
-//			//#line 452 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-2].vInt + 1;
-//			}
-//			break;
-//			case 83:
-//			//#line 456 "lua.stx"
-//			{
-//						align(Word);
-//						code_byte(PUSHSTRING);
-//					code_word(lua_findconstant(s_name(yypvt[-0].vWord)));
-//						incr_ntemp();
-//			}
-//				   break;
-//			case 84:
-//			//#line 463 "lua.stx"
-//			{
-//					code_byte(STOREFIELD);
-//					ntemp -= 2;
-//			}
-//				   break;
-//			case 85:
-//			//#line 469 "lua.stx"
-//			{
-//				yyval.vInt = 0;
-//			}
-//			break;
-//			case 86:
-//			//#line 470 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-0].vInt;
-//			}
-//			break;
-//			case 87:
-//			//#line 473 "lua.stx"
-//			{
-//				code_number(1);
-//			}
-//			break;
-//			case 88:
-//			//#line 473 "lua.stx"
-//			{
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 89:
-//			//#line 474 "lua.stx"
-//			{
-//				code_number(yypvt[-1].vInt + 1);
-//			}
-//			break;
-//			case 90:
-//			//#line 475 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-3].vInt + 1;
-//			}
-//			break;
-//			case 91:
-//			//#line 479 "lua.stx"
-//			{
-//					code_byte(STOREFIELD);
-//					ntemp -= 2;
-//			}
-//				   break;
-
+	
+			case 49:
+				//#line 351 "lua.stx"
+				{
+					yypvt[-2].pByte[0] = (byte)yypvt[-0].vInt;
+					if (yypvt[-1].vLong < 0) // there is no function to be called
+					{
+						yyval.vInt = 1;
+					}
+					else
+					{
+						lua_pushvar((int)(yypvt[-1].vLong + 1));
+						code_byte((byte)OpCode.PUSHMARK);
+					   	incr_ntemp();
+					   	code_byte((byte)OpCode.PUSHOBJECT);
+					   	incr_ntemp();
+					   	code_byte((byte)OpCode.CALLFUNC);
+					   	ntemp -= 4;
+					   	yyval.vInt = 0;
+					   	if (lua_debug!=0)
+					   	{
+							align(2);
+							code_byte((byte)OpCode.SETLINE);
+							code_word((Word)lua_linenumber);
+					   	}
+					}
+				}
+				break;
+			
+			case 50:
+				//#line 374 "lua.stx"
+				{
+					code_byte((byte)OpCode.CREATEARRAY);
+					yyval.vInt = 1;
+				}
+				break;
+			
+			case 51:
+				//#line 378 "lua.stx"
+				{
+					lua_pushvar((int)yypvt[-0].vLong);
+					yyval.vInt = 1;
+				}
+				break;
+			
+			case 52:
+				//#line 379 "lua.stx"
+				{
+					code_number(yypvt[-0].vFloat);
+					yyval.vInt = 1;
+				}
+				break;
+	
+			case 53:
+				//#line 381 "lua.stx"
+				{
+					align(2);
+					code_byte((byte)OpCode.PUSHSTRING);
+					code_word(yypvt[-0].vWord);
+					yyval.vInt = 1;
+					incr_ntemp();
+				}
+				break;
+	
+			case 54:
+				//#line 388 "lua.stx"
+				{
+					code_byte((byte)OpCode.PUSHNIL); yyval.vInt = 1; incr_ntemp();
+				}
+				break;
+			
+			case 55:
+				//#line 390 "lua.stx"
+				{
+					yyval.vInt = 0;
+					if (lua_debug!=0)
+					{
+						align(2);
+						code_byte((byte)OpCode.SETLINE);
+						code_word((Word)lua_linenumber);
+					}
+				}
+				break;
+			
+			case 56:
+				//#line 397 "lua.stx"
+				{
+					code_byte((byte)OpCode.NOTOP);
+					yyval.vInt = 1;
+				}
+				break;
+			
+			case 57:
+				//#line 398 "lua.stx"
+				{
+					code_byte((byte)OpCode.POP);
+					ntemp--;
+				}
+				break;
+				
+			case 58:
+				//#line 399 "lua.stx"
+				{
+					yypvt[-2].pByte[0] = (byte)OpCode.ONFJMP;
+					Word tempWord = (Word)(pc - (yypvt[-2].pByte + 2 + 1)); yypvt[-2].pByte[+1] = (byte)(tempWord & 0xff); yypvt[-2].pByte[+1+1] = (byte)((tempWord >> 8) & 0xff);
+					yyval.vInt = 1;
+				}
+				break;
+			
+			case 59:
+				//#line 404 "lua.stx"
+				{
+					code_byte((byte)OpCode.POP);
+					ntemp--;
+				}
+				break;
+			
+			case 60:
+				//#line 405 "lua.stx"
+				{
+					yypvt[-2].pByte[0] = (byte)OpCode.ONTJMP;
+					Word tempWord = (Word)(pc - (yypvt[-2].pByte + 2 + 1)); yypvt[-2].pByte[+1] = (byte)(tempWord & 0xff); yypvt[-2].pByte[+1+1] = (byte)((tempWord >> 8) & 0xff);
+					yyval.vInt = 1;
+				}
+				break;
+			
+			case 61:
+				//#line 412 "lua.stx"
+				{
+					code_byte((byte)OpCode.PUSHNIL); incr_ntemp();
+				}
+				break;
+				
+			case 63:
+				//#line 416 "lua.stx"
+				{
+					code_byte((byte)OpCode.PUSHMARK); yyval.vInt = ntemp; incr_ntemp();
+				}
+				break;
+	
+			case 64:
+				//#line 417 "lua.stx"
+				{
+					code_byte((byte)OpCode.CALLFUNC); ntemp = yypvt[-3].vInt - 1;
+				}
+				break;
+			
+			case 65:
+				//#line 419 "lua.stx"
+				{
+					lua_pushvar((int)yypvt[-0].vLong);
+				}
+				break;
+			
+			case 66:
+				//#line 422 "lua.stx"
+				{
+					yyval.vInt = 1;
+				}
+				break;
+	
+			case 67:
+				//#line 423 "lua.stx"
+				{
+					yyval.vInt = yypvt[-0].vInt;
+				}
+				break;
+	
+			case 68:
+				//#line 426 "lua.stx"
+				{
+					yyval.vInt = yypvt[-0].vInt;
+				}
+				break;
+			
+			case 69:
+				//#line 427 "lua.stx"
+				{
+					if (yypvt[-1].vInt==0) {lua_codeadjust(ntemp + 1); incr_ntemp();}
+				}
+				break;
+			
+			case 70:
+				//#line 428 "lua.stx"
+				{
+					yyval.vInt = yypvt[-0].vInt;
+				}
+				break;
+			
+			case 73:
+				//#line 435 "lua.stx"
+				{
+					localvar[nlocalvar] = yypvt[-0].vWord;
+					incr_nlocalvar();
+				}
+				break;
+	
+			case 74:
+				//#line 436 "lua.stx"
+				{
+					localvar[nlocalvar] = yypvt[-0].vWord; incr_nlocalvar();
+				}
+				break;
+			
+			case 75:
+				//#line 439 "lua.stx"
+				{
+					yyval.vLong = -1;
+				}
+				break;
+	
+			case 76:
+				//#line 440 "lua.stx"
+				{
+					yyval.vLong = yypvt[-0].vWord;
+				}
+				break;
+	
+			case 77:
+				//#line 443 "lua.stx"
+				{
+					yyval.vInt = yypvt[-1].vInt;
+				}
+				break;
+	
+			case 78:
+				//#line 444 "lua.stx"
+				{
+					yyval.vInt = yypvt[-1].vInt;
+				}
+				break;
+	
+			case 79:
+				//#line 447 "lua.stx"
+				{
+					yyval.vInt = 0;
+				}
+				break;
+			
+			case 80:
+				//#line 448 "lua.stx"
+				{
+					yyval.vInt = yypvt[-0].vInt;
+				}
+				break;
+	
+			case 81:
+				//#line 451 "lua.stx"
+				{
+					yyval.vInt = 1;
+				}
+				break;
+	
+			case 82:
+				//#line 452 "lua.stx"
+				{
+					yyval.vInt = yypvt[-2].vInt + 1;
+				}
+				break;
+	
+			case 83:
+				//#line 456 "lua.stx"
+				{
+					align(2);
+					code_byte((byte)OpCode.PUSHSTRING);
+					code_word((Word)lua_findconstant(s_name(yypvt[-0].vWord)));
+					incr_ntemp();
+				}
+				break;
+				
+			case 84:
+				//#line 463 "lua.stx"
+				{
+					code_byte((byte)OpCode.STOREFIELD); ntemp -= 2;
+				}
+				break;
+	
+			case 85:
+				//#line 469 "lua.stx"
+				{
+					yyval.vInt = 0;
+				}
+				break;
+	
+			case 86:
+				//#line 470 "lua.stx"
+				{
+					yyval.vInt = yypvt[-0].vInt;
+				}
+				break;
+	
+			case 87:
+				//#line 473 "lua.stx"
+				{
+					code_number(1);
+				}
+				break;
+	
+			case 88:
+				//#line 473 "lua.stx"
+				{
+					yyval.vInt = 1;
+				}
+				break;
+	
+			case 89:
+				//#line 474 "lua.stx"
+				{
+					code_number(yypvt[-1].vInt + 1);
+				}
+				break;
+				
+			case 90:
+				//#line 475 "lua.stx"
+				{
+					yyval.vInt = yypvt[-3].vInt + 1;
+				}
+				break;
+				
+			case 91:
+				//#line 479 "lua.stx"
+				{
+					code_byte((byte)OpCode.STOREFIELD); ntemp -= 2;
+				}
+				break;
+	
 			case 92:
 				//#line 486 "lua.stx"
 				{
@@ -1919,7 +1923,7 @@ Console.WriteLine("======================================================");//FI
 					yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
 				}
 				break;
-
+	
 			case 93:
 				//#line 492 "lua.stx"
 				{
@@ -1938,14 +1942,14 @@ Console.WriteLine("======================================================");//FI
 						yyval.vLong = -(local + 1);		/* return negative value */
 				}
 				break;
-
+	
 			case 95:
 				//#line 507 "lua.stx"
 				{
 					lua_pushvar ((int)yypvt[-0].vLong);
 				}
 				break;
-
+	
 			case 96:
 				//#line 508 "lua.stx"
 				{
@@ -1969,7 +1973,7 @@ Console.WriteLine("======================================================");//FI
 					yyval.vLong = 0;		/* indexed variable */
 				}
 				break;
-
+	
 			case 99:
 				//#line 520 "lua.stx"
 				{

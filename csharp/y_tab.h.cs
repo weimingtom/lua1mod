@@ -37,7 +37,7 @@ namespace KopiLua
 			}
 
 //			public static implicit operator CharPtr(string str) { return new CharPtr(str); }
-			public static implicit operator YYSTYPEPtr(int[] chars) { return new YYSTYPEPtr(chars); }
+			public static implicit operator YYSTYPEPtr(YYSTYPE[] chars) { return new YYSTYPEPtr(chars); }
 
 			public YYSTYPEPtr()
 			{

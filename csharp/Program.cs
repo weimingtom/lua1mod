@@ -428,6 +428,10 @@ namespace KopiLua
 			}
 			return null;
 		}
+		public static object realloc(object obj, uint size, string type)
+		{
+			return null;
+		}
 		
 		public static object calloc(uint n, string type) //FIXME:some places are replaced with new, not with this method
 		{
