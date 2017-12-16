@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+//FIXME:TODO:ptr class var value assign
 namespace KopiLua
 {
 	using Word = System.UInt16; //unsigned short
@@ -46,7 +47,7 @@ namespace KopiLua
 		internal static byte nvarbuffer=0; // number of variables at a list
 	
 		internal static Word[] localvar = new Word[STACKGAP];
-		internal static Byte nlocalvar=0; // number of local variables
+		internal static byte nlocalvar=0; // number of local variables
 		internal static int ntemp=0; // number of temporary var into stack
 		internal static int err=0; // flag to indicate error
 	
@@ -1397,238 +1398,220 @@ Console.WriteLine("======================================================");//FI
 				}
 				break;
 				
-//			case 20:
-//			//#line 261 "lua.stx"
-//			{
-//					{
-//					 int i;
-//					 if (yypvt[-0].vInt == 0 || nvarbuffer != ntemp - yypvt[-2].vInt * 2)
-//					 {
-//				  lua_codeadjust(yypvt[-2].vInt * 2 + nvarbuffer);
-//					 }
-//				 for (i = nvarbuffer - 1; i >= 0; i--)
-//				 {
-//				  lua_codestore(i);
-//				 }
-//				 if (yypvt[-2].vInt > 1 || (yypvt[-2].vInt == 1 && varbuffer[0] != 0))
-//				 {
-//				  lua_codeadjust(0);
-//				 }
-//			}
-//			}
-//				   break;
-//			case 21:
-//			//#line 272 "lua.stx"
-//			{
-//				lua_codeadjust(0);
-//			}
-//			break;
-//			case 25:
-//			//#line 279 "lua.stx"
-//			{
-//					  {
-//		//C++ TO C# CONVERTER TODO TASK: C# does not have an equivalent to pointers to value types:
-//		//ORIGINAL LINE: Byte *elseinit = yypvt[-1].pByte + sizeof(Word)+1;
-//					 Byte elseinit = yypvt[-1].pByte + sizeof(Word) + 1;
-//					 if (pc - elseinit == 0) // no else
-//					 {
-//					  pc -= sizeof(Word) + 1;
-//					  /* if (*(pc-1) == NOP) --pc; */
-//					elseinit = pc;
-//					 }
-//				   else
-//				   {
-//					*(yypvt[-1].pByte) = JMP;
-//					(Word)(yypvt[-1].pByte+1) = pc - elseinit;
-//				   }
-//				   *(yypvt[-3].pByte) = IFFJMP;
-//				   (Word)(yypvt[-3].pByte+1) = elseinit - (yypvt[-3].pByte + sizeof(Word) + 1);
-//			  }
-//			}
-//					 break;
-//			case 26:
-//			//#line 299 "lua.stx"
-//			{
-//				yyval.vInt = nlocalvar;
-//			}
-//			break;
-//			case 27:
-//			//#line 299 "lua.stx"
-//			{
-//				ntemp = 0;
-//			}
-//			break;
-//			case 28:
-//			//#line 300 "lua.stx"
-//			{
-//				  if (nlocalvar != yypvt[-3].vInt)
-//				  {
-//					   nlocalvar = yypvt[-3].vInt;
-//				   lua_codeadjust(0);
-//				  }
-//			}
-//					 break;
-//			case 30:
-//			//#line 310 "lua.stx"
-//			{
-//				if (lua_debug)
-//				{
-//					align(Word);
-//					code_byte(SETLINE);
-//					code_word(lua_linenumber);
-//				}
-//			}
-//			break;
-//			case 31:
-//			//#line 312 "lua.stx"
-//			{
-//					   if (lua_debug)
-//					   {
-//						   code_byte(RESET);
-//					   }
-//					   code_byte(RETCODE);
-//					   code_byte(nlocalvar);
-//			}
-//					  break;
-//			case 32:
-//			//#line 319 "lua.stx"
-//			{
-//					  align(Word);
-//				  yyval.pByte = pc;
-//				  code_byte(0); // open space
-//				  code_word(0);
-//			}
-//					 break;
-//			case 33:
-//			//#line 326 "lua.stx"
-//			{
-//				if (yypvt[-0].vInt == 0)
-//				{
-//					lua_codeadjust(ntemp + 1);
-//					incr_ntemp();
-//				}
-//			}
-//			break;
-//			case 34:
-//			//#line 329 "lua.stx"
-//			{
-//				yyval.vInt = yypvt[-1].vInt;
-//			}
-//			break;
-//			case 35:
-//			//#line 330 "lua.stx"
-//			{
-//				code_byte(EQOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 36:
-//			//#line 331 "lua.stx"
-//			{
-//				code_byte(LTOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 37:
-//			//#line 332 "lua.stx"
-//			{
-//				code_byte(LEOP);
-//				code_byte(NOTOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 38:
-//			//#line 333 "lua.stx"
-//			{
-//				code_byte(EQOP);
-//				code_byte(NOTOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 39:
-//			//#line 334 "lua.stx"
-//			{
-//				code_byte(LEOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 40:
-//			//#line 335 "lua.stx"
-//			{
-//				code_byte(LTOP);
-//				code_byte(NOTOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 41:
-//			//#line 336 "lua.stx"
-//			{
-//				code_byte(ADDOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 42:
-//			//#line 337 "lua.stx"
-//			{
-//				code_byte(SUBOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 43:
-//			//#line 338 "lua.stx"
-//			{
-//				code_byte(MULTOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 44:
-//			//#line 339 "lua.stx"
-//			{
-//				code_byte(DIVOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 45:
-//			//#line 340 "lua.stx"
-//			{
-//				code_byte(CONCOP);
-//				yyval.vInt = 1;
-//				ntemp--;
-//			}
-//			break;
-//			case 46:
-//			//#line 341 "lua.stx"
-//			{
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 47:
-//			//#line 342 "lua.stx"
-//			{
-//				code_byte(MINUSOP);
-//				yyval.vInt = 1;
-//			}
-//			break;
-//			case 48:
-//			//#line 344 "lua.stx"
-//			{
-//				  code_byte(PUSHBYTE);
-//				  yyval.pByte = pc;
-//				  code_byte(0);
-//				  incr_ntemp();
-//				  code_byte(CREATEARRAY);
-//			}
-//				 break;
+			case 20:
+				//#line 261 "lua.stx"
+				{
+					{
+						int i;
+						if (yypvt[-0].vInt == 0 || nvarbuffer != ntemp - yypvt[-2].vInt * 2)
+							lua_codeadjust(yypvt[-2].vInt * 2 + nvarbuffer);
+						for (i=nvarbuffer-1; i>=0; i--)
+							lua_codestore(i);
+						if (yypvt[-2].vInt > 1 || (yypvt[-2].vInt == 1 && varbuffer[0] != 0))
+							lua_codeadjust(0);
+					}
+				}
+				break;
+				
+			case 21:
+				//#line 272 "lua.stx"
+				{
+					lua_codeadjust (0);
+				}
+				break;
+
+			case 25:
+				//#line 279 "lua.stx"
+				{
+					{
+						BytePtr elseinit = yypvt[-1].pByte + 2 + 1;
+						if (pc - elseinit == 0)		/* no else */
+						{
+							pc -= 2 + 1;
+							/* if (*(pc-1) == NOP) --pc; */
+							elseinit = pc;
+						}
+						else
+						{
+							yypvt[-1].pByte[0] = (byte)OpCode.JMP;
+							Word tempWord = (Word)(pc - elseinit); yypvt[-1].pByte[+1] = (byte)(tempWord & 0xff); yypvt[-1].pByte[+1+1] = (byte)((tempWord >> 8) & 0xff);
+						}
+						yypvt[-3].pByte[0] = (byte)OpCode.IFFJMP;
+						Word tempWord2 = (Word)(elseinit - (yypvt[-3].pByte + 2 + 1)); yypvt[-3].pByte[+1] = (byte)(tempWord2 & 0xff); yypvt[-3].pByte[+1+1] = (byte)((tempWord2>>8) & 0xff);
+					 }
+				}
+				break;
+
+			case 26:
+				//#line 299 "lua.stx"
+				{
+					yyval.vInt = nlocalvar;
+				}
+				break;
+
+			case 27:
+				//#line 299 "lua.stx"
+				{
+					ntemp = 0;
+				}
+				break;
+
+			case 28:
+				//#line 300 "lua.stx"
+				{
+					if (nlocalvar != yypvt[-3].vInt)
+					{
+						nlocalvar = (byte)yypvt[-3].vInt;
+					   	lua_codeadjust (0);
+					}
+				}
+				break;
+
+			case 30:
+				//#line 310 "lua.stx"
+				{
+					if (lua_debug != 0)
+					{
+						align(2);
+						code_byte((byte)OpCode.SETLINE);
+						code_word((Word)lua_linenumber);
+					}
+				}
+				break;
+
+			case 31:
+				//#line 312 "lua.stx"
+				{
+					if (lua_debug != 0) code_byte((byte)OpCode.RESET);
+					code_byte((byte)OpCode.RETCODE); code_byte(nlocalvar);
+				}
+				break;
+				
+			case 32:
+				//#line 319 "lua.stx"
+				{
+					align(2);
+					yyval.pByte = pc;
+					code_byte(0);		/* open space */
+					code_word (0);
+				}
+				break;
+
+			case 33:
+				//#line 326 "lua.stx"
+				{
+					if (yypvt[-0].vInt == 0) {lua_codeadjust(ntemp + 1); incr_ntemp();}
+				}
+				break;
+				
+			case 34:
+				//#line 329 "lua.stx"
+				{
+					yyval.vInt = yypvt[-1].vInt;
+				}
+				break;
+
+			case 35:
+				//#line 330 "lua.stx"
+				{
+					code_byte((byte)OpCode.EQOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 36:
+				//#line 331 "lua.stx"
+				{
+					code_byte((byte)OpCode.LTOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 37:
+				//#line 332 "lua.stx"
+				{
+					code_byte((byte)OpCode.LEOP); code_byte((byte)OpCode.NOTOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 38:
+				//#line 333 "lua.stx"
+				{
+					code_byte((byte)OpCode.EQOP); code_byte((byte)OpCode.NOTOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 39:
+				//#line 334 "lua.stx"
+				{
+					code_byte((byte)OpCode.LEOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 40:
+				//#line 335 "lua.stx"
+				{
+					code_byte((byte)OpCode.LTOP); code_byte((byte)OpCode.NOTOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 41:
+				//#line 336 "lua.stx"
+				{
+					code_byte((byte)OpCode.ADDOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 42:
+				//#line 337 "lua.stx"
+				{
+					code_byte((byte)OpCode.SUBOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 43:
+				//#line 338 "lua.stx"
+				{
+					code_byte((byte)OpCode.MULTOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+			
+			case 44:
+				//#line 339 "lua.stx"
+				{
+					code_byte((byte)OpCode.DIVOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+
+			case 45:
+				//#line 340 "lua.stx"
+				{
+					code_byte((byte)OpCode.CONCOP); yyval.vInt = 1; ntemp--;
+				}
+				break;
+			
+			case 46:
+				//#line 341 "lua.stx"
+				{
+					yyval.vInt = 1;
+				}
+				break;
+
+			case 47:
+				//#line 342 "lua.stx"
+				{
+					code_byte((byte)OpCode.MINUSOP); yyval.vInt = 1;
+				}
+				break;
+
+			case 48:
+				//#line 344 "lua.stx"
+				{
+					code_byte((byte)OpCode.PUSHBYTE);
+					yyval.pByte = pc; code_byte(0);
+					incr_ntemp();
+					code_byte((byte)OpCode.CREATEARRAY);
+				}
+				break;
+
 //			case 49:
 //			//#line 351 "lua.stx"
 //			{
@@ -1927,97 +1910,100 @@ Console.WriteLine("======================================================");//FI
 //					ntemp -= 2;
 //			}
 //				   break;
-//			case 92:
-//			//#line 486 "lua.stx"
-//			{
-//				   nvarbuffer = 0;
-//					   varbuffer[nvarbuffer] = yypvt[-0].vLong;
-//					   incr_nvarbuffer();
-//				   yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
-//			}
-//				  break;
-//			case 93:
-//			//#line 492 "lua.stx"
-//			{
-//					   varbuffer[nvarbuffer] = yypvt[-0].vLong;
-//					   incr_nvarbuffer();
-//				   yyval.vInt = (yypvt[-0].vLong == 0) ? yypvt[-2].vInt + 1 : yypvt[-2].vInt;
-//			}
-//				  break;
-//			case 94:
-//			//#line 499 "lua.stx"
-//			{
-//				   int local = lua_localname(yypvt[-0].vWord);
-//				   if (local == -1) // global var
-//				   {
-//					yyval.vLong = yypvt[-0].vWord + 1; // return positive value
-//				   }
-//					   else
-//					   {
-//					yyval.vLong = -(local + 1); // return negative value
-//					   }
-//			}
-//				  break;
-//			case 95:
-//			//#line 507 "lua.stx"
-//			{
-//				lua_pushvar(yypvt[-0].vLong);
-//			}
-//			break;
-//			case 96:
-//			//#line 508 "lua.stx"
-//			{
-//				   yyval.vLong = 0; // indexed variable
-//			}
-//				  break;
-//			case 97:
-//			//#line 511 "lua.stx"
-//			{
-//				lua_pushvar(yypvt[-0].vLong);
-//			}
-//			break;
-//			case 98:
-//			//#line 512 "lua.stx"
-//			{
-//				   align(Word);
-//				   code_byte(PUSHSTRING);
-//				   code_word(lua_findconstant(s_name(yypvt[-0].vWord)));
-//				   incr_ntemp();
-//				   yyval.vLong = 0; // indexed variable
-//			}
-//				  break;
-//			case 99:
-//			//#line 520 "lua.stx"
-//			{
-//				localvar[nlocalvar] = yypvt[-1].vWord;
-//				incr_nlocalvar();
-//			}
-//			break;
-//			case 100:
-//			//#line 521 "lua.stx"
-//			{
-//				localvar[nlocalvar] = yypvt[-1].vWord;
-//				incr_nlocalvar();
-//			}
-//			break;
-//			case 101:
-//			//#line 524 "lua.stx"
-//			{
-//				code_byte(PUSHNIL);
-//			}
-//			break;
-//			case 102:
-//			//#line 525 "lua.stx"
-//			{
-//				ntemp = 0;
-//			}
-//			break;
-//			case 104:
-//			//#line 528 "lua.stx"
-//			{
-//				lua_debug = yypvt[-0].vInt;
-//			}
-//			break;
+
+			case 92:
+				//#line 486 "lua.stx"
+				{
+					nvarbuffer = 0;
+					varbuffer[nvarbuffer] = (byte)yypvt[-0].vLong; incr_nvarbuffer();
+					yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
+				}
+				break;
+
+			case 93:
+				//#line 492 "lua.stx"
+				{
+					varbuffer[nvarbuffer] = (byte)yypvt[-0].vLong; incr_nvarbuffer();
+					yyval.vInt = (yypvt[-0].vLong == 0) ? yypvt[-2].vInt + 1 : yypvt[-2].vInt;
+				}
+				break;
+			
+			case 94:
+				//#line 499 "lua.stx"
+				{
+					int local = lua_localname(yypvt[-0].vWord);
+					if (local == -1)	/* global var */
+						yyval.vLong = yypvt[-0].vWord + 1;		/* return positive value */
+					else
+						yyval.vLong = -(local + 1);		/* return negative value */
+				}
+				break;
+
+			case 95:
+				//#line 507 "lua.stx"
+				{
+					lua_pushvar ((int)yypvt[-0].vLong);
+				}
+				break;
+
+			case 96:
+				//#line 508 "lua.stx"
+				{
+					yyval.vLong = 0;		/* indexed variable */
+				}
+				break;
+			
+			case 97:
+				//#line 511 "lua.stx"
+				{
+					lua_pushvar ((int)yypvt[-0].vLong);
+				}
+				break;
+				
+			case 98:
+				//#line 512 "lua.stx"
+				{
+					align(2);
+					code_byte((byte)OpCode.PUSHSTRING);
+					code_word((Word)lua_findconstant(s_name(yypvt[-0].vWord))); incr_ntemp();
+					yyval.vLong = 0;		/* indexed variable */
+				}
+				break;
+
+			case 99:
+				//#line 520 "lua.stx"
+				{
+					localvar[nlocalvar] = yypvt[-1].vWord; incr_nlocalvar();
+				}
+				break;
+				
+			case 100:
+				//#line 521 "lua.stx"
+				{
+					localvar[nlocalvar] = yypvt[-1].vWord; incr_nlocalvar();
+				}
+				break;
+				
+			case 101:
+				//#line 524 "lua.stx"
+				{
+					code_byte((byte)OpCode.PUSHNIL);
+				}
+				break;
+				
+			case 102:
+				//#line 525 "lua.stx"
+				{
+					ntemp = 0;
+				}
+				break;
+				
+			case 104:
+				//#line 528 "lua.stx"
+				{
+					lua_debug = yypvt[-0].vInt;
+				}
+				break;
 			}
 			goto yystack; // reset registers in driver code
 		}
