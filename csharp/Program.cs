@@ -19,6 +19,8 @@ namespace lua1mod
 			
 			// TODO: Implement Functionality Here
 			
+			//Console.WriteLine("atof() = " + KopiLua.Lua.atof("12.34"));
+			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
@@ -655,51 +657,101 @@ namespace KopiLua
 			
 		}
 		
-		public static void sscanf(CharPtr ptr, CharPtr format, ref long arg)
+		public static int fscanf(FILE fp, CharPtr format, params object[] argp)
 		{
-				
+			string str = Console.ReadLine();
+			return sscanf(str, format, argp);
 		}
-		public static void sscanf(CharPtr ptr, CharPtr format, ref float arg)
+		private static int sscanf(CharPtr str, CharPtr fmt, params object[] argp)
 		{
-				
-		}
-		public static int fscanf(FILE fp, CharPtr format, CharPtr str)
-		{
-			return 0;
-		}		
-		public static int fscanf(FILE fp, CharPtr format, ref long str)
-		{
-			return 0;
-		}
-		public static int fscanf(FILE fp, CharPtr format, ref float str)
-		{
-			return 0;
+			int parm_index = 0;
+			int index = 0;
+			while (fmt[index] != 0)
+			{
+				if (fmt[index++]=='%')
+					switch (fmt[index++])
+					{
+						case 's':
+							{
+								argp[parm_index++] = str;
+								break;
+							}
+						case 'c':
+							{
+								argp[parm_index++] = Convert.ToChar(str);
+								break;
+							}
+						case 'd':
+							{
+								argp[parm_index++] = Convert.ToInt32(str);
+								break;
+							}
+						case 'l':
+							{
+								argp[parm_index++] = Convert.ToDouble(str);
+								break;
+							}
+						case 'f':
+							{
+								argp[parm_index++] = Convert.ToDouble(str);
+								break;
+							}
+						//case 'p': //FIXME:
+						//    {
+						//        result += "(pointer)";
+						//        break;
+						//    }
+					}
+			}
+			return parm_index;
 		}
 		
 		
-		
-		public static CharPtr strchr(CharPtr str, char ch)
+		public static CharPtr strchr(CharPtr str, char c)
 		{
+			for (int index = str.index; str.chars[index] != 0; index++)
+				if (str.chars[index] == c)
+					return new CharPtr(str.chars, index);
 			return null;
 		}
 		
-		public static CharPtr strcpy(CharPtr dest, CharPtr src)
+		public static CharPtr strcpy(CharPtr dst, CharPtr src)
 		{
-			return null;
+			int i;
+			for (i = 0; src[i] != '\0'; i++)
+				dst[i] = src[i];
+			dst[i] = '\0';
+			return dst;
 		}
 		
 		public static int puts(CharPtr str)
 		{
+			Console.WriteLine(str.ToString());
 			return 0;
 		}
 		public static int putc(int ch, FILE fp)
 		{
-			return 0;
+			//throw new NotImplementedException();
+			//return 0;
+			if (fp == null)
+			{
+				//FIXME:
+				Console.Write("%c", (char)ch);
+			}
+			return ch;
 		}
 		
-		public static CharPtr strcat(CharPtr desc, CharPtr src)
+		//https://github.com/weimingtom/KopiLuaCompare/blob/1450ff7c6b1885b6e9aa9af9e78dc7fd19678aec/lua-5.1.5/kopilua/luaconf_ex.h.cs
+		public static CharPtr strcat(CharPtr dst, CharPtr src)
 		{
-			return null;
+			int dst_index = 0;
+			while (dst[dst_index] != '\0')
+				dst_index++;
+			int src_index = 0;
+			while (src[src_index] != '\0')
+				dst[dst_index++] = src[src_index++];
+			dst[dst_index++] = '\0';
+			return dst;
 		}
 		
 		//Java
@@ -714,12 +766,13 @@ namespace KopiLua
 		
 		public static double atof(CharPtr nptr)
 		{
-			return 0;
+			return Convert.ToDouble(nptr.ToString());
 		}
 		
 		public static int putchar(int ch)
 		{
-		 	return 0;
+			Console.Write("%c", (char)ch);
+		 	return ch;
 		}
 	}
 }

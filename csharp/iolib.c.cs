@@ -185,17 +185,19 @@ namespace KopiLua
 		   			{
 					case 'i':
 						{
-			 				long l = 0;
-			 				sscanf(s, "%ld", ref l);
-			 				lua_pushnumber(l);
+			 				//long l = 0;
+			 				object[] l = new object[] {(object)(double)0};
+			 				sscanf(s, "%ld", l);
+			 				lua_pushnumber((double)l[0]);
 						}
 						break;
 			
 					case 'f': case 'g': case 'e':
 						{
-			 				float f_ = 0;
-			 				sscanf(s, "%f", ref f_);
-			 				lua_pushnumber(f_);
+			 				//float f_ = 0;
+			 				object[] f_ = new object[] {(object)(float)0};
+			 				sscanf(s, "%f", f_);
+			 				lua_pushnumber((float)f_[0]);
 						}
 						break;
 			
@@ -210,17 +212,19 @@ namespace KopiLua
 			   		{
 					case 'i':
 						{
-				 			long l = 0;
-				 			fscanf(@in, "%ld", ref l);
-				 			lua_pushnumber(l);
+				 			//long l = 0;
+				 			object[] l = { (object)(double)0.0 };
+				 			fscanf(@in, "%ld", l);
+				 			lua_pushnumber((double)l[0]);
 						}
 						break;
 				
 					case 'f': case 'g': case 'e':
 						{
-							 float f = 0;
-							 fscanf (@in, "%f", ref f);
-							 lua_pushnumber(f);
+							 //float f = 0;
+							 object[] f = { (object)(float)0.0 };
+							 fscanf (@in, "%f", f);
+							 lua_pushnumber((float)f[0]);
 						}
 						break;
 				
