@@ -229,7 +229,7 @@ namespace KopiLua
 			   		Node n = list(a,h);
 			   		while (n != null)
 			   		{
-						if (memcmp(n.@ref,r,sizeOf("Object_")) == 0)
+			   			if (n.@ref.isEquals(r))
 						{
 				 			if (n.next == null)
 				 			{

@@ -89,7 +89,7 @@ namespace KopiLua
 		public delegate int Input ();
 		public delegate void Unput (int c);
 		
-		public struct Value //FIXME:struct?class?
+		public class Value //FIXME:struct?class?
 		{
 		 	public Cfunction f;
 			public float n;
@@ -107,6 +107,39 @@ namespace KopiLua
 				this.a = v.a;
 				this.u = v.u;
 			}
+			
+		 	public bool isEquals(Value v)
+		 	{
+		 		if (this.f != null)
+		 		{
+		 			return this.f == v.f;
+		 		}
+		 		if (this.n != 0)
+		 		{
+		 			return this.n == v.n;
+		 		}
+		 		if (this.s != null)
+		 		{
+		 			return this.s == v.s;
+		 		}
+		 		if (this.b != null)
+		 		{
+		 			return this.b == v.b;
+		 		}
+		 		if (this.a != null)
+		 		{
+		 			return this.a == v.a;
+		 		}
+		 		if (this.u != null)
+		 		{
+		 			return this.u == v.u;
+		 		}
+		 		if (this == v)
+		 		{
+		 			return true;
+		 		}
+		 		return false;
+		 	}				
 		}
 
 		public class Object_
@@ -118,6 +151,11 @@ namespace KopiLua
 		 	{
 		 		this.tag = obj.tag;
 		 		this.value.set(obj.value);
+		 	}
+		 	
+		 	public bool isEquals(Object_ obj)
+		 	{
+		 		return this.tag == obj.tag && this.value.isEquals(obj.value);
 		 	}
 		}
 

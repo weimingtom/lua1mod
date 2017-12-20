@@ -456,24 +456,6 @@ namespace KopiLua
 		{
 			
 		}
-
-		public static int memcmp(object ptr1, object ptr2, string type) 
-		{
-			return 0; //FIXME:
-		}
-		public static int memcmp(CharPtr ptr1, CharPtr ptr2, uint size) { return memcmp(ptr1, ptr2, (int)size); }
-		public static int memcmp(CharPtr ptr1, CharPtr ptr2, int size)
-		{
-			for (int i=0; i<size; i++)
-				if (ptr1[i]!=ptr2[i])
-				{
-					if (ptr1[i]<ptr2[i])
-						return -1;
-					else
-						return 1;
-				}
-			return 0;
-		}
 		
 		public static BytePtr memcpy(BytePtr dest, BytePtr src, uint n)
 		{
