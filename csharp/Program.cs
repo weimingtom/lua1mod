@@ -7,7 +7,10 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.IO;
 using System.Diagnostics;
+
+using AT.MIN;
 
 namespace lua1mod
 {
@@ -507,76 +510,152 @@ namespace KopiLua
 		
 		public class FILE
 		{
+			public Stream stream;
 			
+			public FILE()
+			{
+				
+			}
+			
+			public FILE(Stream stream)
+			{
+				this.stream = stream;
+			}
 		}
 		
 		public static int fgetc(FILE fp)
 		{
-			return 0;
+			return fp.stream.ReadByte();
 		}
 		public static void ungetc(int c, FILE fp)
 		{
-			
+			if (fp.stream.Position > 0)
+				fp.stream.Seek(-1, SeekOrigin.Current);
 		}
 		
 		public static int EOF = -1;
 		
 		public static FILE fopen(CharPtr filename, CharPtr mode)
 		{
-			return null;
+			FileStream stream = null;
+			string str = filename.ToString();			
+			FileMode filemode = FileMode.Open;
+			FileAccess fileaccess = (FileAccess)0;			
+			for (int i=0; mode[i] != '\0'; i++)
+				switch (mode[i])
+				{
+					case 'r': 
+						fileaccess = fileaccess | FileAccess.Read;
+						if (!File.Exists(str))
+							return null;
+						break;
+
+					case 'w':
+						filemode = FileMode.Create;
+						fileaccess = fileaccess | FileAccess.Write;
+						break;
+				}
+			try
+			{
+				stream = new FileStream(str, filemode, fileaccess);
+			}
+			catch
+			{
+				stream = null;
+			}			
+			
+			FILE ret = new FILE();
+			ret.stream = stream;
+			return ret;
 		}
 		
 		public static void fclose(FILE fp)
 		{
-			
+			try
+			{
+				fp.stream.Flush();
+				fp.stream.Close();
+			}
+			catch { }
 		}
 		
-		public static FILE stdin = null;
-		public static FILE stdout = null;
-		public static FILE stderr = null;
+		public static FILE stdin = new FILE(Console.OpenStandardInput());
+		public static FILE stdout = new FILE(Console.OpenStandardOutput());
+		public static FILE stderr = new FILE(Console.OpenStandardError());
 		
 		public static int isspace(int c)
 		{
-			return 0;
+			return ((c==' ') || (c>=(char)0x09 && c<=(char)0x0D)) ? 1 : 0;
 		}
 		public static int isdigit(int c)
 		{
-			return 0;
-		}
-	
-		
-		public static double strtod(string str, string str2)
-		{
-			return 0;
+			return Char.IsDigit((char)c) ? 1 : 0;
 		}
 		
 		public static char tolower(char c)
 		{
-			return '_';
+			return Char.ToLower(c);
 		}
 		
 		public static char toupper(char c)
 		{
-			return '_';
+			return Char.ToUpper(c);
 		}
 
-		public static int fprintf(FILE fp, string format, params object[] args)
+		public static int fprintf(FILE fp, string str, params object[] argv)
 		{
-			return 0;
+			string result = Tools.sprintf(str.ToString(), argv);
+			char[] chars = result.ToCharArray();
+			byte[] bytes = new byte[chars.Length];
+			for (int i=0; i<chars.Length; i++)
+				bytes[i] = (byte)chars[i];
+			fp.stream.Write(bytes, 0, bytes.Length);
+			return 1; //Returns the number of characters printed
 		}
-		public static int printf(string format, params object[] args)
+		public static int printf(string str, params object[] argv)
 		{
-			return 0;
+			Tools.printf(str.ToString(), argv);
+			return 1; //Returns the number of characters printed
 		}
+		public static void sprintf(CharPtr buffer, CharPtr str, params object[] argv)
+		{
+			string temp = Tools.sprintf(str.ToString(), argv);
+			strcpy(buffer, temp);
+		}		
 		
 		public static void system(CharPtr str)
 		{
-			
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            processStartInfo.CreateNoWindow = true;
+            processStartInfo.UseShellExecute = false;
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.RedirectStandardError = true;
+            processStartInfo.FileName = "cmd";
+            processStartInfo.Arguments = "/c ";
+            processStartInfo.Arguments += str.ToString();
+
+            Process.Start(processStartInfo).WaitForExit();
 		}
 		
 		public static int remove(CharPtr filename)
 		{
-			return 0;
+			try 
+			{
+				if (File.Exists(filename.ToString()))
+	            {  
+					File.Delete(filename.ToString());
+					return 0;
+				}
+				else
+				{
+					return -1;
+				}
+			} 
+			catch
+			{
+				return -1;
+			}
 		}
 		
 		public const int BUFSIZ = 8192; //FIXME:???
@@ -600,7 +679,6 @@ namespace KopiLua
 		{
 			return Math.Asin(x);
 		}
-		
 		
 		public static double acos(double x)
 		{
@@ -632,29 +710,109 @@ namespace KopiLua
 			return Math.Pow(x, y);
 		}
 		
-		public static CharPtr strstr(CharPtr str1, CharPtr str2)
+		public static CharPtr strstr(CharPtr str, CharPtr substr)
 		{
-			return null;
+			int index = str.ToString().IndexOf(substr.ToString());
+			if (index < 0)
+				return null;
+			return new CharPtr(str + index);
 		}
 		
 		public static uint strlen(CharPtr str)
 		{
-			return 0;
+			uint index = 0;
+			while (str[index] != '\0')
+				index++;
+			return index;
 		}
 		
 		public static CharPtr strdup(CharPtr s)
 		{
-			return null;
+			int index = s.index;
+			char[] chars = new Char[s.chars.Length];
+			for (int i = 0; i < chars.Length; ++i) 
+				chars[i] = s.chars[i];
+			return new CharPtr(chars, index);
 		}
 		
-		public static double strtod(CharPtr nptr, ref CharPtr endptr) 
+		//https://github.com/weimingtom/KopiLuaCompare/blob/1450ff7c6b1885b6e9aa9af9e78dc7fd19678aec/lua-5.1.5/kopilua/luaconf_ex.h.cs
+		//from strtoul
+		public static double strtod(CharPtr s, ref CharPtr end) 
 		{
-			return 0;
-		}
-		
-		public static void sprintf(CharPtr ptr, CharPtr format, params object[] args)
-		{
-			
+			int base_ = 10;
+			try
+			{
+				end = new CharPtr(s.chars, s.index);
+
+				// skip over any leading whitespace
+				while (end[0] == ' ')
+					end = end.next();
+
+				// ignore any leading 0x
+				if ((end[0] == '0') && (end[1] == 'x'))
+					end = end.next().next();
+				else if ((end[0] == '0') && (end[1] == 'X'))
+					end = end.next().next();
+
+				// do we have a leading + or - sign?
+				bool negate = false;
+				if (end[0] == '+')
+					end = end.next();
+				else if (end[0] == '-')
+				{
+					negate = true;
+					end = end.next();
+				}
+
+				// loop through all chars
+				bool invalid = false;
+				bool had_digits = false;
+				ulong result = 0;
+				while (true)
+				{
+					// get this char
+					char ch = end[0];					
+
+					// which digit is this?
+					int this_digit = 0;
+					if (Char.IsDigit(ch)) //(isdigit(ch))
+						this_digit = ch - '0';
+					else if (Char.IsLetter(ch)) //(isalpha(ch))
+						this_digit = tolower(ch) - 'a' + 10;
+					else
+						break;
+
+					// is this digit valid?
+					if (this_digit >= base_)
+						invalid = true;
+					else
+					{
+						had_digits = true;
+						result = result * (ulong)base_ + (ulong)this_digit;
+					}
+
+					end = end.next();
+				}
+
+				// were any of the digits invalid?
+				if (invalid || (!had_digits))
+				{
+					end = s;
+					return System.UInt64.MaxValue;
+				}
+
+				// if the value was a negative then negate it here
+				if (negate)
+					result = (ulong)-(long)result;
+
+				// ok, we're done
+				return (ulong)result;
+			}
+			catch
+			{
+				end = s;
+				return 0;
+			}
 		}
 		
 		public static int fscanf(FILE fp, CharPtr format, params object[] argp)

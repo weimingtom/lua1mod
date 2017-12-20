@@ -62,6 +62,7 @@
     <Compile Include="strlib.c.cs" />
     <Compile Include="table.c.cs" />
     <Compile Include="table.h.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="utils\Arrays.cs" />
     <Compile Include="utils\StringFunctions.cs" />
     <Compile Include="y_tab.c.cs" />
