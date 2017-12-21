@@ -20,7 +20,7 @@ namespace lua1mod
 			// TODO: Implement Functionality Here
 			
 			//Console.WriteLine("atof() = " + KopiLua.Lua.atof("12.34"));
-			Lua.main(0, new Lua.CharPtr[0]);
+			Lua.main(2, new Lua.CharPtr[] {"lua", "print.lua"});
 			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
