@@ -15,9 +15,18 @@ namespace KopiLua
 		private static bool strneq(CharPtr s1, CharPtr s2) {return strcmp(s1,s2)!=0;}
 		
 		//#define new(s) ((s *)malloc(sizeof(s)))
-		private static object new_(string s) { return malloc(sizeOf(s)); }
+		//private static object new_(string s) { return malloc(sizeOf(s)); }
+		private static Hash new_Hash() { return new Hash(); }
+		private static Node new_Node() { return new Node(); }
 		//#define newvector(n,s) ((s *)calloc(n,sizeof(s)))
-		private static object newvector(uint n, string s) { return calloc(n, sizeOf("Node")); }
+		//private static object newvector(uint n, string s) { return calloc(n, sizeOf("Node")); }
+		private static Node[] newvector_Node(uint n)
+		{
+			Node[] ret = new Node[n]; 
+			for (int i = 0; i < n; ++i)
+				ret[i] = new Node();
+			return ret;
+		}
 		
 		//#define nhash(t) ((t)->nhash)
 		private static int nhash(Hash t) { return (int)t.nhash; }
@@ -100,7 +109,7 @@ namespace KopiLua
 		*/
 		public static Hash lua_hashcreate(uint nhash_)
 		{
-			Hash t = (Hash)new_ ("Hash");
+			Hash t = (Hash)new_Hash();//new_ ("Hash");
 			if (t == null)
 			{
 				lua_error ("not enough memory");
@@ -108,7 +117,7 @@ namespace KopiLua
 			}
 			nhash(t, nhash_);
 			markarray(t, (char)0);
-			nodelist(t, (Node[])newvector(nhash_, "Node"));
+			nodelist(t, newvector_Node(nhash_));//(Node[])newvector(nhash_, "Node"));
 			if (nodelist(t) == null)
 			{
 				lua_error ("not enough memory");
@@ -144,7 +153,7 @@ namespace KopiLua
 			n = present(t, @ref, h);
 			if (n == null)
 			{
-				n = (Node) new_("Node");
+				n = new_Node();//(Node) new_("Node");
 			  	if (n == null)
 			  	{
 			   		lua_error ("not enough memory");

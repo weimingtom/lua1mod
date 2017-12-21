@@ -168,7 +168,7 @@ namespace KopiLua
 		*/
 		internal static CharPtr lua_strconc(CharPtr l, CharPtr r)
 		{
-			CharPtr s = (CharPtr)calloc (strlen(l)+strlen(r)+2, sizeOf("char"));
+			CharPtr s = (CharPtr)calloc_char (strlen(l)+strlen(r)+2);
 		 	if (s == null)
 		 	{
 		  		lua_error ("not enough memory");
@@ -184,7 +184,7 @@ namespace KopiLua
 		*/
 		public static CharPtr lua_strdup(CharPtr l)
 		{
-			CharPtr s = (CharPtr)calloc (strlen(l)+2, sizeOf("char"));
+			CharPtr s = (CharPtr)calloc_char (strlen(l)+2);
 		 	if (s == null)
 		 	{
 		  		lua_error ("not enough memory");

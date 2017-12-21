@@ -23,6 +23,7 @@ namespace lua1mod
 			// TODO: Implement Functionality Here
 			
 			//Console.WriteLine("atof() = " + KopiLua.Lua.atof("12.34"));
+			KopiLua.Lua.main(0, new KopiLua.Lua.CharPtr[0]);
 			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
@@ -414,42 +415,45 @@ namespace KopiLua
 					result += chars[i];
 				return result;
 			}
-		}		
+		}	
 		
-		public static string sizeOf(string type) 
+		public static YYSTYPE[] realloc_YYSTYPE(YYSTYPE[] obj, uint size)
 		{
-			return type;
-		}
-		
-		public static object malloc(string type)
-		{
-			if (type.Equals("Hash"))
+			YYSTYPE[] ret = new YYSTYPE[size];
+			for (int i = 0; i < obj.Length; ++i)
 			{
-				return new Hash();
-			}
-			else if (type.Equals("Node"))
-			{
-				return new Node();
-			}
-			return null;
-		}
-		public static object realloc(object obj, uint size, string type)
-		{
-			return null;
-		}
-		
-		public static object calloc(uint n, string type) //FIXME:some places are replaced with new, not with this method
-		{
-			if (type.Equals("Node"))
-		    {
-				Node[] result = new Node[n];
-				for (int i = 0; i < n; ++i)
+				if (i < obj.Length)
 				{
-					result[i] = new Node();
+					ret[i] = obj[i];
 				}
-				return result;
-		    }
-			return null;
+				else
+				{
+					ret[i] = new YYSTYPE();
+				}
+			}
+			return ret;
+		}
+
+		public static int[] realloc_int(int[] obj, uint size)
+		{
+			int[] ret = new int[size];
+			for (int i = 0; i < obj.Length; ++i)
+			{
+				if (i < obj.Length)
+				{
+					ret[i] = obj[i];
+				}
+				else
+				{
+					ret[i] = (int)0;
+				}
+			}
+			return ret;
+		}
+		
+		public static CharPtr calloc_char(uint n) 
+		{
+			return new CharPtr(new char[n]);
 		}
 		
 		public static void free(object obj)
@@ -457,14 +461,11 @@ namespace KopiLua
 			
 		}
 		
-		public static BytePtr memcpy(BytePtr dest, BytePtr src, uint n)
+		public static BytePtr memcpy(BytePtr ptr1, BytePtr ptr2, uint size)
 		{
-			return null;
-		}
-		
-		public static CharPtr objToCharPtr(object obj)
-		{
-			return null;
+			for (int i = 0; i < size; i++)
+				ptr1[i] = ptr2[i];
+			return ptr1;
 		}
 		
 		public static int strcmp(CharPtr s1, CharPtr s2)

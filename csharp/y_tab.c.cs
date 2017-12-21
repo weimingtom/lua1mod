@@ -960,10 +960,10 @@ yy_stack:
 				int yypv_index = (yy_pv - yyv);
 				int yypvt_index = (yypvt - yyv);
 				yymaxdepth += YYMAXDEPTH;
-				yyv = (YYSTYPE[])realloc(yyv,
-					yymaxdepth, sizeOf("YYSTYPE"));
-				yys = (int[])realloc(yys,
-					yymaxdepth, sizeOf("int"));
+				yyv = realloc_YYSTYPE(yyv,
+					yymaxdepth);
+				yys = realloc_int(yys,
+					yymaxdepth);
 				if (yyv==null || yys==null)
 				{
 					yyerror( "yacc stack overflow" );
