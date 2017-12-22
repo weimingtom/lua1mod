@@ -33,11 +33,17 @@ static void execstr (void)
 int main (int argc, char *argv[])
 {
  int i;
+#if 0
  if (argc < 2)
  {
   puts ("usage: lua filename [functionnames]");
   return;
  }
+#else
+ char *argv_[] = {"lua.exe", "print.lua"};
+ argc = 2;
+ argv = argv_;
+#endif
  lua_register ("callfunc", callfunc);
  lua_register ("execstr", execstr);
  lua_register ("test", test);
