@@ -79,10 +79,10 @@ namespace KopiLua
 			{
 				this.index++;
 			}
-			public yysvfRef dec()
+			public yysvfRef dec() //suffix--
 			{
 				this.index--;
-				return this;
+				return new yysvfRef(this.index + 1, this.arr);
 			}
 			public bool isLargerThan(yysvf[] arr)
 			{
@@ -871,7 +871,12 @@ namespace KopiLua
 				lsp = new yysvfRef(yylstate, 0);
 				yyestate = new yysvfArr(yybgin); yystate = new yysvfArr(yybgin);
 				if (yyprevious==YYNEWLINE) yystate.inc();
-				for (;;){fprintf(stdout,"state %d\n",yystate.minus(yysvec)-1);
+				for (;;){
+					fprintf(stdout,"state %d\n",yystate.minus(yysvec)-1);
+					if (yystate.minus(yysvec)-1 == 2)
+					{
+						Console.WriteLine("=============");
+					}
 #if LEXDEBUG
 				if(debug!=0)fprintf(yyout,"state %d\n",yystate.minus(yysvec)-1);
 #endif

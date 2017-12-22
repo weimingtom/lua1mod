@@ -775,7 +775,12 @@ yylook(){
 		lsp = yylstate;
 		yyestate = yystate = yybgin;
 		if (yyprevious==YYNEWLINE) yystate++;
-		for (;;){fprintf(stdout,"state %d\n",yystate-yysvec-1);
+		for (;;){
+			fprintf(stdout,"state %d\n",yystate-yysvec-1);
+			if (yystate-yysvec-1 == 2)
+			{
+				fprintf(stdout, "=================\n");
+			}
 # ifdef LEXDEBUG
 			if(debug)fprintf(yyout,"state %d\n",yystate-yysvec-1);
 # endif
