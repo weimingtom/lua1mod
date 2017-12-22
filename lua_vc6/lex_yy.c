@@ -775,7 +775,7 @@ yylook(){
 		lsp = yylstate;
 		yyestate = yystate = yybgin;
 		if (yyprevious==YYNEWLINE) yystate++;
-		for (;;){
+		for (;;){fprintf(stdout,"state %d\n",yystate-yysvec-1);
 # ifdef LEXDEBUG
 			if(debug)fprintf(yyout,"state %d\n",yystate-yysvec-1);
 # endif
@@ -818,7 +818,7 @@ yylook(){
 					*lsp++ = yystate = yyt->advance+yysvec;
 					goto contin;
 					}
-				printf("xxx %d = %d = %d\n", sizeof(yymatch), (int)yymatch[yych], (int)yymatch[8]);
+				//printf("xxx %d = %d = %d\n", sizeof(yymatch), (int)yymatch[yych], (int)yymatch[8]);
 				yyt = yyr + YYU(yymatch[yych]);
 # ifdef LEXDEBUG
 				if(debug){

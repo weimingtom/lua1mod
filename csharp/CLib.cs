@@ -853,9 +853,7 @@ namespace KopiLua
 		}
 		public static int putc(int ch, FILE fp)
 		{
-			//throw new NotImplementedException();
-			//return 0;
-			if (fp == null)
+			if (fp == null) //FIXME: maybe no output in fact
 			{
 				//FIXME:
 				printf("%c", (char)ch);

@@ -152,7 +152,14 @@ namespace KopiLua
 			public void set(yysvf yyref)
 			{
 				this.yystoff = new yyworkRef(yyref.yystoff);
-				this.yyother = new yysvfRef(yyref.yyother);
+				if (yyref.yyother != null)
+				{
+					this.yyother = new yysvfRef(yyref.yyother);
+				}
+				else
+				{
+					this.yyother = null;
+				}
 				this.yystops = new IntegerPtr(yyref.yystops);
 			}
 		}		
@@ -496,7 +503,7 @@ namespace KopiLua
 			{
 				if (this.arr == arr)
 				{
-					return 0 - this.index;
+					return this.index - 0;
 				}
 				throw new Exception("minus");
 			}
@@ -864,7 +871,7 @@ namespace KopiLua
 				lsp = new yysvfRef(yylstate, 0);
 				yyestate = new yysvfArr(yybgin); yystate = new yysvfArr(yybgin);
 				if (yyprevious==YYNEWLINE) yystate.inc();
-				for (;;){
+				for (;;){fprintf(stdout,"state %d\n",yystate.minus(yysvec)-1);
 #if LEXDEBUG
 				if(debug!=0)fprintf(yyout,"state %d\n",yystate.minus(yysvec)-1);
 #endif

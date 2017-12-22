@@ -74,6 +74,7 @@
     <None Include="print.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="utils" />
