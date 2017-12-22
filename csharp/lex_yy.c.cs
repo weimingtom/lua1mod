@@ -39,26 +39,38 @@ namespace KopiLua
 		
 		public class yysvfRef 
 		{
-			private yysvf[] arr;
+			public yysvf[] arr;
 			private int index;
 			
-			public yysvfRef()
-			{
-				
-			}
+//			public yysvfRef()
+//			{
+//				
+//			}
 			public yysvfRef(int index, yysvf[] arr)
 			{
+//				if (arr == null)
+//				{
+//					Console.WriteLine("=============");
+//				}
 				this.arr = arr;
 				this.index = index;
 			}			
 			public yysvfRef(yysvf[] arr, int index)
 			{
+//				if (arr == null)
+//				{
+//					Console.WriteLine("=============");
+//				}
 				this.arr = arr;
 				this.index = index;
 			}
 
 			public yysvfRef(yysvfRef yref)
 			{
+//				if (yref.arr == null)
+//				{
+//					Console.WriteLine("=============");
+//				}
 				this.arr = yref.arr;
 				this.index = yref.index;
 			}
@@ -100,7 +112,15 @@ namespace KopiLua
 			}
 			public void set(yysvfRef v)
 			{
-				arr[index + 0].set(v.get());
+				if (arr[index + 0] == null)
+				{
+					arr[index + 0] = new yysvf(null, null, null);
+					arr[index + 0].set(v.get());
+				}
+				else
+				{
+					arr[index + 0].set(v.get());
+				}
 			}
 			public void set(int offset, yysvfRef v)
 			{
@@ -483,7 +503,14 @@ namespace KopiLua
 			
 			public yywork get()
 			{
-				return this.arr[this.index];
+				if (this.index >= 0 && this.index < this.arr.Length)
+				{
+					return this.arr[this.index];
+				}
+				else
+				{
+					return new yywork(0, 0);
+				}
 			}
 			public yywork get(int offset)
 			{
@@ -628,7 +655,7 @@ namespace KopiLua
 		}
 		private static yyworkRef yycrankZero() 
 		{
-			return new yyworkRef();
+			return null;//new yyworkRef();
 		}
 		private static yysvfRef yysvecZero()
 		{
@@ -638,124 +665,137 @@ namespace KopiLua
 		{
 			return null;
 		}
-		public static yysvf[] yysvec = new yysvf[] {
-			new yysvf(yycrankZero(), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(-1), yysvecZero(), yyvstopOffset(1)),
-			new yysvf(yycrankOffset(-28), yysvecOffset(1), yyvstopOffset(3)),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(5)),
-			new yysvf(yycrankOffset(4), yysvecZero(), yyvstopOffset(7)),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(10)),
-			new yysvf(yycrankOffset(-11), yysvecZero(), yyvstopOffset(12)),
-			new yysvf(yycrankOffset(-17), yysvecZero(), yyvstopOffset(14)),
-			new yysvf(yycrankOffset(7), yysvecZero(), yyvstopOffset(16)),
-			new yysvf(yycrankOffset(107), yysvecZero(), yyvstopOffset(18)),
-			new yysvf(yycrankOffset(119), yysvecZero(), yyvstopOffset(20)),
-			new yysvf(yycrankOffset(6), yysvecZero(), yyvstopOffset(23)),
-			new yysvf(yycrankOffset(7), yysvecZero(), yyvstopOffset(25)),
-			new yysvf(yycrankOffset(158), yysvecZero(), yyvstopOffset(27)),
-			new yysvf(yycrankOffset(4), yysvecOffset(13), yyvstopOffset(30)),
-			new yysvf(yycrankOffset(5), yysvecOffset(13), yyvstopOffset(33)),
-			new yysvf(yycrankOffset(11), yysvecOffset(13), yyvstopOffset(36)),
-			new yysvf(yycrankOffset(5), yysvecOffset(13), yyvstopOffset(39)),
-			new yysvf(yycrankOffset(5), yysvecOffset(13), yyvstopOffset(42)),
-			new yysvf(yycrankOffset(12), yysvecOffset(13), yyvstopOffset(45)),
-			new yysvf(yycrankOffset(21), yysvecOffset(13), yyvstopOffset(48)),
-			new yysvf(yycrankOffset(10), yysvecOffset(13), yyvstopOffset(51)),
-			new yysvf(yycrankOffset(4), yysvecOffset(13), yyvstopOffset(54)),
-			new yysvf(yycrankOffset(4), yysvecOffset(13), yyvstopOffset(57)),
-			new yysvf(yycrankOffset(21), yysvecOffset(13), yyvstopOffset(60)),
-			new yysvf(yycrankOffset(9), yysvecOffset(13), yyvstopOffset(63)),
-			new yysvf(yycrankOffset(9), yysvecZero(), yyvstopOffset(66)),
-			new yysvf(yycrankOffset(40), yysvecZero(), yyvstopOffset(68)),
-			new yysvf(yycrankOffset(0), yysvecOffset(4), yyvstopOffset(70)),
-			new yysvf(yycrankOffset(0), yysvecOffset(6), yyvstopZero()),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(72)),
-			new yysvf(yycrankOffset(0), yysvecOffset(7), yyvstopZero()),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(74)),
-			new yysvf(yycrankOffset(-280), yysvecZero(), yyvstopOffset(76)),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(78)),
-			new yysvf(yycrankOffset(249), yysvecZero(), yyvstopOffset(80)),
-			new yysvf(yycrankOffset(285), yysvecZero(), yyvstopOffset(82)),
-			new yysvf(yycrankOffset(0), yysvecOffset(10), yyvstopOffset(84)),
-			new yysvf(yycrankOffset(146), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(86)),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(88)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(90)),
-			new yysvf(yycrankOffset(10), yysvecOffset(13), yyvstopOffset(92)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(94)),
-			new yysvf(yycrankOffset(19), yysvecOffset(13), yyvstopOffset(97)),
-			new yysvf(yycrankOffset(35), yysvecOffset(13), yyvstopOffset(99)),
-			new yysvf(yycrankOffset(27), yysvecOffset(13), yyvstopOffset(101)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(103)),
-			new yysvf(yycrankOffset(42), yysvecOffset(13), yyvstopOffset(106)),
-			new yysvf(yycrankOffset(35), yysvecOffset(13), yyvstopOffset(108)),
-			new yysvf(yycrankOffset(30), yysvecOffset(13), yyvstopOffset(110)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(112)),
-			new yysvf(yycrankOffset(36), yysvecOffset(13), yyvstopOffset(115)),
-			new yysvf(yycrankOffset(48), yysvecOffset(13), yyvstopOffset(117)),
-			new yysvf(yycrankOffset(35), yysvecOffset(13), yyvstopOffset(119)),
-			new yysvf(yycrankOffset(61), yysvecOffset(13), yyvstopOffset(121)),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(123)),
-			new yysvf(yycrankOffset(76), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(67), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(312), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(183), yysvecOffset(36), yyvstopOffset(125)),
-			new yysvf(yycrankOffset(322), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(0), yysvecOffset(61), yyvstopOffset(128)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(130)),
-			new yysvf(yycrankOffset(78), yysvecOffset(13), yyvstopOffset(133)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(135)),
-			new yysvf(yycrankOffset(81), yysvecOffset(13), yyvstopOffset(138)),
-			new yysvf(yycrankOffset(84), yysvecOffset(13), yyvstopOffset(140)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(142)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(145)),
-			new yysvf(yycrankOffset(81), yysvecOffset(13), yyvstopOffset(148)),
-			new yysvf(yycrankOffset(66), yysvecOffset(13), yyvstopOffset(150)),
-			new yysvf(yycrankOffset(74), yysvecOffset(13), yyvstopOffset(152)),
-			new yysvf(yycrankOffset(80), yysvecOffset(13), yyvstopOffset(154)),	
-			new yysvf(yycrankOffset(78), yysvecOffset(13), yyvstopOffset(156)),
-			new yysvf(yycrankOffset(94), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(93), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(341), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(0), yysvecOffset(77), yyvstopOffset(158)),
-			new yysvf(yycrankOffset(356), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(99), yysvecOffset(13), yyvstopOffset(160)),
-			new yysvf(yycrankOffset(89), yysvecOffset(13), yyvstopOffset(163)),
-			new yysvf(yycrankOffset(108), yysvecOffset(13), yyvstopOffset(165)),
-			new yysvf(yycrankOffset(120), yysvecOffset(13), yyvstopOffset(167)),
-			new yysvf(yycrankOffset(104), yysvecOffset(13), yyvstopOffset(169)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(171)),
-			new yysvf(yycrankOffset(113), yysvecOffset(13), yyvstopOffset(174)),
-			new yysvf(yycrankOffset(148), yysvecOffset(13), yyvstopOffset(176)),
-			new yysvf(yycrankOffset(133), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(181), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(366), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(0), yysvecOffset(90), yyvstopOffset(178)),
-			new yysvf(yycrankOffset(183), yysvecOffset(13), yyvstopOffset(181)),
-			new yysvf(yycrankOffset(182), yysvecOffset(13), yyvstopOffset(183)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(185)),	
-			new yysvf(yycrankOffset(172), yysvecOffset(13), yyvstopOffset(189)),
-			new yysvf(yycrankOffset(181), yysvecOffset(13), yyvstopOffset(191)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(193)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(196)),
-			new yysvf(yycrankOffset(189), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(195), yysvecZero(), yyvstopZero()),	
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(199)),
-			new yysvf(yycrankOffset(183), yysvecOffset(13), yyvstopOffset(202)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(204)),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(207)),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(210)),
-			new yysvf(yycrankOffset(178), yysvecZero(), yyvstopZero()),	
-			new yysvf(yycrankOffset(186), yysvecOffset(13), yyvstopOffset(212)),
-			new yysvf(yycrankOffset(204), yysvecZero(), yyvstopZero()),
-			new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(214)),
-			new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(217)),
-			new yysvf(yycrankZero(), yysvecZero(), yyvstopZero()),			
-		};
+		public static yysvf[] yysvec = _yysvec_init();
+		public static yysvf[] _yysvec_init()
+		{
+			yysvf[] result = new yysvf[] {
+				new yysvf(yycrankZero(), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(-1), yysvecZero(), yyvstopOffset(1)),
+				new yysvf(yycrankOffset(-28), yysvecOffset(1), yyvstopOffset(3)),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(5)),
+				new yysvf(yycrankOffset(4), yysvecZero(), yyvstopOffset(7)),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(10)),
+				new yysvf(yycrankOffset(-11), yysvecZero(), yyvstopOffset(12)),
+				new yysvf(yycrankOffset(-17), yysvecZero(), yyvstopOffset(14)),
+				new yysvf(yycrankOffset(7), yysvecZero(), yyvstopOffset(16)),
+				new yysvf(yycrankOffset(107), yysvecZero(), yyvstopOffset(18)),
+				new yysvf(yycrankOffset(119), yysvecZero(), yyvstopOffset(20)),
+				new yysvf(yycrankOffset(6), yysvecZero(), yyvstopOffset(23)),
+				new yysvf(yycrankOffset(7), yysvecZero(), yyvstopOffset(25)),
+				new yysvf(yycrankOffset(158), yysvecZero(), yyvstopOffset(27)),
+				new yysvf(yycrankOffset(4), yysvecOffset(13), yyvstopOffset(30)),
+				new yysvf(yycrankOffset(5), yysvecOffset(13), yyvstopOffset(33)),
+				new yysvf(yycrankOffset(11), yysvecOffset(13), yyvstopOffset(36)),
+				new yysvf(yycrankOffset(5), yysvecOffset(13), yyvstopOffset(39)),
+				new yysvf(yycrankOffset(5), yysvecOffset(13), yyvstopOffset(42)),
+				new yysvf(yycrankOffset(12), yysvecOffset(13), yyvstopOffset(45)),
+				new yysvf(yycrankOffset(21), yysvecOffset(13), yyvstopOffset(48)),
+				new yysvf(yycrankOffset(10), yysvecOffset(13), yyvstopOffset(51)),
+				new yysvf(yycrankOffset(4), yysvecOffset(13), yyvstopOffset(54)),
+				new yysvf(yycrankOffset(4), yysvecOffset(13), yyvstopOffset(57)),
+				new yysvf(yycrankOffset(21), yysvecOffset(13), yyvstopOffset(60)),
+				new yysvf(yycrankOffset(9), yysvecOffset(13), yyvstopOffset(63)),
+				new yysvf(yycrankOffset(9), yysvecZero(), yyvstopOffset(66)),
+				new yysvf(yycrankOffset(40), yysvecZero(), yyvstopOffset(68)),
+				new yysvf(yycrankOffset(0), yysvecOffset(4), yyvstopOffset(70)),
+				new yysvf(yycrankOffset(0), yysvecOffset(6), yyvstopZero()),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(72)),
+				new yysvf(yycrankOffset(0), yysvecOffset(7), yyvstopZero()),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(74)),
+				new yysvf(yycrankOffset(-280), yysvecZero(), yyvstopOffset(76)),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(78)),
+				new yysvf(yycrankOffset(249), yysvecZero(), yyvstopOffset(80)),
+				new yysvf(yycrankOffset(285), yysvecZero(), yyvstopOffset(82)),
+				new yysvf(yycrankOffset(0), yysvecOffset(10), yyvstopOffset(84)),
+				new yysvf(yycrankOffset(146), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(86)),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(88)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(90)),
+				new yysvf(yycrankOffset(10), yysvecOffset(13), yyvstopOffset(92)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(94)),
+				new yysvf(yycrankOffset(19), yysvecOffset(13), yyvstopOffset(97)),
+				new yysvf(yycrankOffset(35), yysvecOffset(13), yyvstopOffset(99)),
+				new yysvf(yycrankOffset(27), yysvecOffset(13), yyvstopOffset(101)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(103)),
+				new yysvf(yycrankOffset(42), yysvecOffset(13), yyvstopOffset(106)),
+				new yysvf(yycrankOffset(35), yysvecOffset(13), yyvstopOffset(108)),
+				new yysvf(yycrankOffset(30), yysvecOffset(13), yyvstopOffset(110)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(112)),
+				new yysvf(yycrankOffset(36), yysvecOffset(13), yyvstopOffset(115)),
+				new yysvf(yycrankOffset(48), yysvecOffset(13), yyvstopOffset(117)),
+				new yysvf(yycrankOffset(35), yysvecOffset(13), yyvstopOffset(119)),
+				new yysvf(yycrankOffset(61), yysvecOffset(13), yyvstopOffset(121)),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(123)),
+				new yysvf(yycrankOffset(76), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(67), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(312), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(183), yysvecOffset(36), yyvstopOffset(125)),
+				new yysvf(yycrankOffset(322), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(0), yysvecOffset(61), yyvstopOffset(128)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(130)),
+				new yysvf(yycrankOffset(78), yysvecOffset(13), yyvstopOffset(133)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(135)),
+				new yysvf(yycrankOffset(81), yysvecOffset(13), yyvstopOffset(138)),
+				new yysvf(yycrankOffset(84), yysvecOffset(13), yyvstopOffset(140)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(142)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(145)),
+				new yysvf(yycrankOffset(81), yysvecOffset(13), yyvstopOffset(148)),
+				new yysvf(yycrankOffset(66), yysvecOffset(13), yyvstopOffset(150)),
+				new yysvf(yycrankOffset(74), yysvecOffset(13), yyvstopOffset(152)),
+				new yysvf(yycrankOffset(80), yysvecOffset(13), yyvstopOffset(154)),	
+				new yysvf(yycrankOffset(78), yysvecOffset(13), yyvstopOffset(156)),
+				new yysvf(yycrankOffset(94), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(93), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(341), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(0), yysvecOffset(77), yyvstopOffset(158)),
+				new yysvf(yycrankOffset(356), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(99), yysvecOffset(13), yyvstopOffset(160)),
+				new yysvf(yycrankOffset(89), yysvecOffset(13), yyvstopOffset(163)),
+				new yysvf(yycrankOffset(108), yysvecOffset(13), yyvstopOffset(165)),
+				new yysvf(yycrankOffset(120), yysvecOffset(13), yyvstopOffset(167)),
+				new yysvf(yycrankOffset(104), yysvecOffset(13), yyvstopOffset(169)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(171)),
+				new yysvf(yycrankOffset(113), yysvecOffset(13), yyvstopOffset(174)),
+				new yysvf(yycrankOffset(148), yysvecOffset(13), yyvstopOffset(176)),
+				new yysvf(yycrankOffset(133), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(181), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(366), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(0), yysvecOffset(90), yyvstopOffset(178)),
+				new yysvf(yycrankOffset(183), yysvecOffset(13), yyvstopOffset(181)),
+				new yysvf(yycrankOffset(182), yysvecOffset(13), yyvstopOffset(183)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(185)),	
+				new yysvf(yycrankOffset(172), yysvecOffset(13), yyvstopOffset(189)),
+				new yysvf(yycrankOffset(181), yysvecOffset(13), yyvstopOffset(191)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(193)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(196)),
+				new yysvf(yycrankOffset(189), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(195), yysvecZero(), yyvstopZero()),	
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(199)),
+				new yysvf(yycrankOffset(183), yysvecOffset(13), yyvstopOffset(202)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(204)),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(207)),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(210)),
+				new yysvf(yycrankOffset(178), yysvecZero(), yyvstopZero()),	
+				new yysvf(yycrankOffset(186), yysvecOffset(13), yyvstopOffset(212)),
+				new yysvf(yycrankOffset(204), yysvecZero(), yyvstopZero()),
+				new yysvf(yycrankOffset(0), yysvecOffset(13), yyvstopOffset(214)),
+				new yysvf(yycrankOffset(0), yysvecZero(), yyvstopOffset(217)),
+				new yysvf(yycrankZero(), yysvecZero(), yyvstopZero()),			
+			};
+			for (int i = 0; i < result.Length; ++i)
+			{
+				yysvf svf = result[i];
+				if (svf.yyother != null)
+				{
+					svf.yyother.arr = result;
+				}
+			}
+			return result;
+		}
 		
 		public static yyworkRef yytop = yycrankOffset(423);
 		public static yysvfArr yybgin = new yysvfArr(yysvec, 1);
-		public static sbyte[] yymatch = { //FIXME:???sbyte, char???
+		public static sbyte[] yymatch = { //FIXME:???sbyte, char??? //FIXME: 011 == 0x9
 			0x0, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
 			0x1, 0x9, 0xA, 0x1, 0x1, 0x1, 0x1, 0x1, 
 			0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
@@ -802,7 +842,7 @@ namespace KopiLua
 		{
 			yysvfArr yystate; yysvfRef lsp;
 			yyworkRef yyt = new yyworkRef();
-			yysvfRef yyz = new yysvfRef();
+			yysvfRef yyz = null;
 			int yych=0, yyfirst=0;
 			yyworkRef yyr = new yyworkRef();
 #if LEXDEBUG
@@ -869,7 +909,7 @@ tryagain:
 							yystate = new yysvfRef(yyt.get().advance, yysvec); lsp.set(yystate); lsp.inc();
 							goto contin;
 						}
-						yyt = yyr.getRef(YYU(yymatch[yych]));
+						sbyte yymatch_v = (yych >= yymatch.Length) ? (sbyte)0 : yymatch[yych]; yyt = yyr.getRef(YYU(yymatch_v));
 #if LEXDEBUG
 						if(debug!=0){
 							fprintf(yyout,"try fall back character ");
@@ -940,7 +980,7 @@ contin:
 					yysptr=yysbuf;
 					return(0);
 				}
-				int i__ = input(); yyprevious = i__; yytext[0] = (char)i__;
+				int i__ = input(); yytext[0] = (char)i__; unchecked { yyprevious = (sbyte)i__; }
 				if (yyprevious>0)
 					output((char)yyprevious);
 				yylastch=yytext;

@@ -858,7 +858,7 @@ namespace KopiLua
 			if (fp == null)
 			{
 				//FIXME:
-				Console.Write("%c", (char)ch);
+				printf("%c", (char)ch);
 			}
 			return ch;
 		}
@@ -893,7 +893,7 @@ namespace KopiLua
 		
 		public static int putchar(int ch)
 		{
-			Console.Write("%c", (char)ch);
+			printf("%c", (char)ch);
 		 	return ch;
 		}
 	}

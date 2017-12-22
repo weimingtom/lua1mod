@@ -292,7 +292,7 @@ namespace KopiLua
 			}
 		}
 	
-		private static string yyerror_msg = new string(new char[256]);
+		private static CharPtr yyerror_msg = new CharPtr(new char[256]);
 		public static void yyerror(string s)
 		{
 			//static char msg[256];

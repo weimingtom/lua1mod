@@ -818,6 +818,7 @@ yylook(){
 					*lsp++ = yystate = yyt->advance+yysvec;
 					goto contin;
 					}
+				printf("xxx %d = %d = %d\n", sizeof(yymatch), (int)yymatch[yych], (int)yymatch[8]);
 				yyt = yyr + YYU(yymatch[yych]);
 # ifdef LEXDEBUG
 				if(debug){
