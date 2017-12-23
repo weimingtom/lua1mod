@@ -4,6 +4,8 @@
 ** TeCGraf - PUC-Rio
 ** 11 May 93
 */
+using System;
+
 namespace KopiLua
 {
 	using Word = System.UInt16;
@@ -113,6 +115,10 @@ namespace KopiLua
 		*/
 		public static int lua_findsymbol(CharPtr s)
 		{
+//			if (s.ToString().Equals("print"))
+//		    {
+//				Console.WriteLine("====================");
+//		    }
 		 	int i;
 		 	for (i = 0; i < lua_ntable; i++)
 		  		if (streq(s,s_name(i)))

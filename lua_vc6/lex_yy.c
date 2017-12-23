@@ -776,11 +776,13 @@ yylook(){
 		yyestate = yystate = yybgin;
 		if (yyprevious==YYNEWLINE) yystate++;
 		for (;;){
+#if 0
 			fprintf(stdout,"state %d\n",yystate-yysvec-1);
 			if (yystate-yysvec-1 == 2)
 			{
 				fprintf(stdout, "=================\n");
 			}
+#endif
 # ifdef LEXDEBUG
 			if(debug)fprintf(yyout,"state %d\n",yystate-yysvec-1);
 # endif

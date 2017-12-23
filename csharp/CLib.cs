@@ -280,8 +280,24 @@ namespace KopiLua
 		
 		public class CharPtr
 		{
+			public bool checkChange = false;
 			public char[] chars;
-			public int index;
+			private int _index;
+			public int index
+			{
+				get
+				{
+					return _index;
+				}
+				set
+				{
+					if (checkChange)
+					{
+						Debug.Assert(false, "index changed");
+					}
+					_index = value;
+				}
+			}
 			
 			public char this[int offset]
 			{
@@ -320,6 +336,13 @@ namespace KopiLua
 				this.index = ptr.index;
 			}
 
+			public CharPtr(CharPtr ptr, bool checkChange)
+			{
+				this.chars = ptr.chars;
+				this.index = ptr.index;
+				this.checkChange = checkChange;
+			}
+			
 			public CharPtr(CharPtr ptr, int index)
 			{
 				this.chars = ptr.chars;

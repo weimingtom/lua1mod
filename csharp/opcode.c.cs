@@ -726,10 +726,10 @@ namespace KopiLua
 						BytePtr newpc;
 						ObjectRef b_ = top.getRef(-1);
 						while (tag(b_.get()) != Type.T_MARK) b_.dec();
-						if (b_.obj == stack)
-						{
-							Console.WriteLine("================");
-						}
+//						if (b_.obj == stack)
+//						{
+//							Console.WriteLine("================");
+//						}
 						if (tag(b_.get(-1)) == Type.T_FUNCTION)
 						{
 				 			lua_debugline = 0;			/* always reset debug flag */

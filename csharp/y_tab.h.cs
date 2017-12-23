@@ -9,11 +9,46 @@ namespace KopiLua
 	{
 		public class YYSTYPE //FIXME:union
 		{
-		 	public int vInt;
-		 	public long vLong;
-		 	public float vFloat;
-		 	public Word vWord;
-		 	public BytePtr pByte;
+		 	private int vInt_;
+		 	private long vLong_;
+		 	private float vFloat_;
+		 	private Word vWord_;
+		 	private BytePtr pByte_;
+		 	
+		 	public int vInt {get{return vInt_;}set{vInt_ = value;}}
+		 	public long vLong {get{return vLong_;}set{vLong_ = value;}}
+		 	public float vFloat {get{return vFloat_;}set{vFloat_ = value;}}
+		 	public Word vWord {
+		 		get
+		 		{
+		 			return vWord_;
+		 		}
+		 		set
+		 		{
+//		 			if (value == 33)
+//		 			{
+//		 				Console.WriteLine("==================");
+//		 			}
+		 			vWord_ = value;
+		 		}
+		 	}
+		 	public BytePtr pByte {get{return pByte_;}set{pByte_ = value;}}
+		 	
+		 	public void set(YYSTYPE s) 
+		 	{
+		 		this.vInt = s.vInt;
+		 		this.vLong = s.vLong;
+		 		this.vFloat = s.vFloat;
+		 		this.vWord = s.vWord;
+		 		if (s.pByte != null)
+		 		{
+		 			this.pByte = new BytePtr(s.pByte);
+		 		}
+		 		else
+		 		{
+		 			this.pByte = null;
+		 		}
+		 	}
 		}
 		public class YYSTYPEPtr
 		{

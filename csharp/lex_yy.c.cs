@@ -845,7 +845,7 @@ namespace KopiLua
 		public static sbyte YYU(sbyte x) {return x;}
 		//#define NLSTATE yyprevious=YYNEWLINE
 		public static char[] yytext_buffer = new char[YYLMAX];
-		public static CharPtr yytext = new CharPtr(yytext_buffer);
+		public static CharPtr yytext = new CharPtr(yytext_buffer, true);
 		public static yysvf[] yylstate = new yysvf[YYLMAX];
 		public static yysvfRef yylsp, yyolsp; //FIXME:????
 		public static CharPtr yysbuf = new CharPtr(new char[YYLMAX]);
@@ -870,7 +870,7 @@ namespace KopiLua
 #endif
 			yyfirst=1;
 			if (yymorfg==0)
-				yylastch = new CharPtr(yytext);
+				yylastch = new CharPtr(yytext.chars, 0);
 			else {
 				yymorfg=0;
 				yylastch = new CharPtr(yytext.chars, yytext.index + yyleng);
@@ -880,7 +880,7 @@ namespace KopiLua
 				yyestate = new yysvfArr(yybgin); yystate = new yysvfArr(yybgin);
 				if (yyprevious==YYNEWLINE) yystate.inc();
 				for (;;){
-					fprintf(stdout,"state %d\n",yystate.minus(yysvec)-1);
+//					fprintf(stdout,"=========state %d\n",yystate.minus(yysvec)-1);
 //					if (yystate.minus(yysvec)-1 == 2)
 //					{
 //						Console.WriteLine("=============");
@@ -1003,7 +1003,7 @@ contin:
 				int i__ = input(); yytext[0] = (char)i__; unchecked { yyprevious = (sbyte)i__; }
 				if (yyprevious>0)
 					output((char)yyprevious);
-				yylastch=yytext;
+				yylastch=new CharPtr(yytext.chars, 0);
 #if LEXDEBUG
 				if(debug!=0)putchar('\n');
 #endif

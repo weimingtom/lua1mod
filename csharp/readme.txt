@@ -258,7 +258,7 @@ stack[1] point to "print" cfunction
 						while (tag(b_.get()) != Type.T_MARK) b_.dec();
 						if (b_.obj == stack)
 						{
-							Console.WriteLine("================");
+------->							Console.WriteLine("================");
 						}
 						if (tag(b_.get(-1)) == Type.T_FUNCTION)
 						{
@@ -281,3 +281,74 @@ stack[1] point to "print" cfunction
 VC6: maincode ---> can chaged, use this:
 ((Byte *)mainbuffer)[0]
 
+
+-----------------------------------
+
+(19) print yyval.vWord == 4 (compile/parse-time calculate, not runtime)
+
+		public static int lua_findsymbol(CharPtr s)
+		{
+			if (s.ToString().Equals("print"))
+		    {
+----------->				Console.WriteLine("====================");
+		    }
+		    
+		    
+(20) check yytext.index changed
+
+			public bool checkChange = false;
+			public char[] chars;
+			private int _index;
+			public int index
+			{
+				get
+				{
+					return _index;
+				}
+				set
+				{
+					if (checkChange)
+					{
+----------->						Console.WriteLine("====================");
+					}
+					_index = value;
+				}
+			}
+
+(21) merge buffer_mainbuffer_
+
+#if false
+		//private static long[] buffer = new long[MAXCODE];
+		private static byte[] buffer_ = new byte[MAXCODE * 4];
+		private static BytePtr code = new BytePtr(buffer_);
+		//private static long[] mainbuffer = new long[MAXCODE];
+		private static byte[] mainbuffer_ = new byte[MAXCODE * 4];
+		private static BytePtr maincode = new BytePtr(mainbuffer_);
+#else
+		private const int BUFFER_SPACE_INNER = 256 + 4;
+		private static byte[] buffer_mainbuffer_ = new byte[MAXCODE * 4 + BUFFER_SPACE_INNER + MAXCODE * 4];
+		private static BytePtr code = new BytePtr(buffer_mainbuffer_, 0);
+		private static BytePtr maincode = new BytePtr(buffer_mainbuffer_, 0 + MAXCODE * 4 + BUFFER_SPACE_INNER);
+#endif
+
+
+
+(22) maincode don't effect pc 
+
+maincode = pc;
+====>
+maincode = new BytePtr(pc.chars, pc.index);
+
+(23) PrintCode
+public static int lua_parse()
+		{
+			BytePtr initcode = new BytePtr(maincode);
+		 	err = 0;
+		 	if (yyparse() != 0 || (err == 1)) return 1;
+		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
+--->		 	//PrintCode();
+		 	if (lua_execute(initcode) != 0) return 1;
+		 	maincode = new BytePtr(initcode.chars, initcode.index);
+		 	return 0;
+		}
+		

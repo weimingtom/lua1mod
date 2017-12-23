@@ -328,9 +328,9 @@ namespace KopiLua
 		 	err = 0;
 		 	if (yyparse() != 0 || (err == 1)) return 1;
 		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
-		 	PrintCode();
+		 	//PrintCode();
 		 	if (lua_execute(initcode) != 0) return 1;
-		 	maincode = new BytePtr(initcode);
+		 	maincode = new BytePtr(initcode.chars, initcode.index);
 		 	return 0;
 		}
 	
@@ -1105,7 +1105,7 @@ yy_stack:
 				yypvt = new YYSTYPEPtr(yyv, yypvt_index);
 			}
 			yy_ps[0] = yy_state;
-			yy_pv.inc(); yy_pv[0] = yyval;
+			yy_pv.inc(); yy_pv[0].set(yyval);
 			
 			/*
 			** we have a new state - find out what to do
@@ -1402,7 +1402,7 @@ yydefault:
 			case 3:
 				//#line 179 "lua.stx"
 				{
-					maincode = pc;
+					maincode = new BytePtr(pc.chars, pc.index);
 				}
 				break;
 				
