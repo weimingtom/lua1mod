@@ -109,12 +109,14 @@ namespace KopiLua
 //				return new CharPtr(result);
 //			}
 			public static int operator -(BytePtr ptr1, BytePtr ptr2) {
+#if false
 				//maincode-code == 4356
 				if (ptr1.chars == mainbuffer_ && ptr2.chars == buffer_)
 				{
 					int result = ptr1.index - ptr2.index + (1024 * 4 + 256 + 4);
 					return result;
 				}
+#endif
 				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index;
 			}
 			public static bool operator <(BytePtr ptr1, BytePtr ptr2) {

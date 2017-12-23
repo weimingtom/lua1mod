@@ -31,12 +31,19 @@ namespace KopiLua
 //		#endif	
 		public const int MAXCODE = 1024;
 		
+#if false
 		//private static long[] buffer = new long[MAXCODE];
 		private static byte[] buffer_ = new byte[MAXCODE * 4];
 		private static BytePtr code = new BytePtr(buffer_);
 		//private static long[] mainbuffer = new long[MAXCODE];
 		private static byte[] mainbuffer_ = new byte[MAXCODE * 4];
 		private static BytePtr maincode = new BytePtr(mainbuffer_);
+#else
+		private const int BUFFER_SPACE_INNER = 256 + 4;
+		private static byte[] buffer_mainbuffer_ = new byte[MAXCODE * 4 + BUFFER_SPACE_INNER + MAXCODE * 4];
+		private static BytePtr code = new BytePtr(buffer_mainbuffer_, 0);
+		private static BytePtr maincode = new BytePtr(buffer_mainbuffer_, 0 + MAXCODE * 4 + BUFFER_SPACE_INNER);
+#endif
 		private static BytePtr basepc = null;
 		private static BytePtr pc = null;
 	
@@ -321,7 +328,7 @@ namespace KopiLua
 		 	err = 0;
 		 	if (yyparse() != 0 || (err == 1)) return 1;
 		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
-		 	//PrintCode();
+		 	PrintCode();
 		 	if (lua_execute(initcode) != 0) return 1;
 		 	maincode = new BytePtr(initcode);
 		 	return 0;
