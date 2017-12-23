@@ -32,7 +32,7 @@ namespace KopiLua
 		public const int MAXCODE = 1024;
 		
 		//private static long[] buffer = new long[MAXCODE];
-		private static byte[] buffer_ = new byte[MAXCODE * 8];
+		private static byte[] buffer_ = new byte[MAXCODE * 4];
 		private static BytePtr code = new BytePtr(buffer_);
 		//private static long[] mainbuffer = new long[MAXCODE];
 		private static byte[] mainbuffer_ = new byte[MAXCODE * 4];
@@ -321,128 +321,250 @@ namespace KopiLua
 		 	err = 0;
 		 	if (yyparse() != 0 || (err == 1)) return 1;
 		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
+		 	//PrintCode();
 		 	if (lua_execute(initcode) != 0) return 1;
 		 	maincode = new BytePtr(initcode);
 		 	return 0;
 		}
 	
 	
-#if false
-		//
-		//static void PrintCode (void)
-		//{
-		// Byte *p = code;
-		// printf ("\n\nCODE\n");
-		// while (p != pc)
-		// {
-		//  switch ((OpCode)*p)
-		//  {
-		//   case NOP:		printf ("%d    NOP\n", (p++)-code); break;
-		//   case PUSHNIL:	printf ("%d    PUSHNIL\n", (p++)-code); break;
-		//   case PUSH0: case PUSH1: case PUSH2:
-		//    			printf ("%d    PUSH%c\n", p-code, *p-PUSH0+'0');
-		//    			p++;
-		//   			break;
-		//   case PUSHBYTE:
-		//    			printf ("%d    PUSHBYTE   %d\n", p-code, *(++p));
-		//    			p++;
-		//   			break;
-		//   case PUSHWORD:
-		//    			printf ("%d    PUSHWORD   %d\n", p-code, *((Word *)(p+1)));
-		//    			p += 1 + sizeof(Word);
-		//   			break;
-		//   case PUSHFLOAT:
-		//    			printf ("%d    PUSHFLOAT  %f\n", p-code, *((float *)(p+1)));
-		//    			p += 1 + sizeof(float);
-		//   			break;
-		//   case PUSHSTRING:
-		//    			printf ("%d    PUSHSTRING   %d\n", p-code, *((Word *)(p+1)));
-		//    			p += 1 + sizeof(Word);
-		//   			break;
-		//   case PUSHLOCAL0: case PUSHLOCAL1: case PUSHLOCAL2: case PUSHLOCAL3:
-		//   case PUSHLOCAL4: case PUSHLOCAL5: case PUSHLOCAL6: case PUSHLOCAL7:
-		//   case PUSHLOCAL8: case PUSHLOCAL9:
-		//    			printf ("%d    PUSHLOCAL%c\n", p-code, *p-PUSHLOCAL0+'0');
-		//    			p++;
-		//   			break;
-		//   case PUSHLOCAL:	printf ("%d    PUSHLOCAL   %d\n", p-code, *(++p));
-		//    			p++;
-		//   			break;
-		//   case PUSHGLOBAL:
-		//    			printf ("%d    PUSHGLOBAL   %d\n", p-code, *((Word *)(p+1)));
-		//    			p += 1 + sizeof(Word);
-		//   			break;
-		//   case PUSHINDEXED:    printf ("%d    PUSHINDEXED\n", (p++)-code); break;
-		//   case PUSHMARK:       printf ("%d    PUSHMARK\n", (p++)-code); break;
-		//   case PUSHOBJECT:     printf ("%d    PUSHOBJECT\n", (p++)-code); break;
-		//   case STORELOCAL0: case STORELOCAL1: case STORELOCAL2: case STORELOCAL3:
-		//   case STORELOCAL4: case STORELOCAL5: case STORELOCAL6: case STORELOCAL7:
-		//   case STORELOCAL8: case STORELOCAL9:
-		//    			printf ("%d    STORELOCAL%c\n", p-code, *p-STORELOCAL0+'0');
-		//    			p++;
-		//   			break;
-		//   case STORELOCAL:
-		//    			printf ("%d    STORELOCAK   %d\n", p-code, *(++p));
-		//    			p++;
-		//   			break;
-		//   case STOREGLOBAL:
-		//    			printf ("%d    STOREGLOBAL   %d\n", p-code, *((Word *)(p+1)));
-		//    			p += 1 + sizeof(Word);
-		//   			break;
-		//   case STOREINDEXED0:  printf ("%d    STOREINDEXED0\n", (p++)-code); break;
-		//   case STOREINDEXED:   printf ("%d    STOREINDEXED   %d\n", p-code, *(++p));
-		//    			p++;
-		//   			break;
-		//   case STOREFIELD:     printf ("%d    STOREFIELD\n", (p++)-code); break;
-		//   case ADJUST:
-		//    			printf ("%d    ADJUST   %d\n", p-code, *(++p));
-		//    			p++;
-		//   			break;
-		//   case CREATEARRAY:	printf ("%d    CREATEARRAY\n", (p++)-code); break;
-		//   case EQOP:       	printf ("%d    EQOP\n", (p++)-code); break;
-		//   case LTOP:       	printf ("%d    LTOP\n", (p++)-code); break;
-		//   case LEOP:       	printf ("%d    LEOP\n", (p++)-code); break;
-		//   case ADDOP:       	printf ("%d    ADDOP\n", (p++)-code); break;
-		//   case SUBOP:       	printf ("%d    SUBOP\n", (p++)-code); break;
-		//   case MULTOP:      	printf ("%d    MULTOP\n", (p++)-code); break;
-		//   case DIVOP:       	printf ("%d    DIVOP\n", (p++)-code); break;
-		//   case CONCOP:       	printf ("%d    CONCOP\n", (p++)-code); break;
-		//   case MINUSOP:       	printf ("%d    MINUSOP\n", (p++)-code); break;
-		//   case NOTOP:       	printf ("%d    NOTOP\n", (p++)-code); break;
-		//   case ONTJMP:	   
-		//    			printf ("%d    ONTJMP  %d\n", p-code, *((Word *)(p+1)));
-		//    			p += sizeof(Word) + 1;
-		//   			break;
-		//   case ONFJMP:	   
-		//    			printf ("%d    ONFJMP  %d\n", p-code, *((Word *)(p+1)));
-		//    			p += sizeof(Word) + 1;
-		//   			break;
-		//   case JMP:	   
-		//    			printf ("%d    JMP  %d\n", p-code, *((Word *)(p+1)));
-		//    			p += sizeof(Word) + 1;
-		//   			break;
-		//   case UPJMP:
-		//    			printf ("%d    UPJMP  %d\n", p-code, *((Word *)(p+1)));
-		//    			p += sizeof(Word) + 1;
-		//   			break;
-		//   case IFFJMP:
-		//    			printf ("%d    IFFJMP  %d\n", p-code, *((Word *)(p+1)));
-		//    			p += sizeof(Word) + 1;
-		//   			break;
-		//   case IFFUPJMP:
-		//    			printf ("%d    IFFUPJMP  %d\n", p-code, *((Word *)(p+1)));
-		//    			p += sizeof(Word) + 1;
-		//   			break;
-		//   case POP:       	printf ("%d    POP\n", (p++)-code); break;
-		//   case CALLFUNC:	printf ("%d    CALLFUNC\n", (p++)-code); break;
-		//   case RETCODE:
-		//    			printf ("%d    RETCODE   %d\n", p-code, *(++p));
-		//    			p++;
-		//   			break;
-		//   default:		printf ("%d    Cannot happen\n", (p++)-code); break;
-		//  }
-		// }
-		//}
+#if true
+		
+		public static void PrintCode ()
+		{
+			BytePtr p = new BytePtr(code);
+		 	printf ("\n\nCODE\n");
+		 	while (p != pc)
+		 	{
+		 		switch ((OpCode)p[0])
+		  		{
+				case OpCode.NOP:		
+		 			printf ("%d    NOP\n", p-code);
+		 			p.inc();
+		 			break;
+				
+		 		case OpCode.PUSHNIL:	
+		 			printf ("%d    PUSHNIL\n", p-code); 
+		 			p.inc();
+		 			break;
+				
+		 		case OpCode.PUSH0: case OpCode.PUSH1: case OpCode.PUSH2:
+		 			printf ("%d    PUSH%c\n", p-code, (char)(p[0]-(int)OpCode.PUSH0)+'0');
+		 			p.inc();
+					break;
+				
+				case OpCode.PUSHBYTE:
+					printf ("%d    PUSHBYTE   %d\n", p-code, (int)p[1]);
+					p.inc();
+					p.inc();
+					break;
+				
+				case OpCode.PUSHWORD:
+					Word word_PUSHWORD = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    PUSHWORD   %d\n", p-code, word_PUSHWORD);
+					p += 1 + 2;
+					break;
+				
+				case OpCode.PUSHFLOAT:
+					printf ("%d    PUSHFLOAT  %f\n", p-code, bytesToFloat(p[1], p[2], p[3], p[4]));
+					p += 1 + 4;
+					break;
+				
+				case OpCode.PUSHSTRING:
+					Word word_PUSHSTRING = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    PUSHSTRING   %d\n", p-code, word_PUSHSTRING);
+					p += 1 + 2;
+					break;
+				
+				case OpCode.PUSHLOCAL0: case OpCode.PUSHLOCAL1: case OpCode.PUSHLOCAL2: case OpCode.PUSHLOCAL3:
+				case OpCode.PUSHLOCAL4: case OpCode.PUSHLOCAL5: case OpCode.PUSHLOCAL6: case OpCode.PUSHLOCAL7:
+				case OpCode.PUSHLOCAL8: case OpCode.PUSHLOCAL9:
+					printf ("%d    PUSHLOCAL%c\n", p-code, (char)(p[0]-OpCode.PUSHLOCAL0+'0'));
+					p.inc();
+					break;
+				
+				case OpCode.PUSHLOCAL:	
+					printf ("%d    PUSHLOCAL   %d\n", p-code, (int)p[1]);
+					p.inc();
+					p.inc();
+					break;
+				
+				case OpCode.PUSHGLOBAL:
+					Word word_PUSHGLOBAL = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    PUSHGLOBAL   %d\n", p-code, word_PUSHGLOBAL);
+					p += 1 + 2;
+					break;
+				
+				case OpCode.PUSHINDEXED:    
+					printf ("%d    PUSHINDEXED\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.PUSHMARK:
+					printf ("%d    PUSHMARK\n", p-code); 
+					p.inc();
+					break;
+				
+				case OpCode.PUSHOBJECT:
+					printf ("%d    PUSHOBJECT\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.STORELOCAL0: case OpCode.STORELOCAL1: case OpCode.STORELOCAL2: case OpCode.STORELOCAL3:
+				case OpCode.STORELOCAL4: case OpCode.STORELOCAL5: case OpCode.STORELOCAL6: case OpCode.STORELOCAL7:
+				case OpCode.STORELOCAL8: case OpCode.STORELOCAL9:
+					printf ("%d    STORELOCAL%c\n", p-code, (char)(p[0]-OpCode.STORELOCAL0+'0'));
+					p.inc();
+					break;
+						
+				case OpCode.STORELOCAL:
+					printf ("%d    STORELOCAK   %d\n", p-code, p[+1]);
+					p.inc();
+					p.inc();
+					break;
+				
+				case OpCode.STOREGLOBAL:
+					Word word_STOREGLOBAL = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    STOREGLOBAL   %d\n", p-code, word_STOREGLOBAL);
+					p += 1 + sizeof(Word);
+					break;
+				
+				case OpCode.STOREINDEXED0:
+					printf ("%d    STOREINDEXED0\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.STOREINDEXED:
+					printf ("%d    STOREINDEXED   %d\n", p-code, (int)p[1]);
+					p.inc();
+					p.inc();
+					break;
+					
+				case OpCode.STOREFIELD:     
+					printf ("%d    STOREFIELD\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.ADJUST:
+					printf ("%d    ADJUST   %d\n", p-code, p[+1]);
+					p.inc();
+					p.inc();
+					break;
+					
+				case OpCode.CREATEARRAY:	
+					printf ("%d    CREATEARRAY\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.EQOP:       	
+					printf ("%d    EQOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.LTOP:       	
+					printf ("%d    LTOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.LEOP:       	
+					printf ("%d    LEOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.ADDOP:       	
+					printf ("%d    ADDOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.SUBOP:       	
+					printf ("%d    SUBOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.MULTOP:      	
+					printf ("%d    MULTOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.DIVOP:       	
+					printf ("%d    DIVOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.CONCOP:       	
+					printf ("%d    CONCOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.MINUSOP:
+					printf ("%d    MINUSOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.NOTOP:
+					printf ("%d    NOTOP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.ONTJMP:
+					Word word_ONTJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    ONTJMP  %d\n", p-code, word_ONTJMP);
+					p += sizeof(Word) + 1;
+					break;
+		
+				case OpCode.ONFJMP:
+					Word word_ONFJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    ONFJMP  %d\n", p-code, word_ONFJMP);
+					p += 2 + 1;
+					break;
+				
+				case OpCode.JMP:
+					Word word_JMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    JMP  %d\n", p-code, word_JMP);
+					p += 2 + 1;
+					break;
+				
+				case OpCode.UPJMP:
+					Word word_UPJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    UPJMP  %d\n", p-code, word_UPJMP);
+					p += 2 + 1;
+					break;
+		
+				case OpCode.IFFJMP:
+					Word word_IFFJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    IFFJMP  %d\n", p-code, word_IFFJMP);
+					p += 2 + 1;
+					break;
+					
+				case OpCode.IFFUPJMP:
+					Word word_IFFUPJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    IFFUPJMP  %d\n", p-code, word_IFFUPJMP);
+					p += 2 + 1;
+					break;
+					
+				case OpCode.POP:       	
+					printf ("%d    POP\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.CALLFUNC:
+					printf ("%d    CALLFUNC\n", p-code);
+					p.inc();
+					break;
+				
+				case OpCode.RETCODE:
+					printf ("%d    RETCODE   %d\n", p-code, p[+1]); 
+					p.inc();
+					p.inc();
+					break;
+				
+				default:
+					printf ("%d    Cannot happen\n", p-code); 
+					p.inc(); 
+					break;
+		  		}
+		 	}
+		}
 #endif
 	
 		public static int[] yyexca = {

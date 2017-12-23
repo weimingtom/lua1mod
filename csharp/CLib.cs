@@ -110,7 +110,7 @@ namespace KopiLua
 //			}
 			public static int operator -(BytePtr ptr1, BytePtr ptr2) {
 				//maincode-code == 4356
-				if (ptr1.chars == maincode.chars && ptr2.chars == code.chars)
+				if (ptr1.chars == mainbuffer_ && ptr2.chars == buffer_)
 				{
 					int result = ptr1.index - ptr2.index + (1024 * 4 + 256 + 4);
 					return result;

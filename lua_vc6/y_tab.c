@@ -282,6 +282,8 @@ int yywrap (void)
 }
 
 
+static void PrintCode (void);
+
 /*
 ** Parse LUA code and execute global statement.
 ** Return 0 on success or 1 on error.
@@ -292,13 +294,14 @@ int lua_parse (void)
  err = 0;
  if (yyparse () || (err==1)) return 1;
  *maincode++ = HALT;
+ //PrintCode();
  if (lua_execute (initcode)) return 1;
  maincode = initcode;
  return 0;
 }
 
 
-#if 0
+#if 1
 
 static void PrintCode (void)
 {

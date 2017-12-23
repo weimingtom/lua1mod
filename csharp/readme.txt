@@ -247,3 +247,37 @@ patch--->
 			
 (16) sharpdevelop char[] compare always return false
 
+
+(17) b_   ----> stack
+stack[1] point to "print" cfunction
+
+			   	case OpCode.CALLFUNC:
+			   		{
+						BytePtr newpc;
+---->						ObjectRef b_ = top.getRef(-1);
+						while (tag(b_.get()) != Type.T_MARK) b_.dec();
+						if (b_.obj == stack)
+						{
+							Console.WriteLine("================");
+						}
+						if (tag(b_.get(-1)) == Type.T_FUNCTION)
+						{
+				 			lua_debugline = 0;			/* always reset debug flag */
+				 			newpc = bvalue(b_.get(-1));
+				 			bvalue(b_.get(-1), pc);		        /* store return code */
+				 			nvalue(b_.get(), @base.minus(stack));		/* store base value */
+				 			@base = b_.getRef(+1);
+				 			pc = newpc;
+				 			if (MAXSTACK-@base.minus(stack) < STACKGAP)
+				 			{
+				  				lua_error ("stack overflow");
+				  				return 1;
+				 			}
+						}
+						
+---------------------------------------------
+
+(18)
+VC6: maincode ---> can chaged, use this:
+((Byte *)mainbuffer)[0]
+
