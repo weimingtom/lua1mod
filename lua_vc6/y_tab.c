@@ -1,4 +1,4 @@
-# line 2 "lua.stx"
+//# line 2 "lua.stx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -135,7 +135,7 @@ static void code_number (float f)
 }
 
 
-# line 140 "lua.stx"
+//# line 140 "lua.stx"
 typedef union  
 {
  int   vInt;
@@ -179,7 +179,7 @@ extern int yyerrflag;
 YYSTYPE yylval, yyval;
 # define YYERRCODE 256
 
-# line 530 "lua.stx"
+//# line 530 "lua.stx"
 
 
 /*
@@ -762,7 +762,7 @@ char * yyreds[] =
 	"setdebug : DEBUG",
 };
 #endif /* YYDEBUG */
-#line 1 "/usr/lib/yaccpar"
+//#line 1 "/usr/lib/yaccpar"
 /*	@(#)yaccpar 1.10 89/04/04 SMI; from S5R3 1.10	*/
 
 /*
@@ -1203,16 +1203,16 @@ yyparse()
 	{
 		
 case 2:
-# line 179 "lua.stx"
+//# line 179 "lua.stx"
 {pc=basepc=maincode; nlocalvar=0;} break;
 case 3:
-# line 179 "lua.stx"
+//# line 179 "lua.stx"
 {maincode=pc;} break;
 case 6:
-# line 184 "lua.stx"
+//# line 184 "lua.stx"
 {pc=basepc=code; nlocalvar=0;} break;
 case 7:
-# line 185 "lua.stx"
+//# line 185 "lua.stx"
 {
 	        if (lua_debug)
 		{
@@ -1224,7 +1224,7 @@ case 7:
 	        lua_codeadjust (0);
 	       } break;
 case 8:
-# line 197 "lua.stx"
+//# line 197 "lua.stx"
 { 
                 if (lua_debug) code_byte(RESET); 
 	        code_byte(RETCODE); code_byte(nlocalvar);
@@ -1233,7 +1233,7 @@ case 8:
 	        memcpy (s_bvalue(yypvt[-7].vWord), code, (pc-code)*sizeof(Byte));
 	       } break;
 case 11:
-# line 210 "lua.stx"
+//# line 210 "lua.stx"
 {
             ntemp = 0; 
             if (lua_debug)
@@ -1242,7 +1242,7 @@ case 11:
             }
 	   } break;
 case 15:
-# line 223 "lua.stx"
+//# line 223 "lua.stx"
 {
         {
 	 Byte *elseinit = yypvt[-2].pByte + sizeof(Word)+1;
@@ -1262,10 +1262,10 @@ case 15:
 	}
        } break;
 case 16:
-# line 242 "lua.stx"
+//# line 242 "lua.stx"
 {yyval.pByte = pc;} break;
 case 17:
-# line 244 "lua.stx"
+//# line 244 "lua.stx"
 {
         *(yypvt[-3].pByte) = IFFJMP;
         *((Word *)(yypvt[-3].pByte+1)) = pc - (yypvt[-3].pByte + sizeof(Word)+1);
@@ -1274,16 +1274,16 @@ case 17:
         *((Word *)(yypvt[-1].pByte+1)) = pc - yypvt[-6].pByte;
        } break;
 case 18:
-# line 252 "lua.stx"
+//# line 252 "lua.stx"
 {yyval.pByte = pc;} break;
 case 19:
-# line 254 "lua.stx"
+//# line 254 "lua.stx"
 {
         *(yypvt[-0].pByte) = IFFUPJMP;
         *((Word *)(yypvt[-0].pByte+1)) = pc - yypvt[-4].pByte;
        } break;
 case 20:
-# line 261 "lua.stx"
+//# line 261 "lua.stx"
 {
         {
          int i;
@@ -1296,10 +1296,10 @@ case 20:
 	}
        } break;
 case 21:
-# line 272 "lua.stx"
+//# line 272 "lua.stx"
 { lua_codeadjust (0); } break;
 case 25:
-# line 279 "lua.stx"
+//# line 279 "lua.stx"
 {
           {
   	   Byte *elseinit = yypvt[-1].pByte + sizeof(Word)+1;
@@ -1319,13 +1319,13 @@ case 25:
 	  }  
          } break;
 case 26:
-# line 299 "lua.stx"
+//# line 299 "lua.stx"
 {yyval.vInt = nlocalvar;} break;
 case 27:
-# line 299 "lua.stx"
+//# line 299 "lua.stx"
 {ntemp = 0;} break;
 case 28:
-# line 300 "lua.stx"
+//# line 300 "lua.stx"
 {
 	  if (nlocalvar != yypvt[-3].vInt)
 	  {
@@ -1334,16 +1334,16 @@ case 28:
 	  }
          } break;
 case 30:
-# line 310 "lua.stx"
+//# line 310 "lua.stx"
 { if (lua_debug){align(Word);code_byte(SETLINE);code_word(lua_linenumber);}} break;
 case 31:
-# line 312 "lua.stx"
+//# line 312 "lua.stx"
 { 
            if (lua_debug) code_byte(RESET); 
            code_byte(RETCODE); code_byte(nlocalvar);
           } break;
 case 32:
-# line 319 "lua.stx"
+//# line 319 "lua.stx"
 { 
           align(Word); 
 	  yyval.pByte = pc;
@@ -1351,52 +1351,52 @@ case 32:
 	  code_word (0);
          } break;
 case 33:
-# line 326 "lua.stx"
+//# line 326 "lua.stx"
 { if (yypvt[-0].vInt == 0) {lua_codeadjust (ntemp+1); incr_ntemp();}} break;
 case 34:
-# line 329 "lua.stx"
+//# line 329 "lua.stx"
 { yyval.vInt = yypvt[-1].vInt; } break;
 case 35:
-# line 330 "lua.stx"
+//# line 330 "lua.stx"
 { code_byte(EQOP);   yyval.vInt = 1; ntemp--;} break;
 case 36:
-# line 331 "lua.stx"
+//# line 331 "lua.stx"
 { code_byte(LTOP);   yyval.vInt = 1; ntemp--;} break;
 case 37:
-# line 332 "lua.stx"
+//# line 332 "lua.stx"
 { code_byte(LEOP); code_byte(NOTOP); yyval.vInt = 1; ntemp--;} break;
 case 38:
-# line 333 "lua.stx"
+//# line 333 "lua.stx"
 { code_byte(EQOP); code_byte(NOTOP); yyval.vInt = 1; ntemp--;} break;
 case 39:
-# line 334 "lua.stx"
+//# line 334 "lua.stx"
 { code_byte(LEOP);   yyval.vInt = 1; ntemp--;} break;
 case 40:
-# line 335 "lua.stx"
+//# line 335 "lua.stx"
 { code_byte(LTOP); code_byte(NOTOP); yyval.vInt = 1; ntemp--;} break;
 case 41:
-# line 336 "lua.stx"
+//# line 336 "lua.stx"
 { code_byte(ADDOP);  yyval.vInt = 1; ntemp--;} break;
 case 42:
-# line 337 "lua.stx"
+//# line 337 "lua.stx"
 { code_byte(SUBOP);  yyval.vInt = 1; ntemp--;} break;
 case 43:
-# line 338 "lua.stx"
+//# line 338 "lua.stx"
 { code_byte(MULTOP); yyval.vInt = 1; ntemp--;} break;
 case 44:
-# line 339 "lua.stx"
+//# line 339 "lua.stx"
 { code_byte(DIVOP);  yyval.vInt = 1; ntemp--;} break;
 case 45:
-# line 340 "lua.stx"
+//# line 340 "lua.stx"
 { code_byte(CONCOP);  yyval.vInt = 1; ntemp--;} break;
 case 46:
-# line 341 "lua.stx"
+//# line 341 "lua.stx"
 { yyval.vInt = 1; } break;
 case 47:
-# line 342 "lua.stx"
+//# line 342 "lua.stx"
 { code_byte(MINUSOP); yyval.vInt = 1;} break;
 case 48:
-# line 344 "lua.stx"
+//# line 344 "lua.stx"
 {
       code_byte(PUSHBYTE);
       yyval.pByte = pc; code_byte(0);
@@ -1404,7 +1404,7 @@ case 48:
       code_byte(CREATEARRAY);
      } break;
 case 49:
-# line 351 "lua.stx"
+//# line 351 "lua.stx"
 {
       *(yypvt[-2].pByte) = yypvt[-0].vInt; 
       if (yypvt[-1].vLong < 0)	/* there is no function to be called */
@@ -1428,19 +1428,19 @@ case 49:
       }
      } break;
 case 50:
-# line 374 "lua.stx"
+//# line 374 "lua.stx"
 { 
       code_byte(CREATEARRAY);
       yyval.vInt = 1;
      } break;
 case 51:
-# line 378 "lua.stx"
+//# line 378 "lua.stx"
 { lua_pushvar (yypvt[-0].vLong); yyval.vInt = 1;} break;
 case 52:
-# line 379 "lua.stx"
+//# line 379 "lua.stx"
 { code_number(yypvt[-0].vFloat); yyval.vInt = 1; } break;
 case 53:
-# line 381 "lua.stx"
+//# line 381 "lua.stx"
 {
       align(Word);
       code_byte(PUSHSTRING);
@@ -1449,10 +1449,10 @@ case 53:
       incr_ntemp();
      } break;
 case 54:
-# line 388 "lua.stx"
+//# line 388 "lua.stx"
 {code_byte(PUSHNIL); yyval.vInt = 1; incr_ntemp();} break;
 case 55:
-# line 390 "lua.stx"
+//# line 390 "lua.stx"
 {
       yyval.vInt = 0;
       if (lua_debug)
@@ -1461,87 +1461,87 @@ case 55:
       }
      } break;
 case 56:
-# line 397 "lua.stx"
+//# line 397 "lua.stx"
 { code_byte(NOTOP);  yyval.vInt = 1;} break;
 case 57:
-# line 398 "lua.stx"
+//# line 398 "lua.stx"
 {code_byte(POP); ntemp--;} break;
 case 58:
-# line 399 "lua.stx"
+//# line 399 "lua.stx"
 { 
       *(yypvt[-2].pByte) = ONFJMP;
       *((Word *)(yypvt[-2].pByte+1)) = pc - (yypvt[-2].pByte + sizeof(Word)+1);
       yyval.vInt = 1;
      } break;
 case 59:
-# line 404 "lua.stx"
+//# line 404 "lua.stx"
 {code_byte(POP); ntemp--;} break;
 case 60:
-# line 405 "lua.stx"
+//# line 405 "lua.stx"
 { 
       *(yypvt[-2].pByte) = ONTJMP;
       *((Word *)(yypvt[-2].pByte+1)) = pc - (yypvt[-2].pByte + sizeof(Word)+1);
       yyval.vInt = 1;
      } break;
 case 61:
-# line 412 "lua.stx"
+//# line 412 "lua.stx"
 { code_byte(PUSHNIL); incr_ntemp();} break;
 case 63:
-# line 416 "lua.stx"
+//# line 416 "lua.stx"
 {code_byte(PUSHMARK); yyval.vInt = ntemp; incr_ntemp();} break;
 case 64:
-# line 417 "lua.stx"
+//# line 417 "lua.stx"
 { code_byte(CALLFUNC); ntemp = yypvt[-3].vInt-1;} break;
 case 65:
-# line 419 "lua.stx"
+//# line 419 "lua.stx"
 {lua_pushvar (yypvt[-0].vLong); } break;
 case 66:
-# line 422 "lua.stx"
+//# line 422 "lua.stx"
 { yyval.vInt = 1; } break;
 case 67:
-# line 423 "lua.stx"
+//# line 423 "lua.stx"
 { yyval.vInt = yypvt[-0].vInt; } break;
 case 68:
-# line 426 "lua.stx"
+//# line 426 "lua.stx"
 { yyval.vInt = yypvt[-0].vInt; } break;
 case 69:
-# line 427 "lua.stx"
+//# line 427 "lua.stx"
 {if (!yypvt[-1].vInt){lua_codeadjust (ntemp+1); incr_ntemp();}} break;
 case 70:
-# line 428 "lua.stx"
+//# line 428 "lua.stx"
 {yyval.vInt = yypvt[-0].vInt;} break;
 case 73:
-# line 435 "lua.stx"
+//# line 435 "lua.stx"
 {localvar[nlocalvar]=yypvt[-0].vWord; incr_nlocalvar();} break;
 case 74:
-# line 436 "lua.stx"
+//# line 436 "lua.stx"
 {localvar[nlocalvar]=yypvt[-0].vWord; incr_nlocalvar();} break;
 case 75:
-# line 439 "lua.stx"
+//# line 439 "lua.stx"
 {yyval.vLong=-1;} break;
 case 76:
-# line 440 "lua.stx"
+//# line 440 "lua.stx"
 {yyval.vLong=yypvt[-0].vWord;} break;
 case 77:
-# line 443 "lua.stx"
+//# line 443 "lua.stx"
 { yyval.vInt = yypvt[-1].vInt; } break;
 case 78:
-# line 444 "lua.stx"
+//# line 444 "lua.stx"
 { yyval.vInt = yypvt[-1].vInt; } break;
 case 79:
-# line 447 "lua.stx"
+//# line 447 "lua.stx"
 { yyval.vInt = 0; } break;
 case 80:
-# line 448 "lua.stx"
+//# line 448 "lua.stx"
 { yyval.vInt = yypvt[-0].vInt; } break;
 case 81:
-# line 451 "lua.stx"
+//# line 451 "lua.stx"
 {yyval.vInt=1;} break;
 case 82:
-# line 452 "lua.stx"
+//# line 452 "lua.stx"
 {yyval.vInt=yypvt[-2].vInt+1;} break;
 case 83:
-# line 456 "lua.stx"
+//# line 456 "lua.stx"
 {
             align(Word); 
             code_byte(PUSHSTRING);
@@ -1549,50 +1549,50 @@ case 83:
             incr_ntemp();
 	   } break;
 case 84:
-# line 463 "lua.stx"
+//# line 463 "lua.stx"
 {
 	    code_byte(STOREFIELD);
 	    ntemp-=2;
 	   } break;
 case 85:
-# line 469 "lua.stx"
+//# line 469 "lua.stx"
 { yyval.vInt = 0; } break;
 case 86:
-# line 470 "lua.stx"
+//# line 470 "lua.stx"
 { yyval.vInt = yypvt[-0].vInt; } break;
 case 87:
-# line 473 "lua.stx"
+//# line 473 "lua.stx"
 { code_number(1); } break;
 case 88:
-# line 473 "lua.stx"
+//# line 473 "lua.stx"
 {yyval.vInt=1;} break;
 case 89:
-# line 474 "lua.stx"
+//# line 474 "lua.stx"
 { code_number(yypvt[-1].vInt+1); } break;
 case 90:
-# line 475 "lua.stx"
+//# line 475 "lua.stx"
 {yyval.vInt=yypvt[-3].vInt+1;} break;
 case 91:
-# line 479 "lua.stx"
+//# line 479 "lua.stx"
 {
 	    code_byte(STOREFIELD);
 	    ntemp-=2;
 	   } break;
 case 92:
-# line 486 "lua.stx"
+//# line 486 "lua.stx"
 {
 	   nvarbuffer = 0; 
            varbuffer[nvarbuffer] = yypvt[-0].vLong; incr_nvarbuffer();
 	   yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
 	  } break;
 case 93:
-# line 492 "lua.stx"
+//# line 492 "lua.stx"
 { 
            varbuffer[nvarbuffer] = yypvt[-0].vLong; incr_nvarbuffer();
 	   yyval.vInt = (yypvt[-0].vLong == 0) ? yypvt[-2].vInt + 1 : yypvt[-2].vInt;
 	  } break;
 case 94:
-# line 499 "lua.stx"
+//# line 499 "lua.stx"
 { 
 	   int local = lua_localname (yypvt[-0].vWord);
 	   if (local == -1)	/* global var */
@@ -1601,18 +1601,18 @@ case 94:
 	    yyval.vLong = -(local+1);		/* return negative value */
 	  } break;
 case 95:
-# line 507 "lua.stx"
+//# line 507 "lua.stx"
 {lua_pushvar (yypvt[-0].vLong);} break;
 case 96:
-# line 508 "lua.stx"
+//# line 508 "lua.stx"
 {
 	   yyval.vLong = 0;		/* indexed variable */
 	  } break;
 case 97:
-# line 511 "lua.stx"
+//# line 511 "lua.stx"
 {lua_pushvar (yypvt[-0].vLong);} break;
 case 98:
-# line 512 "lua.stx"
+//# line 512 "lua.stx"
 {
 	   align(Word);
 	   code_byte(PUSHSTRING);
@@ -1620,19 +1620,19 @@ case 98:
 	   yyval.vLong = 0;		/* indexed variable */
 	  } break;
 case 99:
-# line 520 "lua.stx"
+//# line 520 "lua.stx"
 {localvar[nlocalvar]=yypvt[-1].vWord; incr_nlocalvar();} break;
 case 100:
-# line 521 "lua.stx"
+//# line 521 "lua.stx"
 {localvar[nlocalvar]=yypvt[-1].vWord; incr_nlocalvar();} break;
 case 101:
-# line 524 "lua.stx"
+//# line 524 "lua.stx"
 { code_byte(PUSHNIL); } break;
 case 102:
-# line 525 "lua.stx"
+//# line 525 "lua.stx"
 {ntemp = 0;} break;
 case 104:
-# line 528 "lua.stx"
+//# line 528 "lua.stx"
 {lua_debug = yypvt[-0].vInt;} break;
 	}
 	goto yystack;		/* reset registers in driver code */

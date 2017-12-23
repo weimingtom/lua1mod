@@ -24,7 +24,7 @@ namespace KopiLua
 //		#ifndef ALIGNMENT
 //		#define ALIGNMENT	(sizeof(void *))
 //		#endif
-		public const int ALIGNMENT = 1;
+		public const int ALIGNMENT = 4;
 		
 //		#ifndef MAXCODE
 //		#define MAXCODE 1024
@@ -34,7 +34,7 @@ namespace KopiLua
 		//private static long[] buffer = new long[MAXCODE];
 		private static byte[] buffer_ = new byte[MAXCODE * 8];
 		private static BytePtr code = new BytePtr(buffer_);
-		//private static int[] mainbuffer = new int[MAXCODE];
+		//private static long[] mainbuffer = new long[MAXCODE];
 		private static byte[] mainbuffer_ = new byte[MAXCODE * 4];
 		private static BytePtr maincode = new BytePtr(mainbuffer_);
 		private static BytePtr basepc = null;
@@ -868,7 +868,6 @@ namespace KopiLua
 		{
 			YYSTYPEPtr yypvt = null;	/* top of value stack for $vars */
 			uint yymaxdepth = YYMAXDEPTH;
-	
 			/*
 			** Initialize externals - yyparse may be called more than once
 			*/
@@ -1263,7 +1262,7 @@ yydefault:
 			case 2:
 				//#line 179 "lua.stx"
 				{
-					pc = basepc = maincode;
+					basepc = new BytePtr(maincode); pc = new BytePtr(basepc);
 					nlocalvar = 0;
 				}
 				break;
@@ -1278,7 +1277,7 @@ yydefault:
 			case 6:
 				//#line 184 "lua.stx"
 				{
-					pc = basepc = code;
+					basepc = new BytePtr(code); pc = new BytePtr(basepc);
 					nlocalvar = 0;
 				}
 				break;

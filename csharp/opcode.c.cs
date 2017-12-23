@@ -851,7 +851,7 @@ namespace KopiLua
 		 	return 0;
 		}
 	
-		private static Byte[] lua_call_startcode = {(Byte)OpCode.CALLFUNC, (Byte)OpCode.HALT};
+		private static byte[] lua_call_startcode = {(byte)OpCode.CALLFUNC, (byte)OpCode.HALT};
 		/*
 		** Execute the given function. Return 0 on success or 1 on error.
 		*/
@@ -866,7 +866,7 @@ namespace KopiLua
 		 	top.add(2);
 		 	tag(top.get(-nparam-1), Type.T_MARK);
 		 	top.get(-nparam-2).set(func);
-		 	return (lua_execute (lua_call_startcode));
+		 	return (lua_execute (new BytePtr(lua_call_startcode)));
 		}
 	
 		/*

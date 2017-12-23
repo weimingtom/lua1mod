@@ -38,7 +38,7 @@ namespace KopiLua
 			}
 
 //			public static implicit operator CharPtr(string str) { return new CharPtr(str); }
-			public static implicit operator BytePtr(byte[] chars) { return new BytePtr(chars); }
+//			public static implicit operator BytePtr(byte[] chars) { return new BytePtr(chars); }
 
 			public BytePtr()
 			{
@@ -109,7 +109,14 @@ namespace KopiLua
 //				return new CharPtr(result);
 //			}
 			public static int operator -(BytePtr ptr1, BytePtr ptr2) {
-				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index; }
+				//maincode-code == 4356
+				if (ptr1.chars == maincode.chars && ptr2.chars == code.chars)
+				{
+					int result = ptr1.index - ptr2.index + (1024 * 4 + 256 + 4);
+					return result;
+				}
+				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index;
+			}
 			public static bool operator <(BytePtr ptr1, BytePtr ptr2) {
 				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index < ptr2.index; }
 			public static bool operator <=(BytePtr ptr1, BytePtr ptr2) {

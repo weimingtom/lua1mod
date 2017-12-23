@@ -160,7 +160,14 @@ namespace KopiLua
 				{
 					this.yyother = null;
 				}
-				this.yystops = new IntegerPtr(yyref.yystops);
+				if (yyref.yystops != null)
+				{
+					this.yystops = new IntegerPtr(yyref.yystops);
+				}
+				else
+				{
+					this.yystops = null;
+				}
 			}
 		}		
 		public static yysvfArr yyestate;
