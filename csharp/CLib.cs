@@ -496,7 +496,12 @@ namespace KopiLua
 		
 		public static int fgetc(FILE fp)
 		{
-			return fp.stream.ReadByte();
+			int result = fp.stream.ReadByte();
+			if (result == (int)'\r')
+			{
+				result = fp.stream.ReadByte();
+			}
+			return result;
 		}
 		public static void ungetc(int c, FILE fp)
 		{
@@ -591,7 +596,7 @@ namespace KopiLua
 		public static void sprintf(CharPtr buffer, CharPtr str, params object[] argv)
 		{
 			string temp = Tools.sprintf(str.ToString(), argv);
-			strcpy(buffer, temp);
+			strcpy(buffer, new CharPtr(temp));
 		}		
 		
 		public static void system(CharPtr str)

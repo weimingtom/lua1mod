@@ -293,11 +293,14 @@ namespace KopiLua
 		}
 	
 		private static CharPtr yyerror_msg = new CharPtr(new char[256]);
-		public static void yyerror(string s)
+		public static void yyerror(CharPtr s)
 		{
 			//static char msg[256];
+			string lasttext = lua_lasttext ().ToString();
+			lasttext = lasttext.Replace("\r", "\\r");
 			sprintf (yyerror_msg,"%s near \"%s\" at line %d in file \"%s\"",
-			      s, lua_lasttext (), lua_linenumber, lua_filename());
+			         s.ToString(), lasttext, lua_linenumber, lua_filename());
+//			Console.WriteLine("===" + yyerror_msg.ToString());
 			lua_error (yyerror_msg);
 			err = 1;
 		}

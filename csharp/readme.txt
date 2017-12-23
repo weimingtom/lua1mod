@@ -86,3 +86,19 @@ C#--->				for (;;){fprintf(stdout,"state %d\n",yystate.minus(yysvec)-1);
 
 C--->		for (;;){fprintf(stdout,"state %d\n",yystate-yysvec-1);
 # ifdef LEXDEBUG
+
+(4) yytext
+
+case 27:
+			case 28:
+		      {
+C bp--->				       yylval.vWord = lua_findenclosedconstant (yytext);
+				       return STRING;
+				      }
+				     
+
+lua_findenclosedconstant
+		public static int lua_findenclosedconstant(CharPtr s)
+		{
+C# breakpoint ->			int i, j, l = (int)strlen(s);
+

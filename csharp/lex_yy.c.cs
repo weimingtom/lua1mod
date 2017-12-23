@@ -19,7 +19,7 @@ namespace KopiLua
 		public static yysvf[] YYLERR() {return yysvec;}
 		//# define YYSTATE (yyestate-yysvec-1)
 		//# define YYOPTIM 1
-		//# define YYLMAX BUFSIZ
+		public const int YYLMAX = BUFSIZ;
 		//# define output(c) putc(c,yyout)
 		public static void output(char c) { putc(c, yyout); }
 		//# define input() (((yytchar=yysptr>yysbuf?U(*--yysptr):getc(yyin))==10?(yylineno++,yytchar):yytchar)==EOF?0:yytchar)
@@ -844,10 +844,11 @@ namespace KopiLua
 		//#define YYU(x) x
 		public static sbyte YYU(sbyte x) {return x;}
 		//#define NLSTATE yyprevious=YYNEWLINE
-		public static CharPtr yytext = new CharPtr(new char[BUFSIZ]);
-		public static yysvf[] yylstate = new yysvf[BUFSIZ];
+		public static char[] yytext_buffer = new char[YYLMAX];
+		public static CharPtr yytext = new CharPtr(yytext_buffer);
+		public static yysvf[] yylstate = new yysvf[YYLMAX];
 		public static yysvfRef yylsp, yyolsp; //FIXME:????
-		public static CharPtr yysbuf = new CharPtr(new char[BUFSIZ]);
+		public static CharPtr yysbuf = new CharPtr(new char[YYLMAX]);
 		public static CharPtr yysptr = new CharPtr(yysbuf);
 		public static IntegerPtr yyfnd;
 		//extern struct yysvf *yyestate;
@@ -869,10 +870,10 @@ namespace KopiLua
 #endif
 			yyfirst=1;
 			if (yymorfg==0)
-				yylastch = yytext;
+				yylastch = new CharPtr(yytext);
 			else {
 				yymorfg=0;
-				yylastch = yytext+yyleng;
+				yylastch = new CharPtr(yytext.chars, yytext.index + yyleng);
 			}
 			for(;;){
 				lsp = new yysvfRef(yylstate, 0);
@@ -880,10 +881,10 @@ namespace KopiLua
 				if (yyprevious==YYNEWLINE) yystate.inc();
 				for (;;){
 					fprintf(stdout,"state %d\n",yystate.minus(yysvec)-1);
-					if (yystate.minus(yysvec)-1 == 2)
-					{
-						Console.WriteLine("=============");
-					}
+//					if (yystate.minus(yysvec)-1 == 2)
+//					{
+//						Console.WriteLine("=============");
+//					}
 #if LEXDEBUG
 				if(debug!=0)fprintf(yyout,"state %d\n",yystate.minus(yysvec)-1);
 #endif
