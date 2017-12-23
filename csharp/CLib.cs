@@ -497,7 +497,7 @@ namespace KopiLua
 		public static int fgetc(FILE fp)
 		{
 			int result = fp.stream.ReadByte();
-			if (result == (int)'\r')
+			if (result == (int)'\r') //FIXME: only tested under Windows
 			{
 				result = fp.stream.ReadByte();
 			}

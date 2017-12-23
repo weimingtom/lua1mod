@@ -102,3 +102,9 @@ lua_findenclosedconstant
 		{
 C# breakpoint ->			int i, j, l = (int)strlen(s);
 
+
+
+--------------------------------
+
+(5) CALLFUNC:
+

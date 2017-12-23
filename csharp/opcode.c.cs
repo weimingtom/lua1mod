@@ -36,8 +36,8 @@ namespace KopiLua
 		
 		private class ObjectRef 
 		{
-			private Object_[] obj;
-			private int index;
+			public Object_[] obj;
+			public int index;
 			public ObjectRef(Object_[] _obj, int _index)
 			{
 				this.obj = _obj;
@@ -726,6 +726,10 @@ namespace KopiLua
 						BytePtr newpc;
 						ObjectRef b_ = top.getRef(-1);
 						while (tag(b_.get()) != Type.T_MARK) b_.dec();
+						if (b_.obj == stack)
+						{
+							Console.WriteLine("================");
+						}
 						if (tag(b_.get(-1)) == Type.T_FUNCTION)
 						{
 				 			lua_debugline = 0;			/* always reset debug flag */
