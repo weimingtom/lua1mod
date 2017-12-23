@@ -106,5 +106,144 @@ C# breakpoint ->			int i, j, l = (int)strlen(s);
 
 --------------------------------
 
-(5) CALLFUNC:
+(5) CALLFUNC: print not found
+
+----------------------------------------------------
+
+(6) vc6 remove //#line //# line
+can't put breakpoint
+
+(7) 
+sizeof(void *) == 4
+
+(8) 
+search Console.WriteLine("================");
+
+(9)
+ 			yyfirst=1;
+ 			if (yymorfg==0)
+-				yylastch = yytext;
++				yylastch = new CharPtr(yytext);
+ 			else {
+ 				yymorfg=0;
+-				yylastch = yytext+yyleng;
++				yylastch = new CharPtr(yytext.chars, yytext.index + yyleng);
+ 			}
+ 			for(;;
+ 
+ 
+(10)
+  		private static CharPtr yyerror_msg = new CharPtr(new char[256]);
+-		public static void yyerror(string s)
++		public static void yyerror(CharPtr s)
+ 		{
+ 			//static char msg[256];
++			string lasttext = lua_lasttext ().ToString();
++			lasttext = lasttext.Replace("\r", "\\r");
+ 			sprintf (yyerror_msg,"%s near \"%s\" at line %d in file \"%s\"",
+-			      s, lua_lasttext (), lua_linenumber, lua_filename());
++			         s.ToString(), lasttext, lua_linenumber, lua_filename());
++//			Console.WriteLine("===" + yyerror_msg.ToString());
+ 			lua_error (yyerror_msg);
+ 			err = 1;
+ 		}
+ 
+ 
+ (11)
+  int yylineno =1;
+ # define YYU(x) x
+ # define NLSTATE yyprevious=YYNEWLINE
+-char yytext[YYLMAX];
++char yytext[YYLMAX];const char *yytext_buffer = yytext;
+
+(12) maincode-code == 4356 see align_n: pc+1-code
+		private static void align_n (uint size)
+		{
+		 	if (size > ALIGNMENT) size = ALIGNMENT;
+		 	while (((pc+1-code)%size) != 0) // +1 to include BYTECODE
+		 		code_byte ((byte)OpCode.NOP);
+		}
+		
+patch--->
+
+ 			public BytePtr()
+ 			{
+@@ -109,7 +109,14 @@ namespace KopiLua
+ //				return new CharPtr(result);
+ //			}
+ 			public static int operator -(BytePtr ptr1, BytePtr ptr2) {
+-				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index; }
++				//maincode-code == 4356
++				if (ptr1.chars == maincode.chars && ptr2.chars == code.chars)
++				{
++					int result = ptr1.index - ptr2.index + (1024 * 4 + 256 + 4);
++					return result;
++				}
++				Debug.Assert(ptr1.chars == ptr2.chars); return ptr1.index - ptr2.index;
++			}
+
+
+(13)
+ 				{
+ 					this.yyother = null;
+ 				}
+-				this.yystops = new IntegerPtr(yyref.yystops);
++				if (yyref.yystops != null)
++				{
++					this.yystops = new IntegerPtr(yyref.yystops);
++				}
++				else
++				{
++					this.yystops = null;
++				}
+ 			}
+ 
+ (14)
+  			case 2:
+ 				//#line 179 "lua.stx"
+ 				{
+-					pc = basepc = maincode;
++					basepc = new BytePtr(maincode); pc = new BytePtr(basepc);
+ 					nlocalvar = 0;
+ 				}
+ 				break;
+@@ -1278,7 +1277,7 @@ yydefault:
+ 			case 6:
+ 				//#line 184 "lua.stx"
+ 				{
+-					pc = basepc = code;
++					basepc = new BytePtr(code); pc = new BytePtr(basepc);
+ 					nlocalvar = 0;
+ 				}
+ 				break;
+ 
+ 
+ (15) index overflow
+ 
+ 			public yywork get()
+			{
+				if (this.index >= 0 && this.index < this.arr.Length)
+				{
+					return this.arr[this.index];
+				}
+				else
+				{
+--------->					return new yywork(0, 0);
+				}
+			}
+	
+			public void set(yysvfRef v)
+			{
+				if (arr[index + 0] == null)
+				{
+--------->					arr[index + 0] = new yysvf(null, null, null);
+					arr[index + 0].set(v.get());
+				}
+				else
+				{
+					arr[index + 0].set(v.get());
+				}
+			}
+			
+(16) sharpdevelop char[] compare always return false
 
