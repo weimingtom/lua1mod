@@ -15,5 +15,5 @@ end
 r,v = next(a,nil)
 while r ~= nil do
   print ("array["..r.."] = "..v)
---r,v = next(a,r)
+  r,v = next(a,r)
 end 

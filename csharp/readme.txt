@@ -549,3 +549,67 @@ C# bug fix:
 //		 			{
 //		 				Console.WriteLine("================");
 //		 			}
+
+========================
+lua code:
+--print("Hello, world!")
+--print("abcd1234")
+--a = @()
+--a[2] = 3
+--print ("a[".."] = ")
+
+
+a = @()
+i=0
+while i<10 do
+ a[i] = i*i
+ i=i+1
+end
+
+r,v = next(a,nil)
+while r ~= nil do
+  print ("array["..r.."] = "..v)
+  r,v = next(a,r)
+end 
+========================
+
+
+the second next(a,r) don't be executed to firstnode (a, h+1);
+
+			else
+			{
+			  	int h = head (a, r);
+			  	if (h >= 0)
+			  	{
+			   		NodeRef n = list(a,h);
+			   		while (n != null)
+			   		{
+			   			if (n.get().@ref.isEquals(r))
+						{
+				 			if (n.get().next == null)
+				 			{
+----------->				  				firstnode (a, h+1);
+				  				return;
+				 			}
+				 			else if (tag(n.get().next.get().val) != Type.T_NIL)
+				 			{
+				  				lua_pushobject (n.get().next.get().@ref);
+				  				lua_pushobject (n.get().next.get().val);
+				  				return;
+				 			}
+				 			
+
+
+bug fix:
+remove new Node, so 'n.get().next == null' can be true
+
+		private static Node[] newvector_Node(uint n)
+		{
+			Node[] ret = new Node[n]; 
+//			for (int i = 0; i < n; ++i)
+//				ret[i] = new Node();
+			return ret;
+		}
+
+-------------------------------
+(29)

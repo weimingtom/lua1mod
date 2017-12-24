@@ -23,8 +23,8 @@ namespace KopiLua
 		private static Node[] newvector_Node(uint n)
 		{
 			Node[] ret = new Node[n]; 
-			for (int i = 0; i < n; ++i)
-				ret[i] = new Node();
+//			for (int i = 0; i < n; ++i)
+//				ret[i] = new Node();
 			return ret;
 		}
 		
@@ -35,7 +35,7 @@ namespace KopiLua
 		private static Node[] nodelist(Hash t) { return t.list; }
 		private static void nodelist(Hash t, Node[] nodes) { t.list = nodes; }
 		//#define list(t,i) ((t)->list[i])
-		private static Node list(Hash t, int i) { return t.list[i]; }
+		private static NodeRef list(Hash t, int i) { return NodeRef.assign(t.list[i]); }
 		private static void list(Hash t, int i, Node n) { t.list[i] = n; }
 		//#define ref_tag(n) (tag(&(n)->ref))
 		private static Type ref_tag(Node n) { return tag(n.@ref); }
@@ -66,18 +66,18 @@ namespace KopiLua
 			}
 		}
 		
-		private static Node present(Hash t, Object_ @ref, int h)
+		private static NodeRef present(Hash t, Object_ @ref, int h)
 		{
-			Node n=null, p=null;
+			NodeRef n=null, p=null;
 			if (tag(@ref) == Type.T_NUMBER)
 			{
-			  	for (p=null,n=list(t,h); n!=null; p=n, n=n.next)
-			   		if (ref_tag(n) == Type.T_NUMBER && nvalue(@ref) == ref_nvalue(n)) break;
+				for (p=null,n=list(t,h); n!=null; p=n, n=NodeRef.assign(n.get().next))
+					if (ref_tag(n.get()) == Type.T_NUMBER && nvalue(@ref) == ref_nvalue(n.get())) break;
 			}
 			else if (tag(@ref) == Type.T_STRING)
 			{
-				for (p=null,n=list(t,h); n!=null; p=n, n=n.next)
-			   		if (ref_tag(n) == Type.T_STRING && streq(svalue(@ref),ref_svalue(n))) break;
+				for (p=null,n=list(t,h); n!=null; p=n, n=NodeRef.assign(n.get().next))
+			   		if (ref_tag(n.get()) == Type.T_STRING && streq(svalue(@ref),ref_svalue(n.get()))) break;
 			}
 			if (n == null)				/* name not present */
 				return null;
@@ -92,12 +92,12 @@ namespace KopiLua
 			return n;
 		}
 		
-		private static void freelist (Node n)
+		private static void freelist (NodeRef n)
 		{
 			 while (n!=null)
 			 {
-			  	Node next = n.next;
-				free (n);
+			 	NodeRef next = NodeRef.assign(n.get().next);
+			  	free (n.get());
 				n = next;
 			 }
 		}
@@ -146,25 +146,25 @@ namespace KopiLua
 		public static Object_ lua_hashdefine (Hash t, Object_ @ref)
 		{
 			int   h;
-			Node n;
+			NodeRef n;
 			h = head (t, @ref);
 			if (h < 0) return null;
 			
 			n = present(t, @ref, h);
 			if (n == null)
 			{
-				n = new_Node();//(Node) new_("Node");
+				n = NodeRef.assign(new_Node());//(Node) new_("Node");
 			  	if (n == null)
 			  	{
 			   		lua_error ("not enough memory");
 			   		return null;
 			  	}
-			  	n.@ref.set(@ref);
-			  	tag(n.val, Type.T_NIL);
-			  	n.next = list(t,h);			/* link node to head of list */
-			  	list(t,h,n);
+			  	n.get().@ref.set(@ref);
+			  	tag(n.get().val, Type.T_NIL);
+			  	n.get().next = NodeRef.assign(list(t,h));			/* link node to head of list */
+			  	list(t,h,n.get());
 			 }
-			 return (n.val);
+			 return (n.get().val);
 		}
 		
 		/*
@@ -178,11 +178,11 @@ namespace KopiLua
 		
 			for (i=0; i<nhash(h); i++)
 			{
-				Node n;
-			  	for (n = list(h,i); n != null; n = n.next)
+				NodeRef n;
+				for (n = list(h,i); n != null; n = NodeRef.assign(n.get().next))
 			  	{
-			   		lua_markobject (n.@ref);
-			   		lua_markobject (n.val);
+					lua_markobject (n.get().@ref);
+			   		lua_markobject (n.get().val);
 			  	}
 			}
 		}
@@ -201,10 +201,10 @@ namespace KopiLua
 			  	int i;
 			  	for (i=h; i<nhash(a); i++)
 			  	{
-			  		if (list(a,i) != null && tag(list(a,i).val) != Type.T_NIL)
+			  		if (list(a,i) != null && tag(list(a,i).get().val) != Type.T_NIL)
 			   		{
-						lua_pushobject (list(a,i).@ref);
-						lua_pushobject (list(a,i).val);
+			  			lua_pushobject (list(a,i).get().@ref);
+			  			lua_pushobject (list(a,i).get().val);
 						return;
 			   		}
 			  	}
@@ -235,26 +235,26 @@ namespace KopiLua
 			  	int h = head (a, r);
 			  	if (h >= 0)
 			  	{
-			   		Node n = list(a,h);
+			   		NodeRef n = list(a,h);
 			   		while (n != null)
 			   		{
-			   			if (n.@ref.isEquals(r))
+			   			if (n.get().@ref.isEquals(r))
 						{
-				 			if (n.next == null)
+				 			if (n.get().next == null)
 				 			{
 				  				firstnode (a, h+1);
 				  				return;
 				 			}
-				 			else if (tag(n.next.val) != Type.T_NIL)
+				 			else if (tag(n.get().next.get().val) != Type.T_NIL)
 				 			{
-				  				lua_pushobject (n.next.@ref);
-				  				lua_pushobject (n.next.val);
+				  				lua_pushobject (n.get().next.get().@ref);
+				  				lua_pushobject (n.get().next.get().val);
 				  				return;
 				 			}
 				 			else
 				 			{
-				  				Node next = n.next.next;
-				  				while (next != null && tag(next.val) == Type.T_NIL) next = next.next;
+				 				NodeRef next = NodeRef.assign(n.get().next.get().next);
+				 				while (next != null && tag(next.get().val) == Type.T_NIL) next = NodeRef.assign(next.get().next);
 				  				if (next == null)
 				  				{
 				   					firstnode (a, h+1);
@@ -262,13 +262,13 @@ namespace KopiLua
 				  				}
 				 	 			else
 				  				{
-				   					lua_pushobject (next.@ref);
-				   					lua_pushobject (next.val);
+				   					lua_pushobject (next.get().@ref);
+				   					lua_pushobject (next.get().val);
 				  				}
 				  				return;
 				 			}
 						}
-						n = n.next;
+			   			n = NodeRef.assign(n.get().next);
 			   		}
 			   		if (n == null)
 						lua_error ("error in function 'next': reference not found");
