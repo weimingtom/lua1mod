@@ -294,7 +294,7 @@ int lua_parse (void)
  err = 0;
  if (yyparse () || (err==1)) return 1;
  *maincode++ = HALT;
- //PrintCode();
+ PrintCode();
  if (lua_execute (initcode)) return 1;
  maincode = initcode;
  return 0;

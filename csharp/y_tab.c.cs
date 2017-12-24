@@ -328,7 +328,7 @@ namespace KopiLua
 		 	err = 0;
 		 	if (yyparse() != 0 || (err == 1)) return 1;
 		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
-		 	//PrintCode();
+		 	PrintCode();
 		 	if (lua_execute(initcode) != 0) return 1;
 		 	maincode = new BytePtr(initcode.chars, initcode.index);
 		 	return 0;
@@ -341,6 +341,8 @@ namespace KopiLua
 		{
 			BytePtr p = new BytePtr(code);
 		 	printf ("\n\nCODE\n");
+		 	 //FIXME:should be p < pc, so here will overflow
+		 	//while (p.index < pc.index)
 		 	while (p != pc)
 		 	{
 		 		switch ((OpCode)p[0])

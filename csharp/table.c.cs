@@ -128,7 +128,7 @@ namespace KopiLua
 		  		lua_error ("symbol table overflow");
 		  		return -1;
 		 	}
-		 	s_name(lua_ntable, s);
+		 	s_name(lua_ntable, strdup(s));
 		 	if (s_name (lua_ntable) == null)
 		 	{
 		  		lua_error ("not enough memory");

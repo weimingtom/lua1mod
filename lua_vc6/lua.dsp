@@ -164,5 +164,33 @@ SOURCE=.\y_tab.h
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
+# Begin Source File
+
+SOURCE=.\array.lua
+# End Source File
+# Begin Source File
+
+SOURCE=.\globals.lua
+# End Source File
+# Begin Source File
+
+SOURCE=.\print.lua
+# End Source File
+# Begin Source File
+
+SOURCE=.\save.lua
+# End Source File
+# Begin Source File
+
+SOURCE=.\sort.lua
+# End Source File
+# Begin Source File
+
+SOURCE=.\test.lua
+# End Source File
+# Begin Source File
+
+SOURCE=.\type.lua
+# End Source File
 # End Target
 # End Project

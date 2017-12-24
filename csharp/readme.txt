@@ -351,4 +351,39 @@ public static int lua_parse()
 		 	maincode = new BytePtr(initcode.chars, initcode.index);
 		 	return 0;
 		}
-		
+---------------------
+
+(24) incr_nvarbuffer()
+nvarbuffer++
+
+					nvarbuffer = 0;
+					varbuffer[nvarbuffer] = (byte)yypvt[-0].vLong; incr_nvarbuffer();
+					yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
+
+varbuffer[i]=33
+varbuffer[i]=34
+
+varbuffer[nvarbuffer] from vLong
+vLong from here->vWord ->(33, 34)
+
+					int local = lua_localname(yypvt[-0].vWord);
+					if (local == -1)	/* global var */
+						yyval.vLong = yypvt[-0].vWord + 1;		/* return positive value */
+					else
+						yyval.vLong = -(local + 1);		/* return negative value */
+						
+vWord from here->lua_findsymbol
+
+				case 33:
+					{
+						yylval.vWord = (Word)lua_findsymbol(yytext);
+						return NAME;
+
+in lua_findsymbol:
+bug fix:
+s_name(lua_ntable, s);
+->		 	
+s_name(lua_ntable, strdup(s));
+
+because: string s (is yytext) will be changed by lexer, must be cloned
+

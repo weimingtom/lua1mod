@@ -3,6 +3,7 @@
 ** TeCGraf - PUC-Rio
 ** 16 Apr 92
 */
+using System;
 
 namespace KopiLua
 {
@@ -161,8 +162,40 @@ namespace KopiLua
 
 		public class Symbol
 		{
-		 	public CharPtr name = null;
+		 	private CharPtr _name = null;
 		 	public Object_ object_ = new Object_();
+		 	
+		 	public CharPtr name 
+		 	{
+		 		get
+		 		{
+		 			return _name;
+		 		}
+		 		set
+		 		{
+//		 			if (value.ToString().Equals("a"))
+//	 			    {
+//	 			    	Console.WriteLine("=================");
+//	 			    }
+//		 			if (value.ToString().Equals("i"))
+//	 			    {
+//	 			    	Console.WriteLine("=================");
+//	 			    }
+//		 			if (value.ToString().Equals("="))
+//	 			    {
+//	 			    	Console.WriteLine("=================");
+//	 			    }		 			
+//		 			if (_name != null && _name.ToString().Equals("a"))
+//		 			{
+//		 				Console.WriteLine("=================");
+//		 				if (value != null && !value.ToString().Equals("a"))
+//		 				{
+//		 					Console.WriteLine("=================");
+//		 				}
+//		 			}
+		 			_name = value;
+		 		}
+		 	}
 		 	
 		 	public Symbol() 
 		 	{
@@ -180,7 +213,13 @@ namespace KopiLua
 		/* Macros to access structure members */
 		//#define tag(o) ((o)->tag)
 		public static Type tag(Object_ o) { return o.tag; }
-		public static void tag(Object_ o, Type t) { o.tag = t; }		
+		public static void tag(Object_ o, Type t) { 
+//			if (t == Type.T_NUMBER)
+//			{
+//				Console.WriteLine("==============");
+//			}
+			o.tag = t;
+		}
 		//#define nvalue(o) ((o)->value.n)
 		public static float nvalue(Object_ o) { return o.value.n; }		
 		public static void nvalue(Object_ o, float n) { o.value.n = n; }	

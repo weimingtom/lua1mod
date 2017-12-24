@@ -656,7 +656,7 @@ namespace KopiLua
 			   		{
 			   			Object_ l = top.get(-2);
 			   			Object_ r = top.get(-1);
-						if (tonumber(r) || tonumber(l))
+						if (tostring(r) || tostring(l))
 				 			return 1;
 						svalue(l, lua_createstring (lua_strconc(svalue(l),svalue(r))));
 						if (svalue(l) == null)

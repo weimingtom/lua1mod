@@ -730,7 +730,7 @@ namespace KopiLua
 		public static CharPtr strdup(CharPtr s)
 		{
 			int index = s.index;
-			char[] chars = new Char[s.chars.Length];
+			char[] chars = new char[s.chars.Length];
 			for (int i = 0; i < chars.Length; ++i) 
 				chars[i] = s.chars[i];
 			return new CharPtr(chars, index);
