@@ -89,10 +89,10 @@ namespace KopiLua
 				}
 				set
 				{
-					if (value != null && value.index == 0)
-					{
-						Console.WriteLine("====================");
-					}
+//					if (value != null && value.index == 0)
+//					{
+//						Console.WriteLine("====================");
+//					}
 					_next = value;
 				}
 			}
@@ -104,7 +104,7 @@ namespace KopiLua
 		 	public Node()
 		 	{
 		 		this.index = Node.global_nodes.Count;
-		 		Console.WriteLine("============ Node " + index);
+//		 		Console.WriteLine("============ Node " + index);
 		 		Node.global_nodes.Add(this);
 		 	}
 		 	public int index = -1;

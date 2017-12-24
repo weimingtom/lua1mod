@@ -155,10 +155,10 @@ namespace KopiLua
 		 		}
 		 		set
 		 		{
-		 			if (_tag == Type.T_NUMBER && value == Type.T_MARK)
-		 			{
-		 				Console.WriteLine("================");
-		 			}
+//		 			if (_tag == Type.T_NUMBER && value == Type.T_MARK)
+//		 			{
+//		 				Console.WriteLine("================");
+//		 			}
 		 			_tag = value;
 		 		}
 		 	}
