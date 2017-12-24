@@ -19,7 +19,22 @@ namespace KopiLua
 		public class BytePtr
 		{
 			public byte[] chars;
-			public int index;
+			private int _index;
+			public int index
+			{
+				get
+				{
+					return _index;
+				}
+				set
+				{
+//					if (value >= 4373)
+//					{
+//						Console.WriteLine("=================");
+//					}
+					_index = value;
+				}
+			}
 			
 			public byte this[int offset]
 			{

@@ -135,7 +135,7 @@ namespace KopiLua
 	
 		private static void code_number (float f)
 		{
-			int i = BitConverter.ToInt32(BitConverter.GetBytes(f), 0);
+			int i = (int)f; //BitConverter.ToInt32(BitConverter.GetBytes(f), 0);
 		  	if (f == i)  /* f has an integer value */
 		  	{
 		  		if (i <= 2) code_byte((byte)((int)OpCode.PUSH0 + i));
@@ -342,8 +342,8 @@ namespace KopiLua
 			BytePtr p = new BytePtr(code);
 		 	printf ("\n\nCODE\n");
 		 	 //FIXME:should be p < pc, so here will overflow
-		 	//while (p.index < pc.index)
-		 	while (p != pc)
+		 	while (p.index < pc.index)
+		 	//while (p != pc)
 		 	{
 		 		switch ((OpCode)p[0])
 		  		{

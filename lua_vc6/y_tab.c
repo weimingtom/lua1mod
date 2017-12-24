@@ -318,7 +318,7 @@ static void PrintCode (void)
     			p++;
    			break;
    case PUSHBYTE:
-    			printf ("%d    PUSHBYTE   %d\n", p-code, *(++p));
+    			printf ("%d    PUSHBYTE   %d\n", p-code, *(p+1));p++;
     			p++;
    			break;
    case PUSHWORD:
@@ -339,7 +339,7 @@ static void PrintCode (void)
     			printf ("%d    PUSHLOCAL%c\n", p-code, *p-PUSHLOCAL0+'0');
     			p++;
    			break;
-   case PUSHLOCAL:	printf ("%d    PUSHLOCAL   %d\n", p-code, *(++p));
+   case PUSHLOCAL:	printf ("%d    PUSHLOCAL   %d\n", p-code, *(p+1));p++;
     			p++;
    			break;
    case PUSHGLOBAL:
@@ -356,7 +356,7 @@ static void PrintCode (void)
     			p++;
    			break;
    case STORELOCAL:
-    			printf ("%d    STORELOCAK   %d\n", p-code, *(++p));
+    			printf ("%d    STORELOCAK   %d\n", p-code, *(p+1));p++;
     			p++;
    			break;
    case STOREGLOBAL:
@@ -364,12 +364,12 @@ static void PrintCode (void)
     			p += 1 + sizeof(Word);
    			break;
    case STOREINDEXED0:  printf ("%d    STOREINDEXED0\n", (p++)-code); break;
-   case STOREINDEXED:   printf ("%d    STOREINDEXED   %d\n", p-code, *(++p));
+   case STOREINDEXED:   printf ("%d    STOREINDEXED   %d\n", p-code, *(p+1));p++;
     			p++;
    			break;
    case STOREFIELD:     printf ("%d    STOREFIELD\n", (p++)-code); break;
    case ADJUST:
-    			printf ("%d    ADJUST   %d\n", p-code, *(++p));
+    			printf ("%d    ADJUST   %d\n", p-code, *(p+1));p++;
     			p++;
    			break;
    case CREATEARRAY:	printf ("%d    CREATEARRAY\n", (p++)-code); break;
@@ -410,7 +410,7 @@ static void PrintCode (void)
    case POP:       	printf ("%d    POP\n", (p++)-code); break;
    case CALLFUNC:	printf ("%d    CALLFUNC\n", (p++)-code); break;
    case RETCODE:
-    			printf ("%d    RETCODE   %d\n", p-code, *(++p));
+    			printf ("%d    RETCODE   %d\n", p-code, *(p+1));p++;
     			p++;
    			break;
    default:		printf ("%d    Cannot happen\n", (p++)-code); break;

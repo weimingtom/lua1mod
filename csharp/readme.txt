@@ -387,3 +387,30 @@ s_name(lua_ntable, strdup(s));
 
 because: string s (is yytext) will be changed by lexer, must be cloned
 
+--------------------------
+(25) push int -> push float
+
+		private static void code_number (float f)
+		{
+			int i = (int)f; //BitConverter.ToInt32(BitConverter.GetBytes(f), 0);
+
+-----------------------
+
+(26) if(...) {}
+case 17:
+//# line 244 "lua.stx"
+{
+        *(yypvt[-3].pByte) = IFFJMP;
+        *((Word *)(yypvt[-3].pByte+1)) = pc - (yypvt[-3].pByte + sizeof(Word)+1);
+        
+        *(yypvt[-1].pByte) = UPJMP;
+        *((Word *)(yypvt[-1].pByte+1)) = pc - yypvt[-6].pByte;
+       } break;
+
+IFFJMP 4
+NOP
+UPJMP 14
+
+
+????excute 2 times code(NOP) before (see align_n)
+
