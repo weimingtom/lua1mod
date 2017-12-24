@@ -28,7 +28,7 @@ namespace KopiLua
 				}
 				set
 				{
-//					if (value >= 4373)
+//					if (value == 4374)
 //					{
 //						Console.WriteLine("=================");
 //					}

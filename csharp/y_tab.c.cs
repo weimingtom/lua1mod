@@ -1483,7 +1483,7 @@ yydefault:
 			case 16:
 				//#line 242 "lua.stx"
 				{
-					yyval.pByte = pc;
+					yyval.pByte = new BytePtr(pc);
 				}
 				break;
 	
@@ -1501,7 +1501,7 @@ yydefault:
 			case 18:
 				//#line 252 "lua.stx"
 				{
-					yyval.pByte = pc;
+					yyval.pByte = new BytePtr(pc);
 				}
 				break;
 				
@@ -1606,7 +1606,7 @@ yydefault:
 				//#line 319 "lua.stx"
 				{
 					align(2);
-					yyval.pByte = pc;
+					yyval.pByte = new BytePtr(pc);
 					code_byte(0);		/* open space */
 					code_word (0);
 				}
@@ -1721,7 +1721,7 @@ yydefault:
 				//#line 344 "lua.stx"
 				{
 					code_byte((byte)OpCode.PUSHBYTE);
-					yyval.pByte = pc; code_byte(0);
+					yyval.pByte = new BytePtr(pc); code_byte(0);
 					incr_ntemp();
 					code_byte((byte)OpCode.CREATEARRAY);
 				}

@@ -414,3 +414,42 @@ UPJMP 14
 
 ????excute 2 times code(NOP) before (see align_n)
 
+VC6:cond breakpoint:
+code[4373] == 55
+
+=====================
+input lua file:
+--print("Hello, world!")
+--print("abcd1234")
+--a = @()
+--a[2] = 3
+--print ("a[".."] = ")
+
+
+a = @()
+i=0
+while i<10 do
+-- a[i] = i*i
+-- i=i+1
+end
+=====================
+
+
+break here: (write 0 first to a byte and write again IFFJMP in that byte) 
+case 17:
+//# line 244 "lua.stx"
+{
+---->        *(yypvt[-3].pByte) = IFFJMP;
+        *((Word *)(yypvt[-3].pByte+1)) = pc - (yypvt[-3].pByte + sizeof(Word)+1);
+ 
+
+pByte not correct (changed), point to pc (in code[])
+
+C# bug fix:
+.pByte = pc;
+=>
+.pByte = new BytePtr(pc);
+--------------------------------------------------------------------------
+
+(27)
+
