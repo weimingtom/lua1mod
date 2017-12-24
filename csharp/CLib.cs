@@ -868,9 +868,18 @@ namespace KopiLua
 		
 		public static CharPtr strchr(CharPtr str, char c)
 		{
-			for (int index = str.index; str.chars[index] != 0; index++)
-				if (str.chars[index] == c)
-					return new CharPtr(str.chars, index);
+			if (c != '\0')
+			{
+				for (int index = str.index; str.chars[index] != 0; index++)
+					if (str.chars[index] == c)
+						return new CharPtr(str.chars, index);
+			}
+			else
+			{
+				for (int index = str.index; index < str.chars.Length; index++)
+					if (str.chars[index] == c)
+						return new CharPtr(str.chars, index);
+			}
 			return null;
 		}
 		
