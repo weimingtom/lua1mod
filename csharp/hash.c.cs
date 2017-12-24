@@ -159,7 +159,7 @@ namespace KopiLua
 			   		lua_error ("not enough memory");
 			   		return null;
 			  	}
-			  	n.@ref = @ref;
+			  	n.@ref.set(@ref);
 			  	tag(n.val, Type.T_NIL);
 			  	n.next = list(t,h);			/* link node to head of list */
 			  	list(t,h,n);

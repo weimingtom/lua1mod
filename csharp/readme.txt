@@ -451,5 +451,101 @@ C# bug fix:
 .pByte = new BytePtr(pc);
 --------------------------------------------------------------------------
 
-(27)
+(27) r,v=next(a,nil) r.tag == T_MASK, should be T_NUMBER
 
+====================================
+lua code:
+--print("Hello, world!")
+--print("abcd1234")
+--a = @()
+--a[2] = 3
+--print ("a[".."] = ")
+
+
+a = @()
+i=0
+while i<10 do
+ a[i] = i*i
+ i=i+1
+end
+
+r,v = next(a,nil)
+while r ~= nil do
+  print ("array["..r.."] = "..v)
+--r,v = next(a,r)
+end 
+====================================
+
+   case CONCOP:
+   {
+    Object *l = top-2;
+    Object *r = top-1;
+    if (tostring(r) || tostring(l))
+     return 1;
+    svalue(l) = lua_createstring (lua_strconc(svalue(l),svalue(r)));
+    if (svalue(l) == NULL)
+     return 1;
+    --top;
+   }
+   break; 
+   
+   
+ VC6: 
+ l-stack   3
+ r-stack   4
+ 
+ top == stack+5, top-2==stack+3, top-1==stack+4
+ 
+ VC6:
+ breakpoint 
+ stack[4].tag == 2 (==> r.tag == T_NUMBER)
+ 
+ 
+ 
+ 
+   case PUSHGLOBAL: 
+break here------>    *top++ = s_object(*((Word *)(pc))); pc += sizeof(Word);
+   break;
+
+
+lua_table[34].object
+
+lua_table, stack
+
+
+		private static void firstnode (Hash a, int h)
+		{
+			if (h < nhash(a))
+			{
+			  	int i;
+			  	for (i=h; i<nhash(a); i++)
+			  	{
+			  		if (list(a,i) != null && tag(list(a,i).val) != Type.T_NIL)
+			   		{
+bug here ----->						lua_pushobject (list(a,i).@ref);
+						lua_pushobject (list(a,i).val);
+						return;
+			   		}
+			  	}
+			 }
+			 lua_pushnil();
+			 lua_pushnil();
+		}
+		
+a.list[i].@ref.tag == T_MASK (should be T_NUMBER)
+
+C# bug fix:
+.@ref = xxx
+=>
+.@ref.set(xxx)
+
+.val = xxx
+=>
+.val.set(xxx)
+
+---------------------------------------------------
+(28)
+//		 			if (_tag == Type.T_NUMBER && value == Type.T_MARK)
+//		 			{
+//		 				Console.WriteLine("================");
+//		 			}

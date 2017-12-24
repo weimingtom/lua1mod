@@ -145,8 +145,23 @@ namespace KopiLua
 
 		public class Object_
 		{
-		 	public Type tag;
+		 	private Type _tag;
 		 	public Value value = new Value();
+		 	public Type tag
+		 	{
+		 		get
+		 		{
+		 			return _tag;
+		 		}
+		 		set
+		 		{
+//		 			if (_tag == Type.T_NUMBER && value == Type.T_MARK)
+//		 			{
+//		 				Console.WriteLine("================");
+//		 			}
+		 			_tag = value;
+		 		}
+		 	}
 		 	
 		 	public void set(Object_ obj)
 		 	{

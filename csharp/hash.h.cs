@@ -12,8 +12,32 @@ namespace KopiLua
 	{	
 		public class Node
 		{
-			public Object_ @ref = new Object_();
-		 	public Object_ val = new Object_();
+			public Object_ @ref
+			{
+				get
+				{
+					return _ref;
+				}
+				set
+				{
+					_ref = value;
+				}
+			}
+			public Object_ val
+			{
+				get
+				{
+					return _val;
+				}
+				set
+				{
+					_val = value;
+				}				
+			}
+			
+			private Object_ _ref = new Object_();
+		 	private Object_ _val = new Object_();
+		 	
 		 	public Node next;
 		}
 		
