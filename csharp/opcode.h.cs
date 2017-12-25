@@ -92,6 +92,8 @@ namespace KopiLua
 		
 		public class Value //FIXME:struct?class?
 		{
+			public string __name__ = "";
+			
 		 	public Cfunction f;
 			public float n;
 		 	public CharPtr s;
@@ -107,6 +109,7 @@ namespace KopiLua
 				this.b = v.b;
 				this.a = v.a;
 				this.u = v.u;
+				this.__name__ = v.__name__;
 			}
 			
 		 	public bool isEquals(Value v)
@@ -249,7 +252,7 @@ namespace KopiLua
 		public static void avalue(Object_ o, Hash a) { o.value.a = a; }	
 		//#define fvalue(o) ((o)->value.f)
 		public static Cfunction fvalue(Object_ o) { return o.value.f; }		
-		public static void fvalue(Object_ o, Cfunction f) { o.value.f = f; }	
+		public static void fvalue(Object_ o, Cfunction f, string name) { o.value.f = f; o.value.__name__ = name;}	
 		//#define uvalue(o) ((o)->value.u)
 		public static object uvalue(Object_ o) { return o.value.u; }		
 		public static void uvalue(Object_ o, object u) { o.value.u = u; }

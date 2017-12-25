@@ -18,11 +18,14 @@
 #define MAXCODE 1024
 #endif
 static long   buffer[MAXCODE];
-static Byte  *code = (Byte *)buffer;
+/*static*/ Byte  *code = (Byte *)buffer;
 static long   mainbuffer[MAXCODE];
 static Byte  *maincode = (Byte *)mainbuffer;
 static Byte  *basepc;
 static Byte  *pc;
+
+Byte  *code_calloc[100];
+int   code_calloc_size = 0;
 
 #define MAXVAR 32
 static long    varbuffer[MAXVAR];
@@ -1234,6 +1237,15 @@ case 8:
 	        s_tag(yypvt[-7].vWord) = T_FUNCTION;
 	        s_bvalue(yypvt[-7].vWord) = calloc (pc-code, sizeof(Byte));
 	        memcpy (s_bvalue(yypvt[-7].vWord), code, (pc-code)*sizeof(Byte));
+			{
+				int i;
+				char *ptr = s_bvalue(yypvt[-7].vWord);
+				for (i = 0; i < pc-code; ++i)
+				{
+					printf("%d: %x\n", i, ptr[i]);
+				}
+				code_calloc[code_calloc_size++] = ptr;
+			}
 	       } break;
 case 11:
 //# line 210 "lua.stx"

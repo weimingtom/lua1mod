@@ -36,8 +36,24 @@ namespace KopiLua
 		
 		private class ObjectRef 
 		{
+			public int index
+			{
+				get
+				{
+					return _index;
+				}
+				set
+				{
+					if (value == 11 && this.obj[8].value.__name__.Equals("writeto"))
+					{
+						Console.WriteLine("====================");
+					}
+					_index = value;
+				}
+			}
+			
 			public Object_[] obj;
-			public int index;
+			private int _index;
 			public ObjectRef(Object_[] _obj, int _index)
 			{
 				this.obj = _obj;
@@ -276,6 +292,11 @@ namespace KopiLua
 		{
 		 	while (true)
 			{
+		 		Console.WriteLine(">>>>>>>>>>>>>>>>>>" + pc.index);
+		 		if (pc.index == 33)
+		 		{
+		 			Console.WriteLine("==============");
+		 		}
 		 		byte b = pc[0]; pc.inc();
 		  		switch ((OpCode) b)
 		 	 	{
@@ -723,6 +744,10 @@ namespace KopiLua
 		
 			   	case OpCode.CALLFUNC:
 			   		{
+				   		if (pc.chars != code.chars && pc.index == 4454)
+				   		{
+				   			Console.WriteLine("=================");
+				   		}
 						BytePtr newpc;
 						ObjectRef b_ = top.getRef(-1);
 						while (tag(b_.get()) != Type.T_MARK) b_.dec();
@@ -870,7 +895,7 @@ namespace KopiLua
 		 	top.add(2);
 		 	tag(top.get(-nparam-1), Type.T_MARK);
 		 	top.get(-nparam-2).set(func);
-		 	return (lua_execute (new BytePtr(lua_call_startcode)));
+		 	return (lua_execute (new BytePtr(lua_call_startcode, 0)));
 		}
 	
 		/*
@@ -1029,7 +1054,7 @@ namespace KopiLua
 		/*
 		** Push an object (tag=cfunction) to stack. Return 0 on success or 1 on error.
 		*/
-		public static int lua_pushcfunction (lua_CFunction fn)
+		public static int lua_pushcfunction (lua_CFunction fn, string name)
 		{
 			if ((top.minus(stack)) >= MAXSTACK-1)
 		 	{
@@ -1037,7 +1062,7 @@ namespace KopiLua
 		  		return 1;
 		 	}
 			tag(top.get(), Type.T_CFUNCTION);
-			fvalue(top.inc(), fn);
+			fvalue(top.inc(), fn, name);
 		 	return 0;
 		}
 	

@@ -330,7 +330,7 @@ namespace KopiLua
 		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
 		 	PrintCode();
 		 	if (lua_execute(initcode) != 0) return 1;
-		 	maincode = new BytePtr(initcode.chars, initcode.index);
+		 	maincode = new BytePtr(initcode);
 		 	return 0;
 		}
 	
@@ -1404,7 +1404,7 @@ yydefault:
 			case 3:
 				//#line 179 "lua.stx"
 				{
-					maincode = new BytePtr(pc.chars, pc.index);
+					maincode = new BytePtr(pc);
 				}
 				break;
 				
@@ -1440,8 +1440,13 @@ yydefault:
 					code_byte((byte)OpCode.RETCODE);
 					code_byte(nlocalvar);
 					s_tag(yypvt[-7].vWord, Type.T_FUNCTION);
-					s_bvalue(yypvt[-7].vWord, new BytePtr(new byte[pc - code]));
+					BytePtr ptr = new BytePtr(new byte[pc - code], 0);
+					s_bvalue(yypvt[-7].vWord, ptr);
 					memcpy(s_bvalue(yypvt[-7].vWord), code, (uint)((pc - code) * 1));
+					for (int i = 0; i < pc-code; ++i)
+					{
+						printf("%d: %x\n", i, ptr[i]);
+					}				
 				}
 				break;
 				

@@ -79,35 +79,35 @@ namespace KopiLua
 				this.index = index;
 			}
 
-			public BytePtr(byte[] chars)
+			public BytePtr(byte[] chars, int index)
 			{
 				this.chars = chars;
-				this.index = 0;
-			}
-
-			public BytePtr(byte[] chars, int index)
+				this.index = index;
+			}			
+			
+			private BytePtr(int index, byte[] chars)
 			{
 				this.chars = chars;
 				this.index = index;
 			}
 
-			public BytePtr(IntPtr ptr)
-			{
-				this.chars = new byte[0];
-				this.index = 0;
-			}
+//			public BytePtr(IntPtr ptr)
+//			{
+//				this.chars = new byte[0];
+//				this.index = 0;
+//			}
 
-			public static BytePtr operator +(BytePtr ptr, int offset) {return new BytePtr(ptr.chars, ptr.index+offset);}
-			public static BytePtr operator -(BytePtr ptr, int offset) {return new BytePtr(ptr.chars, ptr.index-offset);}
-			public static BytePtr operator +(BytePtr ptr, uint offset) { return new BytePtr(ptr.chars, ptr.index + (int)offset); }
-			public static BytePtr operator -(BytePtr ptr, uint offset) { return new BytePtr(ptr.chars, ptr.index - (int)offset); }
+			public static BytePtr operator +(BytePtr ptr, int offset) {return new BytePtr(ptr.index+offset, ptr.chars);}
+			public static BytePtr operator -(BytePtr ptr, int offset) {return new BytePtr(ptr.index-offset, ptr.chars);}
+			public static BytePtr operator +(BytePtr ptr, uint offset) { return new BytePtr(ptr.index + (int)offset, ptr.chars); }
+			public static BytePtr operator -(BytePtr ptr, uint offset) { return new BytePtr(ptr.index - (int)offset, ptr.chars); }
 
 			public void inc() { this.index++; }
 			public void dec() { this.index--; }
-			public BytePtr next() { return new BytePtr(this.chars, this.index + 1); }
-			public BytePtr prev() { return new BytePtr(this.chars, this.index - 1); }
-			public BytePtr add(int ofs) { return new BytePtr(this.chars, this.index + ofs); }
-			public BytePtr sub(int ofs) { return new BytePtr(this.chars, this.index - ofs); }
+			public BytePtr next() { return new BytePtr(this.index + 1, this.chars); }
+			public BytePtr prev() { return new BytePtr(this.index - 1, this.chars); }
+			public BytePtr add(int ofs) { return new BytePtr(this.index + ofs, this.chars); }
+			public BytePtr sub(int ofs) { return new BytePtr(this.index - ofs, this.chars); }
 			
 			public static bool operator ==(BytePtr ptr, byte ch) { return ptr[0] == ch; }
 			public static bool operator ==(byte ch, BytePtr ptr) { return ptr[0] == ch; }

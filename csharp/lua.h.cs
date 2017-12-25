@@ -12,7 +12,7 @@ namespace KopiLua
 		//typedef struct Object *lua_Object;
 		
 		//#define lua_register(n,f) (lua_pushcfunction(f), lua_storeglobal(n))
-		public static void lua_register(CharPtr n, lua_CFunction f) { lua_pushcfunction(f); lua_storeglobal(n); }
+		public static void lua_register(CharPtr n, lua_CFunction f) { lua_pushcfunction(f, n.ToString()); lua_storeglobal(n); }
 
 //		void           lua_errorfunction    	(void (*fn) (char *s));
 //		void           lua_error		(char *s);

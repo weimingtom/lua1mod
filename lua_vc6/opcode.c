@@ -131,7 +131,9 @@ static int lua_tostring (Object *obj)
  return 0;
 }
 
-
+extern Byte  *code_calloc[100];
+extern int   code_calloc_size;
+extern Byte *code;
 /*
 ** Execute the given opcode. Return 0 in success or 1 on error.
 */
@@ -139,6 +141,32 @@ int lua_execute (Byte *pc)
 {
  while (1)
  {
+	 if (pc-code > 4500)
+	 {
+		char *k = 0;
+		int i;
+		for (i = 0; i < code_calloc_size; ++i)
+		{
+			if (pc - code_calloc[i] < 500 && pc - code_calloc[i] >= 0)
+			{
+				k = code_calloc[i];
+				break;
+			}
+		}
+		if (i == code_calloc_size)
+		{
+			k = code;
+		}
+		printf(">>>>>>>>>>>>>>>>>>%d\n", pc-k);
+		if(pc-k == 33)
+		{
+			printf("=================\n");
+		}
+	 }
+	 else
+	 {
+		printf(">>>>>>>>>>>>>>>>>>%d\n", pc-code);
+	 }
   switch ((OpCode)*pc++)
   {
    case NOP: break;
@@ -476,6 +504,10 @@ int lua_execute (Byte *pc)
      nvalue(b) = (base-stack);		/* store base value */
      base = b+1;
      nparam = top-base;			/* number of parameters */
+	 if (b-stack==6)
+	 {
+		 printf("=====================\n");
+	 }
      (fvalue(b-1))();			/* call C function */
      
      /* shift returned values */

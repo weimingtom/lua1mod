@@ -637,3 +637,19 @@ remove new Node, so 'n.get().next == null' can be true
 varbuffer : long[], can be minus
 
 
+(31) pc not only beside code, may point to a calloc memory in symbol table
+
+//# line 197 "lua.stx"
+{ 
+                if (lua_debug) code_byte(RESET); 
+	        code_byte(RETCODE); code_byte(nlocalvar);
+	        s_tag(yypvt[-7].vWord) = T_FUNCTION;
+save to symbol table(lua_table) ------------>	        s_bvalue(yypvt[-7].vWord) = calloc (pc-code, sizeof(Byte));
+	        memcpy (s_bvalue(yypvt[-7].vWord), code, (pc-code)*sizeof(Byte));
+	       } break;
+
+like this:
+breakpoint ---->   case CALLFUNC:
+pc-code	4452
+pc-code	2203453
+
