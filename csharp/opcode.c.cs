@@ -284,7 +284,262 @@ namespace KopiLua
 		 	return 0;
 		}
 	
+
+		public static void PrintCodeName (CharPtr str, BytePtr p_)
+		{
+			BytePtr p = new BytePtr(p_);
+	 		switch ((OpCode)p[0])
+	  		{
+			case OpCode.NOP:		
+	 			sprintf (str, "NOP");
+	 			p.inc();
+	 			break;
+			
+	 		case OpCode.PUSHNIL:	
+	 			sprintf (str, "PUSHNIL"); 
+	 			p.inc();
+	 			break;
+			
+	 		case OpCode.PUSH0: case OpCode.PUSH1: case OpCode.PUSH2:
+	 			sprintf (str, "PUSH%c", (char)(p[0]-(int)OpCode.PUSH0)+'0');
+	 			p.inc();
+				break;
+			
+			case OpCode.PUSHBYTE:
+				sprintf (str, "PUSHBYTE   %d", (int)p[1]);
+				p.inc();
+				p.inc();
+				break;
+			
+			case OpCode.PUSHWORD:
+				Word word_PUSHWORD = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "PUSHWORD   %d", word_PUSHWORD);
+				p += 1 + 2;
+				break;
+			
+			case OpCode.PUSHFLOAT:
+				sprintf (str, "PUSHFLOAT  %f", bytesToFloat(p[1], p[2], p[3], p[4]));
+				p += 1 + 4;
+				break;
+			
+			case OpCode.PUSHSTRING:
+				Word word_PUSHSTRING = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "PUSHSTRING   %d", word_PUSHSTRING);
+				p += 1 + 2;
+				break;
+			
+			case OpCode.PUSHLOCAL0: case OpCode.PUSHLOCAL1: case OpCode.PUSHLOCAL2: case OpCode.PUSHLOCAL3:
+			case OpCode.PUSHLOCAL4: case OpCode.PUSHLOCAL5: case OpCode.PUSHLOCAL6: case OpCode.PUSHLOCAL7:
+			case OpCode.PUSHLOCAL8: case OpCode.PUSHLOCAL9:
+				sprintf (str, "PUSHLOCAL%c", (char)(p[0]-OpCode.PUSHLOCAL0+'0'));
+				p.inc();
+				break;
+			
+			case OpCode.PUSHLOCAL:	
+				sprintf (str, "PUSHLOCAL   %d", (int)p[1]);
+				p.inc();
+				p.inc();
+				break;
+			
+			case OpCode.PUSHGLOBAL:
+				Word word_PUSHGLOBAL = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "PUSHGLOBAL   %d", word_PUSHGLOBAL);
+				p += 1 + 2;
+				break;
+			
+			case OpCode.PUSHINDEXED:    
+				sprintf (str, "PUSHINDEXED");
+				p.inc();
+				break;
+			
+			case OpCode.PUSHMARK:
+				sprintf (str, "PUSHMARK"); 
+				p.inc();
+				break;
+			
+			case OpCode.PUSHOBJECT:
+				sprintf (str, "PUSHOBJECT");
+				p.inc();
+				break;
+			
+			case OpCode.STORELOCAL0: case OpCode.STORELOCAL1: case OpCode.STORELOCAL2: case OpCode.STORELOCAL3:
+			case OpCode.STORELOCAL4: case OpCode.STORELOCAL5: case OpCode.STORELOCAL6: case OpCode.STORELOCAL7:
+			case OpCode.STORELOCAL8: case OpCode.STORELOCAL9:
+				sprintf (str, "STORELOCAL%c", (char)(p[0]-OpCode.STORELOCAL0+'0'));
+				p.inc();
+				break;
+					
+			case OpCode.STORELOCAL:
+				sprintf (str, "STORELOCAK   %d", p[+1]);
+				p.inc();
+				p.inc();
+				break;
+			
+			case OpCode.STOREGLOBAL:
+				Word word_STOREGLOBAL = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "STOREGLOBAL   %d", word_STOREGLOBAL);
+				p += 1 + sizeof(Word);
+				break;
+			
+			case OpCode.STOREINDEXED0:
+				sprintf (str, "STOREINDEXED0");
+				p.inc();
+				break;
+			
+			case OpCode.STOREINDEXED:
+				sprintf (str, "STOREINDEXED   %d", (int)p[1]);
+				p.inc();
+				p.inc();
+				break;
+				
+			case OpCode.STOREFIELD:     
+				sprintf (str, "STOREFIELD");
+				p.inc();
+				break;
+			
+			case OpCode.ADJUST:
+				sprintf (str, "ADJUST   %d", p[+1]);
+				p.inc();
+				p.inc();
+				break;
+				
+			case OpCode.CREATEARRAY:	
+				sprintf (str, "CREATEARRAY");
+				p.inc();
+				break;
+			
+			case OpCode.EQOP:       	
+				sprintf (str, "EQOP");
+				p.inc();
+				break;
+			
+			case OpCode.LTOP:       	
+				sprintf (str, "LTOP");
+				p.inc();
+				break;
+			
+			case OpCode.LEOP:       	
+				sprintf (str, "LEOP");
+				p.inc();
+				break;
+			
+			case OpCode.ADDOP:       	
+				sprintf (str, "ADDOP");
+				p.inc();
+				break;
+			
+			case OpCode.SUBOP:       	
+				sprintf (str, "SUBOP");
+				p.inc();
+				break;
+			
+			case OpCode.MULTOP:      	
+				sprintf (str, "MULTOP");
+				p.inc();
+				break;
+			
+			case OpCode.DIVOP:       	
+				sprintf (str, "DIVOP");
+				p.inc();
+				break;
+			
+			case OpCode.CONCOP:       	
+				sprintf (str, "CONCOP");
+				p.inc();
+				break;
+			
+			case OpCode.MINUSOP:
+				sprintf (str, "MINUSOP");
+				p.inc();
+				break;
+			
+			case OpCode.NOTOP:
+				sprintf (str, "NOTOP");
+				p.inc();
+				break;
+			
+			case OpCode.ONTJMP:
+				Word word_ONTJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "ONTJMP  %d", word_ONTJMP);
+				p += sizeof(Word) + 1;
+				break;
 	
+			case OpCode.ONFJMP:
+				Word word_ONFJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "ONFJMP  %d", word_ONFJMP);
+				p += 2 + 1;
+				break;
+			
+			case OpCode.JMP:
+				Word word_JMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "JMP  %d", word_JMP);
+				p += 2 + 1;
+				break;
+			
+			case OpCode.UPJMP:
+				Word word_UPJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "UPJMP  %d", word_UPJMP);
+				p += 2 + 1;
+				break;
+	
+			case OpCode.IFFJMP:
+				Word word_IFFJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "IFFJMP  %d", word_IFFJMP);
+				p += 2 + 1;
+				break;
+				
+			case OpCode.IFFUPJMP:
+				Word word_IFFUPJMP = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "IFFUPJMP  %d", word_IFFUPJMP);
+				p += 2 + 1;
+				break;
+				
+			case OpCode.POP:       	
+				sprintf (str, "POP");
+				p.inc();
+				break;
+			
+			case OpCode.CALLFUNC:
+				sprintf (str, "CALLFUNC");
+				p.inc();
+				break;
+			
+			case OpCode.RETCODE:
+				sprintf (str, "RETCODE   %d", p[+1]); 
+				p.inc();
+				p.inc();
+				break;
+			
+			case OpCode.HALT: 
+				sprintf (str, "HALT", p-code);p.inc();
+				break;
+			
+			case OpCode.SETFUNCTION:
+				Word word_SETFUNCTION1 = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				Word word_SETFUNCTION2 = (Word)((byte)p[3] | ((byte)p[4] << 8));
+				sprintf (str, "SETFUNCTION  %d, %d", word_SETFUNCTION1, word_SETFUNCTION2);
+			    p += 2 * 2 + 1;
+			   	break;
+			   			
+			case OpCode.SETLINE:
+			   	Word word_SETLINE = (Word)((byte)p[1] | ((byte)p[2] << 8));
+				sprintf (str, "SETLINE  %d", word_SETLINE);
+			    p += sizeof(Word) + 1;
+			   	break;
+			
+			case OpCode.RESET: 
+			   	sprintf (str, "RESET"); 
+			   	p.inc();
+			   	break;
+				
+			default:
+				sprintf (str, "Cannot happen (%d)", p[0]); 
+				p.inc(); 
+				break;
+	  		}
+		}
+		
+		private static CharPtr code_name = new CharPtr(new char[1000]);
 		/*
 		** Execute the given opcode. Return 0 in success or 1 on error.
 		*/
@@ -292,7 +547,8 @@ namespace KopiLua
 		{
 		 	while (true)
 			{
-		 		Console.WriteLine(">>>>>>>>>>>>>>>>>>" + pc.index);
+		 		PrintCodeName(code_name, pc);
+		 		Console.WriteLine(">>>>>>>>>>>>>>>>>>" + pc.index + " " + code_name.ToString());
 		 		if (pc.index == 33)
 		 		{
 		 			Console.WriteLine("==============");

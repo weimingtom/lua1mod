@@ -416,7 +416,18 @@ static void PrintCode (void)
     			printf ("%d    RETCODE   %d\n", p-code, *(p+1));p++;
     			p++;
    			break;
-   default:		printf ("%d    Cannot happen\n", (p++)-code); break;
+
+case HALT: printf ("%d    HALT\n", (p++)-code); break;
+case SETFUNCTION:
+	printf ("%d    SETFUNCTION  %d, %d\n",  p-code, *((Word *)(p+1)), *((Word *)(p+1+sizeof(Word))));
+    			p += 2 * sizeof(Word) + 1;
+   			break;
+case SETLINE:
+	printf ("%d    SETLINE  %d\n", p-code, *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+case RESET: printf ("%d    RESET\n", (p++)-code); break;
+   default:		printf ("%d    Cannot happen (%d)\n", (p++)-code, (int)*p); break;
   }
  }
 }

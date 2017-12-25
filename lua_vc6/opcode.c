@@ -131,9 +131,132 @@ static int lua_tostring (Object *obj)
  return 0;
 }
 
+
+static void PrintCodeName (char *str, Byte *p)
+{
+  switch ((OpCode)*p)
+  {
+   case NOP:		sprintf (str, "NOP"); break;
+   case PUSHNIL:	sprintf (str, "PUSHNIL"); break;
+   case PUSH0: case PUSH1: case PUSH2:
+    			sprintf (str, "PUSH%c", *p-PUSH0+'0');
+    			p++;
+   			break;
+   case PUSHBYTE:
+    			sprintf (str, "PUSHBYTE   %d", *(p+1));p++;
+    			p++;
+   			break;
+   case PUSHWORD:
+    			sprintf (str, "PUSHWORD   %d", *((Word *)(p+1)));
+    			p += 1 + sizeof(Word);
+   			break;
+   case PUSHFLOAT:
+    			sprintf (str, "PUSHFLOAT  %f", *((float *)(p+1)));
+    			p += 1 + sizeof(float);
+   			break;
+   case PUSHSTRING:
+    			sprintf (str, "PUSHSTRING   %d", *((Word *)(p+1)));
+    			p += 1 + sizeof(Word);
+   			break;
+   case PUSHLOCAL0: case PUSHLOCAL1: case PUSHLOCAL2: case PUSHLOCAL3:
+   case PUSHLOCAL4: case PUSHLOCAL5: case PUSHLOCAL6: case PUSHLOCAL7:
+   case PUSHLOCAL8: case PUSHLOCAL9:
+    			sprintf (str, "PUSHLOCAL%c", *p-PUSHLOCAL0+'0');
+    			p++;
+   			break;
+   case PUSHLOCAL:	sprintf (str, "PUSHLOCAL   %d", *(p+1));p++;
+    			p++;
+   			break;
+   case PUSHGLOBAL:
+    			sprintf (str, "PUSHGLOBAL   %d", *((Word *)(p+1)));
+    			p += 1 + sizeof(Word);
+   			break;
+   case PUSHINDEXED:    sprintf (str, "PUSHINDEXED"); break;
+   case PUSHMARK:       sprintf (str, "PUSHMARK"); break;
+   case PUSHOBJECT:     sprintf (str, "PUSHOBJECT"); break;
+   case STORELOCAL0: case STORELOCAL1: case STORELOCAL2: case STORELOCAL3:
+   case STORELOCAL4: case STORELOCAL5: case STORELOCAL6: case STORELOCAL7:
+   case STORELOCAL8: case STORELOCAL9:
+    			sprintf (str, "STORELOCAL%c", *p-STORELOCAL0+'0');
+    			p++;
+   			break;
+   case STORELOCAL:
+    			sprintf (str, "STORELOCAK   %d", *(p+1));p++;
+    			p++;
+   			break;
+   case STOREGLOBAL:
+    			sprintf (str, "STOREGLOBAL   %d", *((Word *)(p+1)));
+    			p += 1 + sizeof(Word);
+   			break;
+   case STOREINDEXED0:  sprintf (str, "STOREINDEXED0"); break;
+   case STOREINDEXED:   sprintf (str, "STOREINDEXED   %d", *(p+1));p++;
+    			p++;
+   			break;
+   case STOREFIELD:     sprintf (str, "STOREFIELD"); break;
+   case ADJUST:
+    			sprintf (str, "ADJUST   %d", *(p+1));p++;
+    			p++;
+   			break;
+   case CREATEARRAY:	sprintf (str, "CREATEARRAY"); break;
+   case EQOP:       	sprintf (str, "EQOP"); break;
+   case LTOP:       	sprintf (str, "LTOP"); break;
+   case LEOP:       	sprintf (str, "LEOP"); break;
+   case ADDOP:       	sprintf (str, "ADDOP"); break;
+   case SUBOP:       	sprintf (str, "SUBOP"); break;
+   case MULTOP:      	sprintf (str, "MULTOP"); break;
+   case DIVOP:       	sprintf (str, "DIVOP"); break;
+   case CONCOP:       	sprintf (str, "CONCOP"); break;
+   case MINUSOP:       	sprintf (str, "MINUSOP"); break;
+   case NOTOP:       	sprintf (str, "NOTOP"); break;
+   case ONTJMP:	   
+    			sprintf (str, "ONTJMP  %d", *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+   case ONFJMP:	   
+    			sprintf (str, "ONFJMP  %d", *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+   case JMP:	   
+    			sprintf (str, "JMP  %d", *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+   case UPJMP:
+    			sprintf (str, "UPJMP  %d", *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+   case IFFJMP:
+    			sprintf (str, "IFFJMP  %d", *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+   case IFFUPJMP:
+    			sprintf (str, "IFFUPJMP  %d", *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+   case POP:       	sprintf (str, "POP"); break;
+   case CALLFUNC:	sprintf (str, "CALLFUNC"); break;
+   case RETCODE:
+    			sprintf (str, "RETCODE   %d", *(p+1));p++;
+    			p++;
+   			break;
+
+case HALT: sprintf (str, "HALT"); break;
+case SETFUNCTION:
+	sprintf (str, "SETFUNCTION  %d, %d", *((Word *)(p+1)), *((Word *)(p+1+sizeof(Word))));
+    			p += 2 * sizeof(Word) + 1;
+   			break;
+case SETLINE:
+	sprintf (str, "SETLINE  %d", *((Word *)(p+1)));
+    			p += sizeof(Word) + 1;
+   			break;
+case RESET: sprintf (str, "RESET"); break;
+   default:		sprintf (str, "Cannot happen (%d)", (int)*p); break;
+  }
+}
+
 extern Byte  *code_calloc[100];
 extern int   code_calloc_size;
 extern Byte *code;
+static char code_name[1000];
 /*
 ** Execute the given opcode. Return 0 in success or 1 on error.
 */
@@ -141,7 +264,7 @@ int lua_execute (Byte *pc)
 {
  while (1)
  {
-	 if (pc-code > 4500)
+	 if (pc-code > 4500 || pc - code < 0)
 	 {
 		char *k = 0;
 		int i;
@@ -157,7 +280,8 @@ int lua_execute (Byte *pc)
 		{
 			k = code;
 		}
-		printf(">>>>>>>>>>>>>>>>>>%d\n", pc-k);
+		PrintCodeName(code_name, pc);
+		printf(">>>>>>>>>>>>>>>>>>%d %s\n", pc-k, code_name);
 		if(pc-k == 33)
 		{
 			printf("=================\n");
@@ -165,7 +289,8 @@ int lua_execute (Byte *pc)
 	 }
 	 else
 	 {
-		printf(">>>>>>>>>>>>>>>>>>%d\n", pc-code);
+		 PrintCodeName(code_name, pc);
+		printf(">>>>>>>>>>>>>>>>>>%d %s\n", pc-code, code_name);
 	 }
   switch ((OpCode)*pc++)
   {

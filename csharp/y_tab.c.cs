@@ -567,6 +567,28 @@ namespace KopiLua
 					p.inc();
 					break;
 				
+				case OpCode.HALT: 
+					printf ("%d    HALT\n", p-code);p.inc();
+					break;
+				
+				case OpCode.SETFUNCTION:
+					Word word_SETFUNCTION1 = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					Word word_SETFUNCTION2 = (Word)((byte)p[3] | ((byte)p[4] << 8));
+					printf ("%d    SETFUNCTION  %d, %d\n",  p-code, word_SETFUNCTION1, word_SETFUNCTION2);
+				    p += 2 * 2 + 1;
+				   	break;
+				   			
+				case OpCode.SETLINE:
+				   	Word word_SETLINE = (Word)((byte)p[1] | ((byte)p[2] << 8));
+					printf ("%d    SETLINE  %d\n", p-code, word_SETLINE);
+				    p += sizeof(Word) + 1;
+				   	break;
+				
+				case OpCode.RESET: 
+				   	printf ("%d    RESET\n", p-code); 
+				   	p.inc();
+				   	break;
+					
 				default:
 					printf ("%d    Cannot happen\n", p-code); 
 					p.inc(); 
