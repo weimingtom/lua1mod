@@ -634,4 +634,6 @@ remove new Node, so 'n.get().next == null' can be true
 --------------------------------
 
 (30) 
+varbuffer : long[], can be minus
+
 

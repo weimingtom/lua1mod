@@ -49,7 +49,7 @@ namespace KopiLua
 	
 		//#define MAXVAR 32
 		public const int MAXVAR = 32;
-		internal static byte[] varbuffer = new byte[MAXVAR * 8];
+		internal static long[] varbuffer = new long[MAXVAR];
 		internal static byte nvarbuffer=0; // number of variables at a list
 	
 		internal static Word[] localvar = new Word[STACKGAP];
@@ -270,7 +270,7 @@ namespace KopiLua
 			}
 			else if (varbuffer[i] < 0)      /* local var */
 			{
-				int number = (-varbuffer[i]) - 1;
+				int number = (int)((-varbuffer[i]) - 1);
 				if (number < 10)
 				{
 					code_byte((byte)(OpCode.STORELOCAL0 + number));
@@ -2056,7 +2056,7 @@ yydefault:
 				//#line 486 "lua.stx"
 				{
 					nvarbuffer = 0;
-					varbuffer[nvarbuffer] = (byte)yypvt[-0].vLong; incr_nvarbuffer();
+					varbuffer[nvarbuffer] = yypvt[-0].vLong; incr_nvarbuffer();
 					yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
 				}
 				break;
@@ -2064,7 +2064,7 @@ yydefault:
 			case 93:
 				//#line 492 "lua.stx"
 				{
-					varbuffer[nvarbuffer] = (byte)yypvt[-0].vLong; incr_nvarbuffer();
+					varbuffer[nvarbuffer] = yypvt[-0].vLong; incr_nvarbuffer();
 					yyval.vInt = (yypvt[-0].vLong == 0) ? yypvt[-2].vInt + 1 : yypvt[-2].vInt;
 				}
 				break;

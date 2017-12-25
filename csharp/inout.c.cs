@@ -25,7 +25,16 @@ namespace KopiLua
 		private const int MAXFUNCSTACK = 32;
 	
 		private class FuncstackCls { public int file; public int function; }
-		private static FuncstackCls[] funcstack = new FuncstackCls[MAXFUNCSTACK];
+		private static FuncstackCls[] funcstack = _init_funcstack();
+		private static FuncstackCls[] _init_funcstack()
+		{
+			FuncstackCls[] result = new FuncstackCls[MAXFUNCSTACK];
+			for (int i = 0; i < result.Length; ++i)
+			{
+				result[i] = new FuncstackCls();
+			}
+			return result;
+		}
 		private static int nfuncstack=0;
 		
 		private static FILE fp;

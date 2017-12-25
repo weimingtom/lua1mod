@@ -20,10 +20,10 @@ namespace lua1mod
 			// TODO: Implement Functionality Here
 			
 			//Console.WriteLine("atof() = " + KopiLua.Lua.atof("12.34"));
-			Lua.main(2, new Lua.CharPtr[] {"lua", "print.lua"});
+			//Lua.main(2, new Lua.CharPtr[] {"lua", "print.lua"});
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "array.lua"}); //ok
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "globals.lua"}); //ok
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "save.lua"});
+			Lua.main(2, new Lua.CharPtr[] {"lua", "save.lua"});
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "sort.lua"});
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "test.lua"}); //ok
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "type.lua"});

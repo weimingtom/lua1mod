@@ -1585,7 +1585,8 @@ case 92:
 //# line 486 "lua.stx"
 {
 	   nvarbuffer = 0; 
-           varbuffer[nvarbuffer] = yypvt[-0].vLong; incr_nvarbuffer();
+           varbuffer[nvarbuffer] = yypvt[-0].vLong; 
+		   incr_nvarbuffer();
 	   yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
 	  } break;
 case 93:
