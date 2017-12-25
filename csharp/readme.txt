@@ -449,6 +449,22 @@ C# bug fix:
 .pByte = pc;
 =>
 .pByte = new BytePtr(pc);
+
+
+
+
+note (how IFFJMP written):
+					align(2);
+					yyval.pByte = new BytePtr(pc);
+put zero(NOP)--->					code_byte(0);		/* open space */
+put zero arg---->					code_word (0);
+					
+
+{
+replace zero(NOP) with IFFJMP ---->        *(yypvt[-3].pByte) = IFFJMP;
+replace zero arg with a number---->        *((Word *)(yypvt[-3].pByte+1)) = pc - (yypvt[-3].pByte + sizeof(Word)+1);
+        
+
 --------------------------------------------------------------------------
 
 (27) r,v=next(a,nil) r.tag == T_MASK, should be T_NUMBER
@@ -616,4 +632,6 @@ remove new Node, so 'n.get().next == null' can be true
 
 
 --------------------------------
+
+(30) 
 
