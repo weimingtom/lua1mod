@@ -328,7 +328,10 @@ namespace KopiLua
 		 	err = 0;
 		 	if (yyparse() != 0 || (err == 1)) return 1;
 		 	maincode[0] = (byte)OpCode.HALT; maincode.inc();
-		 	PrintCode();
+		 	if (false) 
+		 	{
+		 		PrintCode();
+		 	}
 		 	if (lua_execute(initcode) != 0) return 1;
 		 	maincode = new BytePtr(initcode);
 		 	return 0;
@@ -1472,7 +1475,7 @@ yydefault:
 							printf("%d: %x\n", i, ptr[i]);
 						}
 					}
-					else
+					else if (false)
 					{
 						BytePtr ptr2 = new BytePtr(ptr);
 						CharPtr str = new CharPtr(new char[200]);

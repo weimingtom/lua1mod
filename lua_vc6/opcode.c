@@ -265,6 +265,7 @@ int lua_execute (Byte *pc)
 {
  while (1)
  {
+#if 0
 	 if (pc-code > 4500 || pc - code < 0)
 	 {
 		char *k = 0;
@@ -283,18 +284,17 @@ int lua_execute (Byte *pc)
 		}
 		PrintCodeName(code_name, pc);
 		printf(">>>>>>>>>>>>>>>>>>%d %s\n", pc-k, code_name);
-#if 0
-		if(pc-k == 33)
-		{
-			printf("=================\n");
-		}
-#endif
+		//if(pc-k == 33)
+		//{
+		//	printf("=================\n");
+		//}
 	 }
 	 else
 	 {
 		 PrintCodeName(code_name, pc);
 		printf(">>>>>>>>>>>>>>>>>>%d %s\n", pc-code, code_name);
 	 }
+#endif
   switch ((OpCode)*pc++)
   {
    case NOP: break;
@@ -589,6 +589,12 @@ int lua_execute (Byte *pc)
    case IFFJMP:
    {
     int n = *((Word *)(pc));
+#if 0
+	if (n == 28)
+	{
+		printf("==================\n");
+	}
+#endif
     pc += sizeof(Word);
     top--;
     if (tag(top) == T_NIL) pc += n;

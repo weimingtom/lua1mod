@@ -298,7 +298,9 @@ int lua_parse (void)
  err = 0;
  if (yyparse () || (err==1)) return 1;
  *maincode++ = HALT;
+#if 0
  PrintCode();
+#endif
  if (lua_execute (initcode)) return 1;
  maincode = initcode;
  return 0;
@@ -1253,6 +1255,7 @@ case 8:
 				int i;
 				char *ptr = s_bvalue(yypvt[-7].vWord);
 				code_calloc[code_calloc_size++] = ptr;
+#if 0
 				if (0)
 				{
 					for (i = 0; i < pc-code; ++i)
@@ -1260,7 +1263,7 @@ case 8:
 						printf("%d: %x\n", i, ptr[i]);
 					}
 				}
-				else
+				else if (1)
 				{
 					Byte *ptr2 = (Byte *)ptr;
 					char str[200];
@@ -1273,6 +1276,7 @@ case 8:
 					}
 					printf("func end\n");
 				}
+#endif
 			}
 	       } break;
 case 11:

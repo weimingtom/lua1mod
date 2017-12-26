@@ -1,4 +1,10 @@
-﻿(1) %c
+﻿debug code:
+<1> PrintCode
+<2> func begin
+<3> >>>>>
+
+------------------------
+(1) %c
 
 public static int putc(int ch, FILE fp)
 		{
@@ -652,4 +658,14 @@ like this:
 breakpoint ---->   case CALLFUNC:
 pc-code	4452
 pc-code	2203453
+
+
+(32) Copy ptr
+		public static void svalue(Object_ o, CharPtr ptr) { o.value.s = ptr; }
+		public static void bvalue(Object_ o, BytePtr b) { o.value.b = b; }
+-->
+		public static CharPtr svalue(Object_ o) { return o.value.s != null ? new CharPtr(o.value.s) : null; }
+		public static void svalue(Object_ o, CharPtr ptr) { o.value.s = (ptr != null ? new CharPtr(ptr) : null); }
+		public static BytePtr bvalue(Object_ o) { return o.value.b != null ? new BytePtr(o.value.b) : null; }
+		public static void bvalue(Object_ o, BytePtr b) { o.value.b = (b != null ? new BytePtr(b) : null); }
 

@@ -242,11 +242,11 @@ namespace KopiLua
 		public static float nvalue(Object_ o) { return o.value.n; }		
 		public static void nvalue(Object_ o, float n) { o.value.n = n; }	
 		//#define svalue(o) ((o)->value.s)
-		public static CharPtr svalue(Object_ o) { return o.value.s; }
-		public static void svalue(Object_ o, CharPtr ptr) { o.value.s = ptr; }
+		public static CharPtr svalue(Object_ o) { return o.value.s != null ? new CharPtr(o.value.s) : null; }
+		public static void svalue(Object_ o, CharPtr ptr) { o.value.s = (ptr != null ? new CharPtr(ptr) : null); }
 		//#define bvalue(o) ((o)->value.b)
-		public static BytePtr bvalue(Object_ o) { return o.value.b; }
-		public static void bvalue(Object_ o, BytePtr b) { o.value.b = b; }
+		public static BytePtr bvalue(Object_ o) { return o.value.b != null ? new BytePtr(o.value.b) : null; }
+		public static void bvalue(Object_ o, BytePtr b) { o.value.b = (b != null ? new BytePtr(b) : null); }
 		//#define avalue(o) ((o)->value.a)
 		public static Hash avalue(Object_ o) { return o.value.a; }		
 		public static void avalue(Object_ o, Hash a) { o.value.a = a; }	

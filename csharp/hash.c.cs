@@ -5,6 +5,7 @@
 ** Modified by Waldemar Celes Filho
 ** 12 May 93
 */
+using System;
 
 namespace KopiLua
 {				
@@ -77,7 +78,17 @@ namespace KopiLua
 			else if (tag(@ref) == Type.T_STRING)
 			{
 				for (p=null,n=list(t,h); n!=null; p=n, n=NodeRef.assign(n.get().next))
-			   		if (ref_tag(n.get()) == Type.T_STRING && streq(svalue(@ref),ref_svalue(n.get()))) break;
+				{
+//					if (ref_tag(n.get()) == Type.T_STRING)
+//					{
+//						Console.WriteLine("=========================" + svalue(@ref).ToString() + ", " + ref_svalue(n.get()));
+//					}
+					if (ref_tag(n.get()) == Type.T_STRING && streq(svalue(@ref),ref_svalue(n.get())))
+					{
+//						Console.WriteLine("=========================");
+						break;
+					}
+				}
 			}
 			if (n == null)				/* name not present */
 				return null;

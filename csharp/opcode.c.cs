@@ -548,14 +548,29 @@ namespace KopiLua
 		public static int lua_execute(BytePtr pc)
 		{
 		 	while (true)
-			{		 		
-		 		PrintCodeName(code_name, pc);
-		 		Console.WriteLine(">>>>>>>>>>>>>>>>>>" + pc.index + " " + code_name.ToString());
-		 		if (pc.index == 55)
+			{		 
+		 		if (false)
 		 		{
-		 			pc_count++;
-		 			Console.WriteLine("==============" + pc_count);
+		 			PrintCodeName(code_name, pc);
+		 			Console.WriteLine(">>>>>>>>>>>>>>>>>>" + pc.index + " " + code_name.ToString());
 		 		}
+		 		
+		 		
+//		 		if (pc.index == 55)
+//		 		{
+//		 			pc_count++;
+//		 			Console.WriteLine("==============" + pc_count);
+//		 		}
+
+
+//		 		if (pc.index == 157)
+//		 		{
+//		 			Console.WriteLine("==============");
+//		 		}
+//		 		if (pc.index == 162)
+//		 		{
+//		 			Console.WriteLine("==============");
+//		 		}
 		 		
 		 		byte b = pc[0]; pc.inc();
 		  		switch ((OpCode) b)

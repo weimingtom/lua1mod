@@ -61,7 +61,16 @@ static Node *present(Hash *t, Object *ref, int h)
  else if (tag(ref) == T_STRING)
  {
   for (p=NULL,n=list(t,h); n!=NULL; p=n, n=n->next)
-   if (ref_tag(n) == T_STRING && streq(svalue(ref),ref_svalue(n))) break;
+  { 
+#if 0
+	  if (ref_tag(n) == T_STRING)
+	  {
+		  printf("===============%s, %s\n", svalue(ref), ref_svalue(n));  
+	  }
+#endif
+	  if (ref_tag(n) == T_STRING && streq(svalue(ref),ref_svalue(n))) 
+	   break;
+  }
  }  
  if (n==NULL)				/* name not present */
   return NULL;
