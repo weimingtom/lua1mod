@@ -10,6 +10,8 @@
 #include "lua.h"
 #include "lualib.h"
 
+#define TEST_LUA 1
+
 
 void test (void)
 {
@@ -33,7 +35,7 @@ static void execstr (void)
 int main (int argc, char *argv[])
 {
  int i;
-#if 0
+#if !TEST_LUA
  if (argc < 2)
  {
   puts ("usage: lua filename [functionnames]");
@@ -45,8 +47,8 @@ int main (int argc, char *argv[])
  //char *argv_[] = {"lua.exe", "globals.lua"}; //ok
  //char *argv_[] = {"lua.exe", "save.lua"}; //ok
  //char *argv_[] = {"lua.exe", "sort.lua", "main"}; //ok
- char *argv_[] = {"lua.exe", "test.lua", "retorno_multiplo"}; //ok
- //char *argv_[] = {"lua.exe", "type.lua"};
+ //char *argv_[] = {"lua.exe", "test.lua", "retorno_multiplo"}; //ok
+ char *argv_[] = {"lua.exe", "type.lua"}; //ok
  argc = sizeof(argv_) / sizeof(char *);
  argv = argv_;
 #endif

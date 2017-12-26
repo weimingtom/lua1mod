@@ -511,7 +511,7 @@ namespace KopiLua
 				break;
 			
 			case OpCode.HALT: 
-				sprintf (str, "HALT", p-code);p.inc();
+				sprintf (str, "HALT");p.inc();
 				break;
 			
 			case OpCode.SETFUNCTION:
