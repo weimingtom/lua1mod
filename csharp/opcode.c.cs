@@ -44,10 +44,10 @@ namespace KopiLua
 				}
 				set
 				{
-					if (value == 11 && this.obj[8].value.__name__.Equals("writeto"))
-					{
-						Console.WriteLine("====================");
-					}
+//					if (value == 11 && this.obj[8].value.__name__.Equals("writeto"))
+//					{
+//						Console.WriteLine("====================");
+//					}
 					_index = value;
 				}
 			}
@@ -549,10 +549,10 @@ namespace KopiLua
 			{
 		 		PrintCodeName(code_name, pc);
 		 		Console.WriteLine(">>>>>>>>>>>>>>>>>>" + pc.index + " " + code_name.ToString());
-		 		if (pc.index == 33)
-		 		{
-		 			Console.WriteLine("==============");
-		 		}
+//		 		if (pc.index == 33)
+//		 		{
+//		 			Console.WriteLine("==============");
+//		 		}
 		 		byte b = pc[0]; pc.inc();
 		  		switch ((OpCode) b)
 		 	 	{
@@ -1000,10 +1000,10 @@ namespace KopiLua
 		
 			   	case OpCode.CALLFUNC:
 			   		{
-				   		if (pc.chars != code.chars && pc.index == 4454)
-				   		{
-				   			Console.WriteLine("=================");
-				   		}
+//				   		if (pc.chars != code.chars && pc.index == 4454)
+//				   		{
+//				   			Console.WriteLine("=================");
+//				   		}
 						BytePtr newpc;
 						ObjectRef b_ = top.getRef(-1);
 						while (tag(b_.get()) != Type.T_MARK) b_.dec();

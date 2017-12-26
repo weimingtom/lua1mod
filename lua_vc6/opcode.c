@@ -282,10 +282,12 @@ int lua_execute (Byte *pc)
 		}
 		PrintCodeName(code_name, pc);
 		printf(">>>>>>>>>>>>>>>>>>%d %s\n", pc-k, code_name);
+#if 0
 		if(pc-k == 33)
 		{
 			printf("=================\n");
 		}
+#endif
 	 }
 	 else
 	 {
@@ -629,10 +631,12 @@ int lua_execute (Byte *pc)
      nvalue(b) = (base-stack);		/* store base value */
      base = b+1;
      nparam = top-base;			/* number of parameters */
+#if 0
 	 if (b-stack==6)
 	 {
 		 printf("=====================\n");
 	 }
+#endif
      (fvalue(b-1))();			/* call C function */
      
      /* shift returned values */
