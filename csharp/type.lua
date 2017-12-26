@@ -32,4 +32,3 @@ t1 = @trilha{ x = 4, name = "3"}
 
 a = "na".."me"
 
-

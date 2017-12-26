@@ -23,10 +23,10 @@ namespace lua1mod
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "print.lua"});
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "array.lua"}); //ok
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "globals.lua"}); //ok
-			Lua.main(2, new Lua.CharPtr[] {"lua", "save.lua"});
+			//Lua.main(2, new Lua.CharPtr[] {"lua", "save.lua"}); //ok
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "sort.lua"});
 			//Lua.main(2, new Lua.CharPtr[] {"lua", "test.lua"}); //ok
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "type.lua"});
+			Lua.main(2, new Lua.CharPtr[] {"lua", "type.lua"});
 			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);

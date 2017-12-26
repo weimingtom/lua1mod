@@ -42,6 +42,8 @@ int main (int argc, char *argv[])
 #else
  //char *argv_[] = {"lua.exe", "print.lua"};
  char *argv_[] = {"lua.exe", "save.lua"};
+ //char *argv_[] = {"lua.exe", "sort.lua"};
+ //char *argv_[] = {"lua.exe", "type.lua"};
  argc = 2;
  argv = argv_;
 #endif
