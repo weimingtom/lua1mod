@@ -20,13 +20,13 @@ namespace lua1mod
 			// TODO: Implement Functionality Here
 			
 			//Console.WriteLine("atof() = " + KopiLua.Lua.atof("12.34"));
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "print.lua"});
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "array.lua"}); //ok
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "globals.lua"}); //ok
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "save.lua"}); //ok
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "sort.lua"});
-			//Lua.main(2, new Lua.CharPtr[] {"lua", "test.lua"}); //ok
-			Lua.main(2, new Lua.CharPtr[] {"lua", "type.lua"});
+			//Lua.main(2, new Lua.CharPtr[] {"lua.exe", "print.lua"});
+			//Lua.main(2, new Lua.CharPtr[] {"lua.exe", "array.lua"}); //ok
+			//Lua.main(2, new Lua.CharPtr[] {"lua.exe", "globals.lua"}); //ok
+			//Lua.main(2, new Lua.CharPtr[] {"lua.exe", "save.lua"}); //ok
+			//Lua.main(3, new Lua.CharPtr[] {"lua.exe", "sort.lua", "main"}); //ok
+			Lua.main(2, new Lua.CharPtr[] {"lua.exe", "test.lua", "retorno_multiplo"});
+			//Lua.main(2, new Lua.CharPtr[] {"lua.exe", "type.lua"});
 			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);

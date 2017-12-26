@@ -1252,18 +1252,19 @@ case 8:
 	        s_bvalue(yypvt[-7].vWord) = calloc (pc-code, sizeof(Byte));
 	        memcpy (s_bvalue(yypvt[-7].vWord), code, (pc-code)*sizeof(Byte));
 			{
-				int i;
 				char *ptr = s_bvalue(yypvt[-7].vWord);
 				code_calloc[code_calloc_size++] = ptr;
 #if 0
-				if (0)
-				{
-					for (i = 0; i < pc-code; ++i)
-					{
-						printf("%d: %x\n", i, ptr[i]);
-					}
-				}
-				else if (1)
+				//if (0)
+				//{
+				//  int i;
+				//	for (i = 0; i < pc-code; ++i)
+				//	{
+				//		printf("%d: %x\n", i, ptr[i]);
+				//	}
+				//}
+				//else 
+				if (1)
 				{
 					Byte *ptr2 = (Byte *)ptr;
 					char str[200];

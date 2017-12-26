@@ -541,7 +541,6 @@ namespace KopiLua
 		}
 		
 		private static CharPtr code_name = new CharPtr(new char[1000]);
-		private static int pc_count = 0;
 		/*
 		** Execute the given opcode. Return 0 in success or 1 on error.
 		*/
@@ -558,8 +557,7 @@ namespace KopiLua
 		 		
 //		 		if (pc.index == 55)
 //		 		{
-//		 			pc_count++;
-//		 			Console.WriteLine("==============" + pc_count);
+//		 			Console.WriteLine("==============");
 //		 		}
 
 

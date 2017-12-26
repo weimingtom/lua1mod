@@ -1045,7 +1045,7 @@ namespace KopiLua
 			yyerrflag = 0;
 			yychar = -1;
 	
-			goto yystack;
+			//goto yystack; //FIXME:move to below
 //			{
 			
 			YYSTYPEPtr yy_pv; // top of value stack
@@ -1053,15 +1053,15 @@ namespace KopiLua
 			int yy_state; // current state
 			int yy_n; // internal state number info
 	
-			/*
-			** get globals into registers.
-			** branch to here only if YYBACKUP was called.
-			*/
-yynewstate:
-			yy_pv = yypv;
-			yy_ps = yyps;
-			yy_state = yystate;
-			goto yy_newstate;
+//			/*
+//			** get globals into registers.
+//			** branch to here only if YYBACKUP was called.
+//			*/
+////yynewstate:
+//			yy_pv = yypv;
+//			yy_ps = yyps;
+//			yy_state = yystate;
+//			goto yy_newstate;
 
 			/*
 			** get globals into registers.
@@ -1255,15 +1255,15 @@ yydefault:
 					yyerror("syntax error");
 					goto case 1; //goto skip_init;
 //yyerrlab:
-					/*
-					** get globals into registers.
-					** we have a user generated syntax type error
-					*/
-					yy_pv = yypv;
-					yy_ps = yyps;
-					yy_state = yystate;
-					yynerrs++;
-					goto case 1;
+//					/*
+//					** get globals into registers.
+//					** we have a user generated syntax type error
+//					*/
+//					yy_pv = yypv;
+//					yy_ps = yyps;
+//					yy_state = yystate;
+//					yynerrs++;
+//					goto case 1;
 //skip_init:
 				case 1:
 				case 2: 	/* incompletely recovered error */
@@ -1468,14 +1468,15 @@ yydefault:
 					BytePtr ptr = new BytePtr(new byte[pc - code], 0);
 					s_bvalue(yypvt[-7].vWord, ptr);
 					memcpy(s_bvalue(yypvt[-7].vWord), code, (uint)((pc - code) * 1));
+//					if (false)
+//					{
+//						for (int i = 0; i < pc-code; ++i)
+//						{
+//							printf("%d: %x\n", i, ptr[i]);
+//						}
+//					}
+//					else 
 					if (false)
-					{
-						for (int i = 0; i < pc-code; ++i)
-						{
-							printf("%d: %x\n", i, ptr[i]);
-						}
-					}
-					else if (false)
 					{
 						BytePtr ptr2 = new BytePtr(ptr);
 						CharPtr str = new CharPtr(new char[200]);

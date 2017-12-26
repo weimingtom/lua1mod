@@ -40,11 +40,14 @@ int main (int argc, char *argv[])
   return;
  }
 #else
- //char *argv_[] = {"lua.exe", "print.lua"};
- char *argv_[] = {"lua.exe", "save.lua"};
- //char *argv_[] = {"lua.exe", "sort.lua"};
+ //char *argv_[] = {"lua.exe", "print.lua"}; //ok
+ //char *argv_[] = {"lua.exe", "array.lua"}; //ok
+ //char *argv_[] = {"lua.exe", "globals.lua"}; //ok
+ //char *argv_[] = {"lua.exe", "save.lua"}; //ok
+ //char *argv_[] = {"lua.exe", "sort.lua", "main"}; //ok
+ char *argv_[] = {"lua.exe", "test.lua", "retorno_multiplo"}; //ok
  //char *argv_[] = {"lua.exe", "type.lua"};
- argc = 2;
+ argc = sizeof(argv_) / sizeof(char *);
  argv = argv_;
 #endif
  lua_register ("callfunc", callfunc);
