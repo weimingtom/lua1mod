@@ -132,12 +132,12 @@ static int lua_tostring (Object *obj)
 }
 
 
-static void PrintCodeName (char *str, Byte *p)
+Byte *PrintCodeName (char *str, Byte *p)
 {
   switch ((OpCode)*p)
   {
-   case NOP:		sprintf (str, "NOP"); break;
-   case PUSHNIL:	sprintf (str, "PUSHNIL"); break;
+   case NOP:		sprintf (str, "NOP");p++; break;
+   case PUSHNIL:	sprintf (str, "PUSHNIL");p++; break;
    case PUSH0: case PUSH1: case PUSH2:
     			sprintf (str, "PUSH%c", *p-PUSH0+'0');
     			p++;
@@ -171,9 +171,9 @@ static void PrintCodeName (char *str, Byte *p)
     			sprintf (str, "PUSHGLOBAL   %d", *((Word *)(p+1)));
     			p += 1 + sizeof(Word);
    			break;
-   case PUSHINDEXED:    sprintf (str, "PUSHINDEXED"); break;
-   case PUSHMARK:       sprintf (str, "PUSHMARK"); break;
-   case PUSHOBJECT:     sprintf (str, "PUSHOBJECT"); break;
+   case PUSHINDEXED:    sprintf (str, "PUSHINDEXED");p++; break;
+   case PUSHMARK:       sprintf (str, "PUSHMARK");p++; break;
+   case PUSHOBJECT:     sprintf (str, "PUSHOBJECT");p++; break;
    case STORELOCAL0: case STORELOCAL1: case STORELOCAL2: case STORELOCAL3:
    case STORELOCAL4: case STORELOCAL5: case STORELOCAL6: case STORELOCAL7:
    case STORELOCAL8: case STORELOCAL9:
@@ -188,26 +188,26 @@ static void PrintCodeName (char *str, Byte *p)
     			sprintf (str, "STOREGLOBAL   %d", *((Word *)(p+1)));
     			p += 1 + sizeof(Word);
    			break;
-   case STOREINDEXED0:  sprintf (str, "STOREINDEXED0"); break;
+   case STOREINDEXED0:  sprintf (str, "STOREINDEXED0");p++; break;
    case STOREINDEXED:   sprintf (str, "STOREINDEXED   %d", *(p+1));p++;
     			p++;
    			break;
-   case STOREFIELD:     sprintf (str, "STOREFIELD"); break;
+   case STOREFIELD:     sprintf (str, "STOREFIELD");p++; break;
    case ADJUST:
     			sprintf (str, "ADJUST   %d", *(p+1));p++;
     			p++;
    			break;
-   case CREATEARRAY:	sprintf (str, "CREATEARRAY"); break;
-   case EQOP:       	sprintf (str, "EQOP"); break;
-   case LTOP:       	sprintf (str, "LTOP"); break;
-   case LEOP:       	sprintf (str, "LEOP"); break;
-   case ADDOP:       	sprintf (str, "ADDOP"); break;
-   case SUBOP:       	sprintf (str, "SUBOP"); break;
-   case MULTOP:      	sprintf (str, "MULTOP"); break;
-   case DIVOP:       	sprintf (str, "DIVOP"); break;
-   case CONCOP:       	sprintf (str, "CONCOP"); break;
-   case MINUSOP:       	sprintf (str, "MINUSOP"); break;
-   case NOTOP:       	sprintf (str, "NOTOP"); break;
+   case CREATEARRAY:	sprintf (str, "CREATEARRAY");p++; break;
+   case EQOP:       	sprintf (str, "EQOP");p++; break;
+   case LTOP:       	sprintf (str, "LTOP");p++; break;
+   case LEOP:       	sprintf (str, "LEOP");p++; break;
+   case ADDOP:       	sprintf (str, "ADDOP");p++; break;
+   case SUBOP:       	sprintf (str, "SUBOP");p++; break;
+   case MULTOP:      	sprintf (str, "MULTOP");p++; break;
+   case DIVOP:       	sprintf (str, "DIVOP");p++; break;
+   case CONCOP:       	sprintf (str, "CONCOP");p++; break;
+   case MINUSOP:       	sprintf (str, "MINUSOP");p++; break;
+   case NOTOP:       	sprintf (str, "NOTOP");p++; break;
    case ONTJMP:	   
     			sprintf (str, "ONTJMP  %d", *((Word *)(p+1)));
     			p += sizeof(Word) + 1;
@@ -232,14 +232,14 @@ static void PrintCodeName (char *str, Byte *p)
     			sprintf (str, "IFFUPJMP  %d", *((Word *)(p+1)));
     			p += sizeof(Word) + 1;
    			break;
-   case POP:       	sprintf (str, "POP"); break;
-   case CALLFUNC:	sprintf (str, "CALLFUNC"); break;
+   case POP:       	sprintf (str, "POP");p++; break;
+   case CALLFUNC:	sprintf (str, "CALLFUNC");p++; break;
    case RETCODE:
     			sprintf (str, "RETCODE   %d", *(p+1));p++;
     			p++;
    			break;
 
-case HALT: sprintf (str, "HALT"); break;
+case HALT: sprintf (str, "HALT");p++; break;
 case SETFUNCTION:
 	sprintf (str, "SETFUNCTION  %d, %d", *((Word *)(p+1)), *((Word *)(p+1+sizeof(Word))));
     			p += 2 * sizeof(Word) + 1;
@@ -248,9 +248,10 @@ case SETLINE:
 	sprintf (str, "SETLINE  %d", *((Word *)(p+1)));
     			p += sizeof(Word) + 1;
    			break;
-case RESET: sprintf (str, "RESET"); break;
+case RESET: sprintf (str, "RESET");p++; break;
    default:		sprintf (str, "Cannot happen (%d)", (int)*p); break;
   }
+  return p;
 }
 
 extern Byte  *code_calloc[100];

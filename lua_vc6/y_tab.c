@@ -26,6 +26,7 @@ static Byte  *pc;
 
 Byte  *code_calloc[100];
 int   code_calloc_size = 0;
+extern Byte *PrintCodeName (char *str, Byte *p);
 
 #define MAXVAR 32
 static long    varbuffer[MAXVAR];
@@ -1251,11 +1252,27 @@ case 8:
 			{
 				int i;
 				char *ptr = s_bvalue(yypvt[-7].vWord);
-				for (i = 0; i < pc-code; ++i)
-				{
-					printf("%d: %x\n", i, ptr[i]);
-				}
 				code_calloc[code_calloc_size++] = ptr;
+				if (0)
+				{
+					for (i = 0; i < pc-code; ++i)
+					{
+						printf("%d: %x\n", i, ptr[i]);
+					}
+				}
+				else
+				{
+					Byte *ptr2 = (Byte *)ptr;
+					char str[200];
+					printf("func begin\n");
+					while (ptr2 - ptr < pc - code)
+					{
+						int index = ptr2 - ptr;
+						ptr2 = PrintCodeName(str, ptr2);
+						printf("[%d] %s\n", index, str);
+					}
+					printf("func end\n");
+				}
 			}
 	       } break;
 case 11:

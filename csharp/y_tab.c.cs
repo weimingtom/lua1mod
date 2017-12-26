@@ -1465,10 +1465,26 @@ yydefault:
 					BytePtr ptr = new BytePtr(new byte[pc - code], 0);
 					s_bvalue(yypvt[-7].vWord, ptr);
 					memcpy(s_bvalue(yypvt[-7].vWord), code, (uint)((pc - code) * 1));
-					for (int i = 0; i < pc-code; ++i)
+					if (false)
 					{
-						printf("%d: %x\n", i, ptr[i]);
-					}				
+						for (int i = 0; i < pc-code; ++i)
+						{
+							printf("%d: %x\n", i, ptr[i]);
+						}
+					}
+					else
+					{
+						BytePtr ptr2 = new BytePtr(ptr);
+						CharPtr str = new CharPtr(new char[200]);
+						printf("func begin\n");
+						while (ptr2.index < pc - code)
+						{
+							int index = ptr2.index;
+							ptr2 = PrintCodeName(str, ptr2);
+							printf("[%d] %s\n", index, str.ToString());
+						}
+						printf("func end\n");
+					}
 				}
 				break;
 				

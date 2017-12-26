@@ -285,7 +285,7 @@ namespace KopiLua
 		}
 	
 
-		public static void PrintCodeName (CharPtr str, BytePtr p_)
+		public static BytePtr PrintCodeName (CharPtr str, BytePtr p_)
 		{
 			BytePtr p = new BytePtr(p_);
 	 		switch ((OpCode)p[0])
@@ -537,6 +537,7 @@ namespace KopiLua
 				p.inc(); 
 				break;
 	  		}
+	 		return p;
 		}
 		
 		private static CharPtr code_name = new CharPtr(new char[1000]);
