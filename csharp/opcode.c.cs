@@ -541,19 +541,22 @@ namespace KopiLua
 		}
 		
 		private static CharPtr code_name = new CharPtr(new char[1000]);
+		private static int pc_count = 0;
 		/*
 		** Execute the given opcode. Return 0 in success or 1 on error.
 		*/
 		public static int lua_execute(BytePtr pc)
 		{
 		 	while (true)
-			{
+			{		 		
 		 		PrintCodeName(code_name, pc);
 		 		Console.WriteLine(">>>>>>>>>>>>>>>>>>" + pc.index + " " + code_name.ToString());
-//		 		if (pc.index == 33)
-//		 		{
-//		 			Console.WriteLine("==============");
-//		 		}
+		 		if (pc.index == 55)
+		 		{
+		 			pc_count++;
+		 			Console.WriteLine("==============" + pc_count);
+		 		}
+		 		
 		 		byte b = pc[0]; pc.inc();
 		  		switch ((OpCode) b)
 		 	 	{
@@ -1019,7 +1022,7 @@ namespace KopiLua
 				 			bvalue(b_.get(-1), pc);		        /* store return code */
 				 			nvalue(b_.get(), @base.minus(stack));		/* store base value */
 				 			@base = b_.getRef(+1);
-				 			pc = newpc;
+				 			pc = new BytePtr(newpc);
 				 			if (MAXSTACK-@base.minus(stack) < STACKGAP)
 				 			{
 				  				lua_error ("stack overflow");
