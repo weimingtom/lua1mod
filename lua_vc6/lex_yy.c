@@ -1,3 +1,17 @@
+#define LEXDEBUG 1
+
+#if LEXDEBUG
+void allprint(int i)
+{
+	printf("[%d \'%c\']", i, (char)i);
+}
+
+void sprint(char *ch)
+{
+	printf("\"%s\"", ch);
+}
+#endif
+
 # include "stdio.h"
 # define U(x) x
 # define NLSTATE yyprevious=YYNEWLINE
@@ -762,7 +776,8 @@ yylook(){
 	char *yylastch;
 	/* start off machines */
 # ifdef LEXDEBUG
-	debug = 0;
+	debug = 1;
+	yyout = stdout;
 # endif
 	yyfirst=1;
 	if (!yymorfg)

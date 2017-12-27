@@ -35,13 +35,13 @@ namespace lua1mod
 
 #else
 			Lua.CharPtr[] argv;
-//			argv = new Lua.CharPtr[] {"lua.exe", "print.lua"}; //ok
+			argv = new Lua.CharPtr[] {"lua.exe", "print.lua"}; //ok
 //			argv = new Lua.CharPtr[] {"lua.exe", "array.lua"}; //ok
 //			argv = new Lua.CharPtr[] {"lua.exe", "globals.lua"}; //ok
 //			argv = new Lua.CharPtr[] {"lua.exe", "save.lua"}; //ok
 //			argv = new Lua.CharPtr[] {"lua.exe", "sort.lua", "main"}; //ok
 //			argv = new Lua.CharPtr[] {"lua.exe", "test.lua", "retorno_multiplo"}; //ok
-			argv = new Lua.CharPtr[] {"lua.exe", "type.lua"}; //ok
+//			argv = new Lua.CharPtr[] {"lua.exe", "type.lua"}; //ok
 			Lua.main(argv.Length, argv);
 			
 			Console.Write("Press any key to continue . . . ");

@@ -1,5 +1,5 @@
 ﻿#define YYOPTIM
-//#define LEXDEBUG
+#define LEXDEBUG
 
 using System;
 
@@ -11,6 +11,19 @@ namespace KopiLua
 	
 	public partial class Lua
 	{		
+//FIXME:added
+#if LEXDEBUG
+		public static void allprint(int i)
+		{
+			printf("[%d \'%c\']", i, (char)i);
+		}
+		
+		public static void sprint(CharPtr ch)
+		{
+			printf("\"%s\"", ch.ToString());
+		}
+#endif		
+		
 		//# define U(x) x
 		//# define NLSTATE yyprevious=YYNEWLINE
 		//# define BEGIN yybgin = yysvec + 1 +
@@ -866,7 +879,8 @@ namespace KopiLua
 			CharPtr yylastch;
 			/* start off machines */
 #if LEXDEBUG
-			debug = 0;
+			debug = 1;
+			yyout = stdout;
 #endif
 			yyfirst=1;
 			if (yymorfg==0)
@@ -894,7 +908,13 @@ namespace KopiLua
 						if(yyz == null)break;
 						if(yyz.get().yystoff.isEquals(yycrank))break;
 					}
-					int i_ = input(); yych = i_; yylastch[0] = (char)i_; yylastch.inc();
+					int i_ = input(); 
+					
+					//yych = i_; //FIXME:
+					int i_2 = i_ & 0xff;
+					yych = (sbyte)(i_2 < 0x80 ? i_2 : i_2 - 0x100);
+					
+					yylastch[0] = (char)i_; yylastch.inc();
 					yyfirst=0;
 #if YYOPTIM
 tryagain:
@@ -933,7 +953,7 @@ tryagain:
 #if LEXDEBUG
 						if(debug!=0){
 							fprintf(yyout,"try fall back character ");
-							allprint(YYU(yymatch[yych]));
+							allprint(YYU(yymatch[yymatch_v])); //allprint(YYU(yymatch[yych])); //FIXME:changed
 							putchar('\n');
 						}
 #endif
@@ -966,6 +986,7 @@ contin:
 #if LEXDEBUG
 				if(debug!=0){
 					fprintf(yyout,"stopped at %d with ",lsp.getRef(-1).minus(yysvec)-1);
+					yysvf reff = lsp.get(-1);
 					allprint(yych);
 					putchar('\n');
 				}
@@ -1000,7 +1021,9 @@ contin:
 					yysptr=yysbuf;
 					return(0);
 				}
-				int i__ = input(); yytext[0] = (char)i__; unchecked { yyprevious = (sbyte)i__; }
+				int i__ = input(); yytext[0] = (char)i__; 
+				int i__2 = i__ & 0xff;
+				yyprevious = (sbyte)(i__2 < 0x80 ? i__2 : i__2 - 0x100); //yyprevious = unchecked((sbyte)i__2);
 				if (yyprevious>0)
 					output((char)yyprevious);
 				yylastch=new CharPtr(yytext.chars, 0);
@@ -1033,19 +1056,6 @@ contin:
 		{
 			unput(c);
 		}
-		
-//FIXME:added
-#if LEXDEBUG
-		public static void allprint(int i)
-		{
-			printf("\"%d\"[\'%c\']", i, (char)i);
-		}
-		
-		public static void sprint(CharPtr ch)
-		{
-			printf("\"%s\"", ch.ToString());
-		}
-#endif
 	}
 }
 
