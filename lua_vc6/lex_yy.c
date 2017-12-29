@@ -3,7 +3,18 @@
 #if LEXDEBUG
 void allprint(int i)
 {
-	printf("[%d \'%c\']", i, (char)i);
+	if (i == 40)
+	{
+		printf("========================\n");
+	}
+	if ((char)i == '\n')
+	{
+		printf("[%d \'\\n\']", i);
+	}
+	else
+	{
+		printf("[%d \'%c\']", i, (char)i);
+	}
 }
 
 void sprint(char *ch)
@@ -864,7 +875,10 @@ yylook(){
 				}
 # endif
 			else
-				{unput(*--yylastch);break;}
+			{
+				unput(*--yylastch);
+				break;
+			}
 		contin:
 # ifdef LEXDEBUG
 			if(debug){

@@ -15,7 +15,18 @@ namespace KopiLua
 #if LEXDEBUG
 		public static void allprint(int i)
 		{
-			printf("[%d \'%c\']", i, (char)i);
+			if (i == 40)
+			{
+				Console.WriteLine("======================");
+			}
+			if ((char)i == '\n')
+			{
+				printf("[%d \'\\n\']", i);
+			}
+			else
+			{
+				printf("[%d \'%c\']", i, (char)i);
+			}
 		}
 		
 		public static void sprint(CharPtr ch)
@@ -149,6 +160,110 @@ namespace KopiLua
 				return this.arr == arr && this.index == 0;
 			}
 		}
+		public class yysvfRefRef 
+		{
+			public yysvfRef[] arr;
+			private int index;
+			
+//			public yysvfRef()
+//			{
+//				
+//			}
+			public yysvfRefRef(int index, yysvfRef[] arr)
+			{
+//				if (arr == null)
+//				{
+//					Console.WriteLine("=============");
+//				}
+				this.arr = arr;
+				this.index = index;
+			}			
+			public yysvfRefRef(yysvfRef[] arr, int index)
+			{
+//				if (arr == null)
+//				{
+//					Console.WriteLine("=============");
+//				}
+				this.arr = arr;
+				this.index = index;
+			}
+
+			public yysvfRefRef(yysvfRefRef yref)
+			{
+//				if (yref.arr == null)
+//				{
+//					Console.WriteLine("=============");
+//				}
+				this.arr = yref.arr;
+				this.index = yref.index;
+			}
+			
+			public void inc()
+			{
+				this.index++;
+			}
+			public yysvfRefRef dec() //suffix--
+			{
+				this.index--;
+				return new yysvfRefRef(this.index + 1, this.arr);
+			}
+			public bool isLargerThan(yysvfRef[] arr)
+			{
+				return this.arr == arr && this.index > 0;
+			}
+			public int minus(yysvfRef[] arr)
+			{
+				if (this.arr == arr)
+				{
+					return this.index - 0;
+				}
+				throw new Exception("minus");
+			}
+			
+			public yysvfRef get()
+			{
+				return arr[index];
+			}
+			
+			public yysvfRef get(int offset)
+			{
+				return arr[index + offset];
+			}
+			public yysvfRefRef getRef(int offset)
+			{
+				return new yysvfRefRef(arr, index + offset);
+			}
+//			public void set(yysvfRefRef v)
+//			{
+//				if (arr[index + 0] == null)
+//				{
+//					arr[index + 0] = new yysvfRef();
+//					arr[index + 0].set(v.get());
+//				}
+//				else
+//				{
+//					arr[index + 0].set(v.get());
+//				}
+//			}
+//			public void set(int offset, yysvfRefRef v)
+//			{
+//				arr[index + offset].set(v.get());
+//			}
+			public void set(yysvfRef v)
+			{
+				arr[index] = new yysvfRef(v);
+			}
+			
+			public bool isEquals(yysvfRefRef yyref)
+			{
+				return this.arr == yyref.arr && this.index == yyref.index;
+			}
+			public bool isEquals(yysvfRef[] arr)
+			{
+				return this.arr == arr && this.index == 0;
+			}
+		}		
+		
 		public class yysvf
 		{
 			public yyworkRef yystoff;
@@ -859,8 +974,8 @@ namespace KopiLua
 		//#define NLSTATE yyprevious=YYNEWLINE
 		public static char[] yytext_buffer = new char[YYLMAX];
 		public static CharPtr yytext = new CharPtr(yytext_buffer, true);
-		public static yysvf[] yylstate = new yysvf[YYLMAX];
-		public static yysvfRef yylsp, yyolsp; //FIXME:????
+		public static yysvfRef[] yylstate = new yysvfRef[YYLMAX];
+		public static yysvfRefRef yylsp, yyolsp; //FIXME:????
 		public static CharPtr yysbuf = new CharPtr(new char[YYLMAX]);
 		public static CharPtr yysptr = new CharPtr(yysbuf);
 		public static IntegerPtr yyfnd;
@@ -868,7 +983,7 @@ namespace KopiLua
 		public static int yyprevious = YYNEWLINE;
 		public static int yylook()
 		{
-			yysvfArr yystate; yysvfRef lsp;
+			yysvfArr yystate; yysvfRefRef lsp;
 			yyworkRef yyt = new yyworkRef();
 			yysvfRef yyz = null;
 			int yych=0, yyfirst=0;
@@ -890,7 +1005,7 @@ namespace KopiLua
 				yylastch = new CharPtr(yytext.chars, yytext.index + yyleng);
 			}
 			for(;;){
-				lsp = new yysvfRef(yylstate, 0);
+				lsp = new yysvfRefRef(yylstate, 0);
 				yyestate = new yysvfArr(yybgin); yystate = new yysvfArr(yybgin);
 				if (yyprevious==YYNEWLINE) yystate.inc();
 				for (;;){
@@ -985,24 +1100,23 @@ contin:
 				}
 #if LEXDEBUG
 				if(debug!=0){
-					fprintf(yyout,"stopped at %d with ",lsp.getRef(-1).minus(yysvec)-1);
-					yysvf reff = lsp.get(-1);
+					fprintf(yyout,"stopped at %d with ",lsp.get(-1).minus(yysvec)-1);
 					allprint(yych);
 					putchar('\n');
 				}
 #endif
 				while (lsp.dec().isLargerThan(yylstate)){
 					yylastch[0] = (char)0; yylastch.dec();
-					if (lsp.get() != null && (yyfnd= lsp.get().yystops)!=null && yyfnd[0] > 0){
-						yyolsp = lsp;
+					if (lsp.get() != null && (yyfnd= lsp.get().get().yystops)!=null && yyfnd[0] > 0){
+						yyolsp = new yysvfRefRef(lsp);
 						if(yyextra[yyfnd[0]]!=0){		/* must backup */
-							while(yyback(lsp.get().yystops,-yyfnd[0]) != 1 && lsp.isLargerThan(yylstate)){
+							while(yyback(lsp.get().get().yystops,-yyfnd[0]) != 1 && lsp.isLargerThan(yylstate)){
 								lsp.dec();
 								unput(yylastch[0]);yylastch.dec();
 							}
 						}
 						yyprevious = YYU((sbyte)yylastch[0]);
-						yylsp = lsp;
+						yylsp = new yysvfRefRef(lsp);
 						yyleng = yylastch-yytext+1;
 						yytext[yyleng] = (char)0;
 #if LEXDEBUG
