@@ -7,7 +7,6 @@ namespace KopiLua
 {
 	using Word = System.UInt16; //unsigned short
 	using YYTYPE = System.SByte;
-	using yysvfArr = KopiLua.Lua.yysvfRef; //FIXME:same as yysvfRef, but arr is full of new yysvf()
 	
 	public partial class Lua
 	{		
@@ -307,7 +306,7 @@ namespace KopiLua
 				}
 			}
 		}		
-		public static yysvfArr yyestate;
+		public static yysvfRef yyestate;
 		//extern struct yysvf yysvec[], *yybgin;
 		
 		//#undef input
@@ -945,7 +944,7 @@ namespace KopiLua
 		}
 		
 		public static yyworkRef yytop = yycrankOffset(423);
-		public static yysvfArr yybgin = new yysvfArr(yysvec, 1);
+		public static yysvfRef yybgin = new yysvfRef(yysvec, 1);
 		public static sbyte[] yymatch = { //FIXME:???sbyte, char??? //FIXME: 011 == 0x9
 			0x0, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 
 			0x1, 0x9, 0xA, 0x1, 0x1, 0x1, 0x1, 0x1, 
@@ -992,7 +991,7 @@ namespace KopiLua
 		public static int yyprevious = YYNEWLINE;
 		public static int yylook()
 		{
-			yysvfArr yystate; yysvfRefRef lsp;
+			yysvfRef yystate; yysvfRefRef lsp;
 			yyworkRef yyt = new yyworkRef();
 			yysvfRef yyz = null;
 			int yych=0, yyfirst=0;
@@ -1015,7 +1014,7 @@ namespace KopiLua
 			}
 			for(;;){
 				lsp = new yysvfRefRef(yylstate, 0);
-				yyestate = new yysvfArr(yybgin); yystate = new yysvfArr(yybgin);
+				yyestate = new yysvfRef(yybgin); yystate = new yysvfRef(yybgin);
 				if (yyprevious==YYNEWLINE) yystate.inc();
 				for (;;){
 //					fprintf(stdout,"=========state %d\n",yystate.minus(yysvec)-1);
