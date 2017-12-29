@@ -1,5 +1,5 @@
 ﻿#define YYOPTIM
-#define LEXDEBUG
+//#define LEXDEBUG
 
 using System;
 
@@ -15,10 +15,10 @@ namespace KopiLua
 #if LEXDEBUG
 		public static void allprint(int i)
 		{
-			if (i == 40)
-			{
-				Console.WriteLine("======================");
-			}
+//			if (i == 40)
+//			{
+//				Console.WriteLine("======================");
+//			}
 			if ((char)i == '\n')
 			{
 				printf("[%d \'\\n\']", i);
@@ -211,14 +211,14 @@ namespace KopiLua
 			{
 				return this.arr == arr && this.index > 0;
 			}
-			public int minus(yysvfRef[] arr)
-			{
-				if (this.arr == arr)
-				{
-					return this.index - 0;
-				}
-				throw new Exception("minus");
-			}
+//			public int minus(yysvfRef[] arr)
+//			{
+//				if (this.arr == arr)
+//				{
+//					return this.index - 0;
+//				}
+//				throw new Exception("minus");
+//			}
 			
 			public yysvfRef get()
 			{
@@ -227,12 +227,20 @@ namespace KopiLua
 			
 			public yysvfRef get(int offset)
 			{
+//				if (index + offset < 0)
+//				{
+//					Console.WriteLine("=======================");
+//				}
+				if (index + offset < 0)
+				{
+					return null;
+				}
 				return arr[index + offset];
 			}
-			public yysvfRefRef getRef(int offset)
-			{
-				return new yysvfRefRef(arr, index + offset);
-			}
+//			public yysvfRefRef getRef(int offset)
+//			{
+//				return new yysvfRefRef(arr, index + offset);
+//			}
 //			public void set(yysvfRefRef v)
 //			{
 //				if (arr[index + 0] == null)
@@ -252,16 +260,17 @@ namespace KopiLua
 			public void set(yysvfRef v)
 			{
 				arr[index] = new yysvfRef(v);
+				//arr[index] = v;
 			}
 			
-			public bool isEquals(yysvfRefRef yyref)
-			{
-				return this.arr == yyref.arr && this.index == yyref.index;
-			}
-			public bool isEquals(yysvfRef[] arr)
-			{
-				return this.arr == arr && this.index == 0;
-			}
+//			public bool isEquals(yysvfRefRef yyref)
+//			{
+//				return this.arr == yyref.arr && this.index == yyref.index;
+//			}
+//			public bool isEquals(yysvfRef[] arr)
+//			{
+//				return this.arr == arr && this.index == 0;
+//			}
 		}		
 		
 		public class yysvf
@@ -1100,14 +1109,14 @@ contin:
 				}
 #if LEXDEBUG
 				if(debug!=0){
-					fprintf(yyout,"stopped at %d with ",lsp.get(-1).minus(yysvec)-1);
+					fprintf(yyout,"stopped at %d with ", lsp.get(-1) != null ? lsp.get(-1).minus(yysvec)-1 : -0x5a56b);
 					allprint(yych);
 					putchar('\n');
 				}
 #endif
 				while (lsp.dec().isLargerThan(yylstate)){
 					yylastch[0] = (char)0; yylastch.dec();
-					if (lsp.get() != null && (yyfnd= lsp.get().get().yystops)!=null && yyfnd[0] > 0){
+					if (lsp.get().get() != null /*FIXME:*/ && (yyfnd= new IntegerPtr(lsp.get().get().yystops))!=null && yyfnd[0] > 0){
 						yyolsp = new yysvfRefRef(lsp);
 						if(yyextra[yyfnd[0]]!=0){		/* must backup */
 							while(yyback(lsp.get().get().yystops,-yyfnd[0]) != 1 && lsp.isLargerThan(yylstate)){

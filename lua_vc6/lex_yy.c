@@ -1,12 +1,14 @@
-#define LEXDEBUG 1
+//#define LEXDEBUG 1
 
 #if LEXDEBUG
 void allprint(int i)
 {
+#if 0
 	if (i == 40)
 	{
 		printf("========================\n");
 	}
+#endif
 	if ((char)i == '\n')
 	{
 		printf("[%d \'\\n\']", i);

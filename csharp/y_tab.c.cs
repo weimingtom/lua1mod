@@ -1068,8 +1068,8 @@ namespace KopiLua
 			** either we just started, or we just finished a reduction
 			*/
 yystack:
-			yy_pv = yypv;
-			yy_ps = yyps;
+			yy_pv = new YYSTYPEPtr(yypv);
+			yy_ps = new IntegerPtr(yyps);
 			yy_state = yystate;
 	
 			/*
@@ -1407,8 +1407,8 @@ yydefault:
 			}
 					/* save until reenter driver code */
 			yystate = yy_state;
-			yyps = yy_ps;
-			yypv = yy_pv;
+			yyps = new IntegerPtr(yy_ps);
+			yypv = new YYSTYPEPtr(yy_pv);
 				
 
 

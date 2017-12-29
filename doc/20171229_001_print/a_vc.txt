@@ -1,0 +1,1489 @@
+state 1
+char [112 'p']
+compressed state
+try fall back character [65 'A']
+fall back to state 0
+char [112 'p']
+compressed state
+try fall back character [65 'A']
+state 12 char [112 'p']
+state 12
+char [114 'r']
+state 40 char [114 'r']
+state 40
+char [105 'i']
+fall back to state 12
+char [105 'i']
+state 40 char [105 'i']
+state 40
+char [110 'n']
+fall back to state 12
+char [110 'n']
+state 40 char [110 'n']
+state 40
+char [116 't']
+fall back to state 12
+char [116 't']
+state 40 char [116 't']
+state 40
+char ========================
+[40 '(']
+fall back to state 12
+char ========================
+[40 '(']
+stopped at 40 with ========================
+[40 '(']
+
+match "print" action 33
+state 0
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 2 char ========================
+[40 '(']
+state 2
+stopped at 2 with ========================
+[40 '(']
+
+match "(" action 34
+state 0
+char [34 '"']
+compressed state
+state 5 char [34 '"']
+state 5
+char [72 'H']
+compressed state
+try fall back character [65 'A']
+state 28 char [72 'H']
+state 28
+char [101 'e']
+fall back to state 5
+char [101 'e']
+compressed state
+try fall back character [68 'D']
+state 28 char [101 'e']
+state 28
+char [108 'l']
+fall back to state 5
+char [108 'l']
+compressed state
+try fall back character [65 'A']
+state 28 char [108 'l']
+state 28
+char [108 'l']
+fall back to state 5
+char [108 'l']
+compressed state
+try fall back character [65 'A']
+state 28 char [108 'l']
+state 28
+char [111 'o']
+fall back to state 5
+char [111 'o']
+compressed state
+try fall back character [65 'A']
+state 28 char [111 'o']
+state 28
+char [44 ',']
+fall back to state 5
+char [44 ',']
+compressed state
+try fall back character [1 '']
+state 28 char [44 ',']
+state 28
+char [32 ' ']
+fall back to state 5
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 28 char [32 ' ']
+state 28
+char [119 'w']
+fall back to state 5
+char [119 'w']
+compressed state
+try fall back character [65 'A']
+state 28 char [119 'w']
+state 28
+char [111 'o']
+fall back to state 5
+char [111 'o']
+compressed state
+try fall back character [65 'A']
+state 28 char [111 'o']
+state 28
+char [114 'r']
+fall back to state 5
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 28 char [114 'r']
+state 28
+char [108 'l']
+fall back to state 5
+char [108 'l']
+compressed state
+try fall back character [65 'A']
+state 28 char [108 'l']
+state 28
+char [100 'd']
+fall back to state 5
+char [100 'd']
+compressed state
+try fall back character [68 'D']
+state 28 char [100 'd']
+state 28
+char [33 '!']
+fall back to state 5
+char [33 '!']
+compressed state
+try fall back character [1 '']
+state 28 char [33 '!']
+state 28
+char [34 '"']
+fall back to state 5
+char [34 '"']
+compressed state
+state 29 char [34 '"']
+state 29
+stopped at 29 with [34 '"']
+
+match ""Hello, world!"" action 27
+state 0
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 2 char [41 ')']
+state 2
+stopped at 2 with [41 ')']
+
+match ")" action 34
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [112 'p']
+compressed state
+try fall back character [65 'A']
+fall back to state 0
+char [112 'p']
+compressed state
+try fall back character [65 'A']
+state 12 char [112 'p']
+state 12
+char [114 'r']
+state 40 char [114 'r']
+state 40
+char [105 'i']
+fall back to state 12
+char [105 'i']
+state 40 char [105 'i']
+state 40
+char [110 'n']
+fall back to state 12
+char [110 'n']
+state 40 char [110 'n']
+state 40
+char [116 't']
+fall back to state 12
+char [116 't']
+state 40 char [116 't']
+state 40
+char ========================
+[40 '(']
+fall back to state 12
+char ========================
+[40 '(']
+stopped at 40 with ========================
+[40 '(']
+
+match "print" action 33
+state 0
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 2 char ========================
+[40 '(']
+state 2
+stopped at 2 with ========================
+[40 '(']
+
+match "(" action 34
+state 0
+char [34 '"']
+compressed state
+state 5 char [34 '"']
+state 5
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 28 char [97 'a']
+state 28
+char [98 'b']
+fall back to state 5
+char [98 'b']
+compressed state
+try fall back character [65 'A']
+state 28 char [98 'b']
+state 28
+char [99 'c']
+fall back to state 5
+char [99 'c']
+compressed state
+try fall back character [65 'A']
+state 28 char [99 'c']
+state 28
+char [100 'd']
+fall back to state 5
+char [100 'd']
+compressed state
+try fall back character [68 'D']
+state 28 char [100 'd']
+state 28
+char [49 '1']
+fall back to state 5
+char [49 '1']
+compressed state
+try fall back character [48 '0']
+state 28 char [49 '1']
+state 28
+char [50 '2']
+fall back to state 5
+char [50 '2']
+compressed state
+try fall back character [48 '0']
+state 28 char [50 '2']
+state 28
+char [51 '3']
+fall back to state 5
+char [51 '3']
+compressed state
+try fall back character [48 '0']
+state 28 char [51 '3']
+state 28
+char [52 '4']
+fall back to state 5
+char [52 '4']
+compressed state
+try fall back character [48 '0']
+state 28 char [52 '4']
+state 28
+char [34 '"']
+fall back to state 5
+char [34 '"']
+compressed state
+state 29 char [34 '"']
+state 29
+stopped at 29 with [34 '"']
+
+match ""abcd1234"" action 27
+state 0
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 2 char [41 ')']
+state 2
+stopped at 2 with [41 ')']
+
+match ")" action 34
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [64 '@']
+compressed state
+try fall back character [1 '']
+state 32 char [64 '@']
+state 32
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 32 char ========================
+[40 '(']
+state 32
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 32 char [41 ')']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--a = @()" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [91 '[']
+compressed state
+try fall back character [1 '']
+state 32 char [91 '[']
+state 32
+char [50 '2']
+compressed state
+try fall back character [48 '0']
+state 32 char [50 '2']
+state 32
+char [93 ']']
+compressed state
+try fall back character [1 '']
+state 32 char [93 ']']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [51 '3']
+compressed state
+try fall back character [48 '0']
+state 32 char [51 '3']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--a[2] = 3" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [112 'p']
+compressed state
+try fall back character [65 'A']
+state 32 char [112 'p']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [116 't']
+compressed state
+try fall back character [65 'A']
+state 32 char [116 't']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 32 char ========================
+[40 '(']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [91 '[']
+compressed state
+try fall back character [1 '']
+state 32 char [91 '[']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [93 ']']
+compressed state
+try fall back character [1 '']
+state 32 char [93 ']']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 32 char [41 ')']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--print ("a[".."] = ")" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [10 '\n']
+compressed state
+try fall back character [10 '\n']
+fall back to state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [10 '\n']
+compressed state
+try fall back character [10 '\n']
+fall back to state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [64 '@']
+compressed state
+try fall back character [1 '']
+state 32 char [64 '@']
+state 32
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 32 char ========================
+[40 '(']
+state 32
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 32 char [41 ')']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--a = @()" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [48 '0']
+compressed state
+state 32 char [48 '0']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--i=0" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [119 'w']
+compressed state
+try fall back character [65 'A']
+state 32 char [119 'w']
+state 32
+char [104 'h']
+compressed state
+try fall back character [65 'A']
+state 32 char [104 'h']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [108 'l']
+compressed state
+try fall back character [65 'A']
+state 32 char [108 'l']
+state 32
+char [101 'e']
+compressed state
+try fall back character [68 'D']
+state 32 char [101 'e']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [60 '<']
+compressed state
+try fall back character [1 '']
+state 32 char [60 '<']
+state 32
+char [49 '1']
+compressed state
+try fall back character [48 '0']
+state 32 char [49 '1']
+state 32
+char [48 '0']
+compressed state
+state 32 char [48 '0']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [100 'd']
+compressed state
+try fall back character [68 'D']
+state 32 char [100 'd']
+state 32
+char [111 'o']
+compressed state
+try fall back character [65 'A']
+state 32 char [111 'o']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--while i<10 do" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [91 '[']
+compressed state
+try fall back character [1 '']
+state 32 char [91 '[']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [93 ']']
+compressed state
+try fall back character [1 '']
+state 32 char [93 ']']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [42 '*']
+compressed state
+try fall back character [1 '']
+state 32 char [42 '*']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "-- a[i] = i*i" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [43 '+']
+compressed state
+state 32 char [43 '+']
+state 32
+char [49 '1']
+compressed state
+try fall back character [48 '0']
+state 32 char [49 '1']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "-- i=i+1" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [101 'e']
+compressed state
+try fall back character [68 'D']
+state 32 char [101 'e']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [100 'd']
+compressed state
+try fall back character [68 'D']
+state 32 char [100 'd']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--end" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [10 '\n']
+compressed state
+try fall back character [10 '\n']
+fall back to state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [44 ',']
+compressed state
+try fall back character [1 '']
+state 32 char [44 ',']
+state 32
+char [118 'v']
+compressed state
+try fall back character [65 'A']
+state 32 char [118 'v']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [101 'e']
+compressed state
+try fall back character [68 'D']
+state 32 char [101 'e']
+state 32
+char [120 'x']
+compressed state
+try fall back character [65 'A']
+state 32 char [120 'x']
+state 32
+char [116 't']
+compressed state
+try fall back character [65 'A']
+state 32 char [116 't']
+state 32
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 32 char ========================
+[40 '(']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [44 ',']
+compressed state
+try fall back character [1 '']
+state 32 char [44 ',']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [108 'l']
+compressed state
+try fall back character [65 'A']
+state 32 char [108 'l']
+state 32
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 32 char [41 ')']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--r,v = next(a,nil)" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [119 'w']
+compressed state
+try fall back character [65 'A']
+state 32 char [119 'w']
+state 32
+char [104 'h']
+compressed state
+try fall back character [65 'A']
+state 32 char [104 'h']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [108 'l']
+compressed state
+try fall back character [65 'A']
+state 32 char [108 'l']
+state 32
+char [101 'e']
+compressed state
+try fall back character [68 'D']
+state 32 char [101 'e']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [126 '~']
+compressed state
+try fall back character [1 '']
+state 32 char [126 '~']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [108 'l']
+compressed state
+try fall back character [65 'A']
+state 32 char [108 'l']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [100 'd']
+compressed state
+try fall back character [68 'D']
+state 32 char [100 'd']
+state 32
+char [111 'o']
+compressed state
+try fall back character [65 'A']
+state 32 char [111 'o']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--while r ~= nil do" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [112 'p']
+compressed state
+try fall back character [65 'A']
+state 32 char [112 'p']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [105 'i']
+compressed state
+try fall back character [65 'A']
+state 32 char [105 'i']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [116 't']
+compressed state
+try fall back character [65 'A']
+state 32 char [116 't']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 32 char ========================
+[40 '(']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [121 'y']
+compressed state
+try fall back character [65 'A']
+state 32 char [121 'y']
+state 32
+char [91 '[']
+compressed state
+try fall back character [1 '']
+state 32 char [91 '[']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [93 ']']
+compressed state
+try fall back character [1 '']
+state 32 char [93 ']']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [34 '"']
+compressed state
+state 32 char [34 '"']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [46 '.']
+compressed state
+try fall back character [1 '']
+state 32 char [46 '.']
+state 32
+char [118 'v']
+compressed state
+try fall back character [65 'A']
+state 32 char [118 'v']
+state 32
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 32 char [41 ')']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--  print ("array["..r.."] = "..v)" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [44 ',']
+compressed state
+try fall back character [1 '']
+state 32 char [44 ',']
+state 32
+char [118 'v']
+compressed state
+try fall back character [65 'A']
+state 32 char [118 'v']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [61 '=']
+compressed state
+try fall back character [1 '']
+state 32 char [61 '=']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [101 'e']
+compressed state
+try fall back character [68 'D']
+state 32 char [101 'e']
+state 32
+char [120 'x']
+compressed state
+try fall back character [65 'A']
+state 32 char [120 'x']
+state 32
+char [116 't']
+compressed state
+try fall back character [65 'A']
+state 32 char [116 't']
+state 32
+char ========================
+[40 '(']
+compressed state
+try fall back character [1 '']
+state 32 char ========================
+[40 '(']
+state 32
+char [97 'a']
+compressed state
+try fall back character [65 'A']
+state 32 char [97 'a']
+state 32
+char [44 ',']
+compressed state
+try fall back character [1 '']
+state 32 char [44 ',']
+state 32
+char [114 'r']
+compressed state
+try fall back character [65 'A']
+state 32 char [114 'r']
+state 32
+char [41 ')']
+compressed state
+try fall back character [1 '']
+state 32 char [41 ')']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--  r,v = next(a,r)" action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [45 '-']
+compressed state
+state 7 char [45 '-']
+state 7
+char [45 '-']
+state 32 char [45 '-']
+state 32
+char [101 'e']
+compressed state
+try fall back character [68 'D']
+state 32 char [101 'e']
+state 32
+char [110 'n']
+compressed state
+try fall back character [65 'A']
+state 32 char [110 'n']
+state 32
+char [100 'd']
+compressed state
+try fall back character [68 'D']
+state 32 char [100 'd']
+state 32
+char [32 ' ']
+compressed state
+try fall back character [9 '	']
+state 32 char [32 ' ']
+state 32
+char [10 '\n']
+compressed state
+stopped at 32 with [10 '\n']
+
+match "--end " action 5
+state 0
+char [10 '\n']
+compressed state
+state 4 char [10 '\n']
+state 4
+stopped at 4 with [10 '\n']
+
+match "
+" action 4
+state 1
+char [0 ' ']
+compressed state
+try fall back character [0 ' ']
+fall back to state 0
+char [0 ' ']
+compressed state
+try fall back character [0 ' ']
+stopped at -371051 with [0 ' ']
+Hello, world!
+abcd1234
