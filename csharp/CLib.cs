@@ -914,11 +914,7 @@ namespace KopiLua
 		}
 		public static int putc(int ch, FILE fp)
 		{
-			if (fp == null) //FIXME: maybe no output in fact
-			{
-				//FIXME:
-				printf("%c", (char)ch);
-			}
+			fp.stream.WriteByte((byte)ch);
 			return ch;
 		}
 		

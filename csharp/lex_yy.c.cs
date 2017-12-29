@@ -12,25 +12,62 @@ namespace KopiLua
 	{		
 //FIXME:added
 #if LEXDEBUG
+		//search allprint yacc
+		//https://github.com/juddy/stali/blob/master/bin/hbase/lex/allprint.c
+		//https://github.com/codesrxxx/unix_image/blob/master/v7source/source/usr/src/cmd/lex/lib/allprint.c
 		public static void allprint(int i)
 		{
 //			if (i == 40)
 //			{
 //				Console.WriteLine("======================");
 //			}
-			if ((char)i == '\n')
-			{
-				printf("[%d \'\\n\']", i);
-			}
-			else
-			{
-				printf("[%d \'%c\']", i, (char)i);
-			}
+			
+//			if ((char)i == '\n')
+//			{
+//				printf("[%d \'\\n\']", i);
+//			}
+//			else
+//			{
+//				printf("[%d \'%c\']", i, (char)i);
+//			}
+			
+//			if (i == '(')
+//			{
+//				Console.WriteLine("=====================");
+//			}
+			int c = i;
+			switch(c){
+				case '\n':
+					fprintf(yyout,"\\n");
+					break;
+				case '\t':
+					fprintf(yyout,"\\t");
+					break;
+				case '\b':
+					fprintf(yyout,"\\b");
+					break;
+				case ' ':
+					fprintf(yyout,"\\_");
+					break;
+				default:
+					if(!(32 < c && c < 127))
+						fprintf(yyout,"\\%-2x",c);
+					else 
+						putc(c,yyout);
+					break;
+				}
+			return;
 		}
 		
 		public static void sprint(CharPtr ch)
 		{
-			printf("\"%s\"", ch.ToString());
+//			printf("\"%s\"", ch.ToString());
+			
+			CharPtr s = new CharPtr(ch);
+			while (s[0] != 0)
+			{
+				allprint((int)s[0]);s.inc();
+			}
 		}
 #endif		
 		
@@ -1003,6 +1040,9 @@ namespace KopiLua
 			/* start off machines */
 #if LEXDEBUG
 			debug = 1;
+			yyout = stdout;
+#endif
+#if !YYOPTIM
 			yyout = stdout;
 #endif
 			yyfirst=1;

@@ -1,14 +1,28 @@
 //#define LEXDEBUG 1
 
 #if LEXDEBUG
+#include <stdio.h>
+//search allprint yacc
+//https://github.com/juddy/stali/blob/master/bin/hbase/lex/allprint.c
+//https://github.com/codesrxxx/unix_image/blob/master/v7source/source/usr/src/cmd/lex/lib/allprint.c
 void allprint(int i)
 {
+	extern FILE *yyout;
+	int c = i;
+	
 #if 0
+	if (i == (int)'(')
+	{
+		printf("========================\n");
+	}	
+	
 	if (i == 40)
 	{
 		printf("========================\n");
 	}
 #endif
+
+#if 0
 	if ((char)i == '\n')
 	{
 		printf("[%d \'\\n\']", i);
@@ -17,11 +31,38 @@ void allprint(int i)
 	{
 		printf("[%d \'%c\']", i, (char)i);
 	}
+#endif
+	switch(c){
+		case '\n':
+			fprintf(yyout,"\\n");
+			break;
+		case '\t':
+			fprintf(yyout,"\\t");
+			break;
+		case '\b':
+			fprintf(yyout,"\\b");
+			break;
+		case ' ':
+			fprintf(yyout,"\\_");
+			break;
+		default:
+			if(!(32 < c && c < 127))
+				fprintf(yyout,"\\%-2x",c);
+			else 
+				putc(c,yyout);
+			break;
+		}
+	return;
 }
 
 void sprint(char *ch)
 {
+#if 0
 	printf("\"%s\"", ch);
+#endif
+
+	while (*ch)
+		allprint(*ch++);
 }
 #endif
 
@@ -790,6 +831,9 @@ yylook(){
 	/* start off machines */
 # ifdef LEXDEBUG
 	debug = 1;
+	yyout = stdout;
+# endif
+# ifndef YYOPTIM
 	yyout = stdout;
 # endif
 	yyfirst=1;
