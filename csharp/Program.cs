@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-#define TEST_LUA 
+//#define TEST_LUA 
  
 using System; 
 using KopiLua;

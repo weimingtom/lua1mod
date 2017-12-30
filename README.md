@@ -2,6 +2,7 @@
 Lua 1.0 CSharp port  
 
 ## History  
+* 2017-12-30 : Migrate from gitee to github.  
 * 2017-12-26 : Pass all tests.  
 * 2017-12-23 : First run success.  
 * 2017-10-17 : First commit.  
