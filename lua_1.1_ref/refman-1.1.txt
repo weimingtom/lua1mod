@@ -1,0 +1,118 @@
+Reference Manual of the Programming Language Lua
+
+Roberto Ierusalimschy
+Luiz Henrique de Figueiredo
+Waldemar Celes Filho
+
+TeCGraf | PUC-Rio
+roberto, lhf, celes@icad.puc-rio.br
+
+May 27, 1994
+
+Abstract
+
+  Lua is an embedded programming language designed to be used as a conguration language for any program that needs one. This document describes the Lua programming language and the API that allows interaction between Lua programs and its host C program. It also presents some examples of using the main features of the system.
+
+1 Introduction
+
+Lua is an embedded programming language designed to support general procedural programming features with data description facilities. It is supposed to be used as a conguration language for any program that needs one. Lua was designed by R. Ierusalimschy, L. H. de Figueiredo and W. Celes, and implemented by W. Celes.
+  Lua is implemented as a library, written in C. Being an embedded language, Lua has no notion of a "main" program: it only works embedded in a host client, called the embedding program. This host program can invoke functions to execute a piece of code in Lua, can write and read Lua variables, and can register C functions to be called by Lua code. Through the use of C functions, Lua can be augmented to cope with rather dierent domains, thus creating customized programming languages sharing a syntactical framework.
+  Lua is free distribution software, and provided as usual with no guarantees. The implementation described in this manual is available by anonymous ftp from
+  
+  ftp.icad.puc-rio.br:/pub/lua/lua_1.0.tar.Z
+
+2 Environment and Modules
+
+  All statements in Lua are executed in a global environment. This environment, which keeps all global variables and functions, is initialized at the beginning of the embedding program and persists until its end.
+  The global environment can be manipulated by Lua code or by the embedding program, which can read and write global variables using functions in the library that implements Lua.
+  Global variables do not need declaration. Any variable is assumed to be global unless explicitly declared local (see local declarations, Section 4.4.5). Before the first assignment, the
+value of a global variable is **nil**.
+  The unit of execution of Lua is called a module. The syntax for modules is:<1> 
+  
+  module -> {statement | function}
+
+  A module may contain statements and/or function definitions, and may be in a file or in a string inside the host program. When a module is executed, first all its functions and statements are compiled, and the functions added to the global environment; then the statements are executed in sequential order. All modifications a module effects on the global environment persist after its end. Those include modifications to global variables and definitions of new functions <2>.  
+
+
+3 Types
+
+Lua is a dynamically typed language. Variables do not have types; only values do. All values carry their own type. Therefore, there are no type definitions in the language.
+  There are seven basic types in Lua: nil, number, string, function, Cfunction, userdata, and table. Nil is the type of the value **nil**, whose main property is to be different from any other value. Number represents real (floating point) numbers, while string has the usual meaning.
+  Functions are considered first-class values in Lua. This means that functions can be stored in variables, passed as arguments to other functions and returned as results. When a function in Lua is defined, its body is compiled and stored in a global variable with the given name.
+
+1 As usual in extended BNF, {a} means 0 or more a's, [a] means an optional a and {a}+ means one or more a's.
+2 Actually, a function definition is an assignment to a global variable; see Section 3.
+
+Lua can call (and manipulate) functions written in Lua and functions written in C; the latter have type Cfunction.
+  The type userdata is provided to allow arbitrary C pointers to be stored in Lua variables. It corresponds to void* and has no valid operations in Lua, besides assignment and equality test.
+  The type table implements associative arrays, that is, arrays that can be indexed both with numbers and with strings. Therefore, this type may be used not only to represent ordinary arrays, but also symbol tables, sets, records, etc. To represent a record, Lua uses the field name as an index. The language supports this representation by providing a.name as syntactic sugar for a["name"].
+  It is important to notice that tables are ob jects, and not values. Variables cannot contain tables, only references to them. Assignment, parameter passing and returns always manipulate references to tables, and do not imply any kind of copy. Moreover, tables must be explicitly created before used; see Section 4.5.7.
+
+4 The Language
+
+This section describes the lexis, syntax and semantics of Lua.
+
+4.1 Lexical Conventions
+
+Lua is a case sensitive language. Identifiers can be any string of letters, digits, and underscores, not beginning with a digit. The following words are reserved, and cannot be used as identifiers: 
+
+    and do else elseif end
+    function if local nil not
+    or repeat return until then while
+
+  The following strings denote other tokens:
+
+    ~= <= >= < > = .. + - * / %
+    ( ) { } [ ] @ ; , .
+
+Literal strings can be delimited by matching single or double quotes, and can contain the C-like escape sequences '\n', '\t' and '\r'. Comments start anywhere outside a string with a double hyphen (--) and run until the end of the line.
+  Numerical constants may be written with an optional decimal part, and an optional decimal exponent. Examples of valid numerical constants are:
+    
+    4 4. .4 4.57e-3 .3e12
+
+4.2 Coercion
+
+Lua provides some automatic conversions. Any arithmetic operation applied to a string tries to convert that string to a number, following the usual rules. More specifically, the string is converted to a number using the standard strtod C function. Conversely, whenever a number is used when a string is expected, that number is converted to a string, according to the following rule: if the number is an integer, it is written without exponent or decimal point; otherwise, it is formatted following the "%g" conversion specification of the standard printf C function.
+
+4.3 Adjustment
+
+Functions in Lua can return many values. Because there are no type declarations, the system does not know how many values a function will return. Therefore, sometimes, a list of values must be adjusted , at run time, to a given length. If there are more values than are needed, the last values are thrown away. If there are more needs than values, the list is extended with as many **nil's** as needed. Adjustment also occurs in other contexts, such as multiple assignment.
+
+4.4 Statements
+
+Lua supports an almost conventional set of statements. The conventional commands include assignment, control structures and procedure calls. Non-conventional commands include table constructors, explained in Section 4.5.7, and local variable declarations.
+
+4.4.1 Blocks
+
+A block is a list of statements, executed sequentially. Any statement can be optionally followed by a semicolon.
+
+    block -> {stat sc} [ret sc]
+    sc -> [';']
+
+For syntactic reasons, a return statement can only be written as the last statement of a block. This restriction also avoids some "statement not reached" errors.
+
+4.4.2 Assignment
+
+The language allows multiple assignment. Therefore, the syntax defines a list of variables on the left side, and a list of expressions on the right side. Both lists have their elements separated by commas.
+
+    stat -> varlist1 '=' explist1
+    varlist1 -> var {',' var}
+
+This statement first evaluates all values on the right side and eventual indices on the left side, and then makes the assignments. Therefore, it can be used to exchange two values, as in
+
+    x, y = y, x
+
+Before the assignment, the list of values is adjusted to the length of the list of variables (see
+Section 4.3).
+  A single name can denote a global or a local variable.
+
+    var -> name
+    var -> var '[' exp1 ']' | var '.' name
+
+  Brackets are used to index a table. In this case, var must result in a table value; otherwise, there is an execution error. The syntax var.NAME is just syntactic sugar for var["NAME"].
+
+4.4.3 Control Structures
+
+The condition expression of a control structure can return any value. All values different from **nil** are considered true, while **nil** is considered false. Ifs, whiles and repeats have the usual meaning.
+
+
