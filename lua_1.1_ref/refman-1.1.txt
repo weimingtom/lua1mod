@@ -160,7 +160,7 @@ Numbers (numerical constants) and string literals are explained in Section 4.1. 
 
 4.5.2 Arithmetic Op erators
 
-Lua supp orts the usual arithmetic op erators, with the usual meaning. These op erators are the binary +, -, * and /, and the unary + and -. The op erands must be numbers, or strings that can be converted to numbers, according to the rules given in Section 4.2.
+Lua supp orts the usual arithmetic operators, with the usual meaning. These op erators are the binary +, -, * and /, and the unary + and -. The operands must be numbers, or strings that can be converted to numbers, according to the rules given in Section 4.2.
 
 
 4.5.3 Relational Op erators
@@ -207,5 +207,134 @@ Table constructors are expressions that create tables. Table constructors are ff
 
   Such an expression results in a new empty table. An optional dimension may b e given as a hint to the initial table size. Indep endently of the initial dimension, all arrays in Lua stretch dynamically as needed.
   To construct a table and initialize some fields, the following syntax is available:
+
+	tableconstructor -> '@' [name] field list
+
+  Such an expression creates a new table, which will b e its final value, initialize some of its fields according to fieldlist (see b elow), and, if name is given, calls a function with that name passing the table as parameter. This function can b e used to check field values, to create default fields, or for any other side-effect.
+
+	field list -> 'f' [field list1 ] 'g'
+	field list1 -> field {',' field}
+	field -> name '=' exp
+
+This field list initializes named fields in a table. As an example:
+
+	a = @f{x = 1, y = 3}
+
+is equivalent to:
+
+	temp = @(2)
+	temp.x = 1
+	temp.y = 3
+	f(temp)
+	a = temp
+
+In order to initialize a list, one can use the following syntax:
+
+	fieldlist -> '[' [lfieldlist1 ] ']'
+	lfieldlist1 -> exp {',' exp }
+
+As an example:
+
+	a = @["v1", "vv"]
+
+is equivalent to:
+
+	temp = @(2)
+	temp[1] = "v1"
+	temp[2] = "v2"
+	a = temp
+	
+  As particular cases, the following two expressions are completely equivalent:
+
+	@f{ } @f[ ]
+
+4.5.8 Function Calls
+
+A function call has the following syntax:
+
+	functioncall -> var '(' [explist1] ')'
+	explist1 -> {exp1 ','} exp
+
+  Here, var can b e any variable (global, lo cal, indexed, etc) whose value has typ e function or Cfunction . All argument expressions are evaluated b efore the call, from left to right; then the list of arguments is adjusted to the length of the list of parameters (see Section 4.3); finally this list is assigned to the parameters.
+  Because a function can return any numb er of results (see Section 4.4.3), the numb er of results must b e adjusted b efore used. If the function is called as an statement (see Section 4.4.4), its return list is adjusted to 0. If the function is called in a place that needs a single value (syntactically denoted by the non-terminal exp1), its return list is adjusted to 1. If the function is called in a place that can hold many values (syntactically denoted by the non-terminal exp), no adjustment is done.
+
+
+4.6 Function Definitions
+
+Functions in Lua can be defined anywhere in the global level of a module; functions cannot be defined inside other functions. The syntax for function definition is:
+
+	function -> function name '(' [parlist1 ] ')' block end
+
+  When Lua finds a function definition, its body is compiled to intermediate code and stored, with type function, into the global variable name.
+  Parameters act as local variables, initialized with the argument values.
+
+	parlist1 -> 'name'{',' name}
+
+  Results are returned using the return statement (see Section 4.4.3). If the control reaches the end of a function without a return instruction, the function returns with no results.
+
+5 The Application Program Interface
+
+This section describes the API for Lua, that is, the set of C functions available to the host program to communicate with the library. The API functions can be classified in the following categories:
+
+	1. executing Lua co de;
+	2. converting values between C and Lua;
+	3. manipulating (reading and writing) Lua ob jects;
+	4. calling Lua functions;
+	5. C functions to b e called by Lua;
+	6. error handling.
+
+All API functions are declared in the file lua.h. Unless stated otherwise, API functions return an error code: 0 in case of success, non 0 in case of errors.
+
+5.1 Executing Lua Code
+
+A host program can execute Lua programs written in a file or in a string, using the following functions:
+
+int lua_dofile (char *filename);
+int lua_dostring (char *string);
+
+5.2 Converting Values between C and Lua
+
+Because Lua has no static typ e system, all values passed b etween Lua and C have type lua_Object, which works like an abstract typ e in C that can hold any Lua value. lua_Object is declared as:
+
+typedef struct Object *lua_Object;
+
+where Object is not declared in lua.h.
+  Lua has garbage collection. Therefore, there is no guarantee that a lua_Object will be valid after another execution of Lua co de. A go o d programming practice is to convert such objects to C values as so on as they are available, and never store them in global variables. 
+  To check the typ e of a lua_Object, the following functions are available:
+
+	int lua_isnil (lua_Object object);
+	int lua_isnumber (lua_Object object);
+	int lua_isstring (lua_Object object);
+	int lua_istable (lua_Object object);
+	int lua_iscfunction (lua_Object object);
+	int lua_isuserdata (lua_Object object);
+
+All return 1 if the ob ject has the given typ e, 0 otherwise.
+  To translate a value from typ e lua_Object to a specific C type, the programmer can use:
+
+	float lua_getnumber (lua_Object object);
+	char *lua_getstring (lua_Object object);
+	char *lua_copystring (lua_Object object);
+	lua_CFunction lua_getcfunction (lua_Object object);
+	void *lua_getuserdata (lua_Object object);
+
+lua_getnumber converts a lua_Object to a float. This lua_Object must b e a numb er or a string convertible to numb er (see Section 4.2); otherwise, the function returns 0.
+  lua_getstring converts a lua_Object to a string (char *). This lua_Object must be a string or a number; otherwise, the function returns 0 (the null p ointer). This function does not create a new string, but returns a p ointer to a string inside the Lua environment. Because Lua has garbage collection, there is no guarantee that such p ointer will b e valid after another execution of Lua co de. The function lua_copystring b ehaves exactly like lua_getstring, but returns a fresh copy of the string.
+  lua_getcfunction converts a lua_Object to a C function. This lua_Object must have type Cfunction ; otherwise, the function returns 0 (the null p ointer). The type lua_CFunction
+is explained in Section 5.5.
+  lua_getuserdata converts a lua_Object to void*. This lua_Object must have type userdata ; otherwise, the function returns 0 (the null p ointer). 
+  The reverse process, that is, the conversion from a specific C type to the typ e lua_Object, is done by using the following functions:
+
+	int lua_pushnumber (float n);
+	int lua_pushstring (char *s);
+	int lua_pushcfunction (lua_CFunction f);
+	int lua_pushuserdata (void *u);
+
+All of them receive a C value, convert it to a lua_Object, and leave their results on the top of the Lua stack, where it can b e assigned to a variable, passed as paramenter to a Lua function, etc (see below). To complete the set, the value nil or a lua_Object can also be pushed onto the stack, with:
+
+	int lua_pushnil (void);
+	int lua_pushobject (lua_Object object);
+
+
 
 
