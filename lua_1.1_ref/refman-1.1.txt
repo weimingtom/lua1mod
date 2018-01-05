@@ -115,4 +115,97 @@ Section 4.3).
 
 The condition expression of a control structure can return any value. All values different from **nil** are considered true, while **nil** is considered false. Ifs, whiles and repeats have the usual meaning.
 
+	stat -> while exp1 do block end
+	stat -> rep eat block until exp1
+	stat -> if exp1 then block {elseif} [else block] end
+	elseif -> elseif exp1 then block
+
+  A return is used to return values from a function. Because a function may return more than one value, the syntax for a return statement is:
+	
+	ret -> return explist
+
+4.4.4 Expressions as Statements
+
+All expressions with p ossible side-effects can b e executed as statements. These include function calls and table constructors:
+
+	stat -> functioncall
+	stat -> tableconstructor
+
+  Eventual returned values are thrown away. Function calls are explained in Section 4.5.8, while constructors are the sub ject of Section 4.5.7.
+
+4.4.5 Lo cal Declarations
+
+Local variables can b e declared anywhere inside a blo ck. Their scop e b egins after the declaration and lasts until the blo ck end. The declaration may include an initial assignment:
+
+	stat -> local declist [init]
+	declist -> name {',' name}
+	init -> '=' explist1
+
+If there is an initial assignment, it has the same semantics of a multiple assignment. Otherwise,
+all variables are initialized with nil.
+
+4.5 Expressions
+
+4.5.1 Simple Expressions
+
+Simple expressions are:
+
+	exp -> '(' exp ')'
+	exp -> nil
+	exp -> 'number'
+	exp -> 'literal'
+	exp -> var
+
+Numbers (numerical constants) and string literals are explained in Section 4.1. Variables are explained in Section 4.4.2.
+
+4.5.2 Arithmetic Op erators
+
+Lua supp orts the usual arithmetic op erators, with the usual meaning. These op erators are the binary +, -, * and /, and the unary + and -. The op erands must be numbers, or strings that can be converted to numbers, according to the rules given in Section 4.2.
+
+
+4.5.3 Relational Op erators
+
+Lua offers the following relational op erators:
+
+	< > <= >= ~= =
+
+All return **nil** as false and 1 as true.
+
+  Equality first compares the typ es of its op erands. If they are different, the result is nil. Otherwise, their values are compared. Numbers and strings are compared in the usual way. Tables, Cfunctions, and functions are compared by reference, that is, two tables are considered equal only if they are the same table. The op erator ~= is exactly the negation of equality (=).
+  The other op erators can only b e applied to strings and numbers. If one of the arguments is a string, the other is converted to a string, and their values are compared using lexicographical order. Otherwise, b oth are numb ers and are compared as such.
+
+4.5.4 Logical Op erators
+
+All logical op erators, like control structures, consider nil as false and anything else as true. Like relational op erators, they return nil as false and 1 as true. The logical op erators are:
+
+	and or not
+
+The operators and and or use short-cut evaluation, that is, the second op erand is evaluated only if necessary.
+
+4.5.5 Concatenation
+
+Lua offers a string concatenation op erator, denoted by "..". The op erands must b e strings or numbers, which are converted to strings according to the rules in Section 4.2.
+
+4.5.6 Precedence
+
+Op erator precedence follows the table b elow, from the lower to the higher priority:
+
+	and or
+	< > <= >= ~= =
+	..
+	+ -
+	* /
+	not + (unary) - (unary)
+
+All binary op erators are left asso ciative.
+
+4.5.7 Table Constructors
+
+Table constructors are expressions that create tables. Table constructors are ffered in different flavors. The simplest one is:
+
+	tableconstructor ! '@' '(' [exp1 ] ')'
+
+  Such an expression results in a new empty table. An optional dimension may b e given as a hint to the initial table size. Indep endently of the initial dimension, all arrays in Lua stretch dynamically as needed.
+  To construct a table and initialize some fields, the following syntax is available:
+
 
